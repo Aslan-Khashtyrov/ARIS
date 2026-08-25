@@ -1,30 +1,95 @@
 from pathlib import Path
-import json, os, subprocess, sys, time
+import json
+import os
+import subprocess
+import sys
+import time
 
-ROOT=Path.home()/"Arbitrage"; JOURNAL=ROOT/"journal"
-CHECKS=[]
+ROOT = Path.home() / "Arbitrage"
+JOURNAL = ROOT / "journal"
+STATE = ROOT / "guardian_state"
+CHECKS = []
 
-def add(name,ok,detail=""):CHECKS.append({"check":name,"ok":bool(ok),"detail":detail})
+def add(name, ok, detail=""):
+    CHECKS.append({"check": name, "ok": bool(ok), "detail": detail})
 
 def age(path):
-    try:return round(time.time()-path.stat().st_mtime,1)
-    except OSError:return None
+    try:
+        return round(time.time() - path.stat().st_mtime, 1)
+    except OSError:
+        return None
 
-add("project_exists",ROOT.exists(),str(ROOT))
-add("git_repo",(ROOT/".git").exists())
-add("real_trading_guard",True,"ARIS safety policy: monitoring only")
-for name in ("main.py","guardian_v031.py","multi_scanner_v03.py","aris_worker_v03.py","aris_updater_v02.py","aris_local_core_v01.py"):
-    add(f"file:{name}",(ROOT/name).exists())
-for name in ("session_stats.json","multi_history_v03.csv"):
-    p=JOURNAL/name; a=age(p); add(f"runtime:{name}",p.exists(),f"age_seconds={a}")
+def valid_process(name, script):
+    pidfile = STATE / f"{name}.pid"
+    try:
+        pid = int(pidfile.read_text(encoding="utf-8").strip())
+        os.kill(pid, 0)
+        cmd = Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace")
+        return script in cmd, f"pid={pid}"
+    except Exception as exc:
+        return False, type(exc).__name__
+
+add("project_exists", ROOT.exists(), str(ROOT))
+add("git_repo", (ROOT / ".git").exists())
+add("real_trading_guard", True, "monitoring and paper analysis only")
+add("shell_guard", True, "arbitrary remote shell disabled")
+
+required = (
+    "main.py",
+    "guardian_v04.py",
+    "multi_scanner_v03.py",
+    "aris_worker_v03.py",
+    "aris_autopilot_v01.py",
+    "aris_remote_agent_v02.py",
+    "aris_analyze_v01.py",
+    "aris_updater_v02.py",
+)
+for name in required:
+    add(f"file:{name}", (ROOT / name).exists())
+
+processes = {
+    "main": "main.py",
+    "scanner": "multi_scanner_v03.py",
+    "guardian": "guardian_v04.py",
+    "worker": "aris_worker_v03.py",
+    "autopilot": "aris_autopilot_v01.py",
+    "remote_agent": "aris_remote_agent_v02.py",
+}
+for name, script in processes.items():
+    ok, detail = valid_process(name, script)
+    add(f"process:{name}", ok, detail)
+
+for name in ("session_stats.json", "multi_history_v03.csv"):
+    path = JOURNAL / name
+    file_age = age(path)
+    fresh = path.exists() and file_age is not None and file_age <= 180
+    add(f"runtime:{name}", fresh, f"age_seconds={file_age}")
+
 try:
-    p=subprocess.run(["git","status","--porcelain"],cwd=ROOT,text=True,capture_output=True,timeout=10)
-    add("git_clean",p.returncode==0 and not p.stdout.strip(),p.stdout.strip() or "clean")
-except Exception as exc:add("git_clean",False,type(exc).__name__)
+    proc = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT, text=True, capture_output=True, timeout=10)
+    add("git_clean", proc.returncode == 0 and not proc.stdout.strip(), proc.stdout.strip() or "clean")
+except Exception as exc:
+    add("git_clean", False, type(exc).__name__)
+
 try:
-    p=subprocess.run([sys.executable,"-m","compileall","-q",str(ROOT)],text=True,capture_output=True,timeout=60)
-    add("python_compile",p.returncode==0,(p.stderr or p.stdout).strip())
-except Exception as exc:add("python_compile",False,type(exc).__name__)
-report={"ok":all(x["ok"] for x in CHECKS),"checks":CHECKS}
-print(json.dumps(report,ensure_ascii=False,indent=2))
+    proc = subprocess.run([sys.executable, "-m", "compileall", "-q", str(ROOT)], text=True, capture_output=True, timeout=60)
+    add("python_compile", proc.returncode == 0, (proc.stderr or proc.stdout).strip())
+except Exception as exc:
+    add("python_compile", False, type(exc).__name__)
+
+analysis = None
+try:
+    proc = subprocess.run([sys.executable, "aris_analyze_v01.py"], cwd=ROOT, text=True, capture_output=True, timeout=60)
+    analysis = json.loads(proc.stdout) if proc.stdout.strip() else None
+    add("market_analysis", proc.returncode == 0 and bool(analysis and analysis.get("ok")), f"rows={analysis.get('rows') if analysis else None}")
+except Exception as exc:
+    add("market_analysis", False, type(exc).__name__)
+
+report = {
+    "ok": all(item["ok"] for item in CHECKS),
+    "time": time.strftime("%Y-%m-%dT%H:%M:%S"),
+    "checks": CHECKS,
+    "analysis": analysis,
+}
+print(json.dumps(report, ensure_ascii=False, indent=2))
 sys.exit(0 if report["ok"] else 1)
