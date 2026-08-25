@@ -1,11 +1,36 @@
 {
   "ok": true,
-  "id": "healthcheck-20260825-01",
-  "action": "HEALTHCHECK",
-  "time": "2026-08-25T21:48:25",
+  "id": "sync-audit-fixes-20260825-01",
+  "action": "PING",
+  "time": "2026-08-25T21:52:43",
   "result": {
-    "returncode": 0,
-    "stdout": "{\n  \"ok\": true,\n  \"checks\": [\n    {\n      \"check\": \"project_exists\",\n      \"ok\": true,\n      \"detail\": \"/data/data/com.termux/files/home/Arbitrage\"\n    },\n    {\n      \"check\": \"git_repo\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"check\": \"real_trading_guard\",\n      \"ok\": true,\n      \"detail\": \"ARIS safety policy: monitoring only\"\n    },\n    {\n      \"check\": \"file:main.py\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"check\": \"file:guardian_v031.py\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"check\": \"file:multi_scanner_v03.py\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"check\": \"file:aris_worker_v03.py\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"check\": \"file:aris_updater_v02.py\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"check\": \"file:aris_local_core_v01.py\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"check\": \"runtime:session_stats.json\",\n      \"ok\": true,\n      \"detail\": \"age_seconds=1.9\"\n    },\n    {\n      \"check\": \"runtime:multi_history_v03.csv\",\n      \"ok\": true,\n      \"detail\": \"age_seconds=1.5\"\n    },\n    {\n      \"check\": \"git_clean\",\n      \"ok\": true,\n      \"detail\": \"clean\"\n    },\n    {\n      \"check\": \"python_compile\",\n      \"ok\": true,\n      \"detail\": \"\"\n    }\n  ]\n}\n",
-    "stderr": ""
+    "pong": true,
+    "components": {
+      "main": {
+        "online": true,
+        "pid": 27779,
+        "script": "main.py"
+      },
+      "scanner": {
+        "online": true,
+        "pid": 27810,
+        "script": "multi_scanner_v03.py"
+      },
+      "guardian": {
+        "online": true,
+        "pid": 27830,
+        "script": "guardian_v04.py"
+      },
+      "worker": {
+        "online": true,
+        "pid": 27832,
+        "script": "aris_worker_v03.py"
+      },
+      "autopilot": {
+        "online": true,
+        "pid": 27834,
+        "script": "aris_autopilot_v01.py"
+      }
+    }
   }
 }
