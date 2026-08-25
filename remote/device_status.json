@@ -1,36 +1,27 @@
 {
   "ok": true,
-  "id": "sync-audit-fixes-20260825-01",
-  "action": "PING",
-  "time": "2026-08-25T21:52:43",
+  "id": "restart-audited-components-20260825-01",
+  "action": "RESTART_COMPONENTS",
+  "time": "2026-08-25T21:53:18",
   "result": {
-    "pong": true,
-    "components": {
-      "main": {
-        "online": true,
-        "pid": 27779,
-        "script": "main.py"
+    "stopped": [
+      {
+        "name": "worker",
+        "pid": 27832
       },
-      "scanner": {
-        "online": true,
-        "pid": 27810,
-        "script": "multi_scanner_v03.py"
+      {
+        "name": "guardian",
+        "pid": 27830
       },
-      "guardian": {
-        "online": true,
-        "pid": 27830,
-        "script": "guardian_v04.py"
+      {
+        "name": "scanner",
+        "pid": 27810
       },
-      "worker": {
-        "online": true,
-        "pid": 27832,
-        "script": "aris_worker_v03.py"
-      },
-      "autopilot": {
-        "online": true,
-        "pid": 27834,
-        "script": "aris_autopilot_v01.py"
+      {
+        "name": "main",
+        "pid": 27779
       }
-    }
+    ],
+    "note": "autopilot will restart missing components"
   }
 }
