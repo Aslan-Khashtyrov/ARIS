@@ -1,0 +1,29 @@
+name: ARIS safety checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Compile Python sources
+        run: python -m compileall -q .
+      - name: Reject obvious committed secrets
+        shell: bash
+        run: |
+          if grep -RInE --include='*.py' --include='*.json' --include='*.yml' --include='*.yaml' '(sk-[A-Za-z0-9_-]{20,}|OPENAI_API_KEY[[:space:]]*=[[:space:]]*[^$[:space:]]+)' . --exclude-dir=.git; then
+            echo 'Possible secret detected in tracked source.'
+            exit 1
+          fi
+          echo 'No obvious committed secrets detected.'
