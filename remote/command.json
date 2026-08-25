@@ -1,5 +1,5 @@
 {
-  "id": "healthcheck-20260825-01",
-  "action": "HEALTHCHECK",
-  "note": "Immediate remote validation before first market analysis."
+  "id": "sync-audit-fixes-20260825-01",
+  "action": "PING",
+  "note": "Fast-forward audited ARIS fixes onto the device."
 }
