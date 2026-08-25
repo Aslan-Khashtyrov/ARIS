@@ -1,0 +1,36 @@
+{
+  "ok": true,
+  "id": "ping-20260825-remote-v02-01",
+  "action": "PING",
+  "time": "2026-08-25T21:40:58",
+  "result": {
+    "pong": true,
+    "components": {
+      "main": {
+        "online": true,
+        "pid": 27779,
+        "script": "main.py"
+      },
+      "scanner": {
+        "online": true,
+        "pid": 27810,
+        "script": "multi_scanner_v03.py"
+      },
+      "guardian": {
+        "online": true,
+        "pid": 27830,
+        "script": "guardian_v04.py"
+      },
+      "worker": {
+        "online": true,
+        "pid": 27832,
+        "script": "aris_worker_v03.py"
+      },
+      "autopilot": {
+        "online": true,
+        "pid": 27834,
+        "script": "aris_autopilot_v01.py"
+      }
+    }
+  }
+}
