@@ -1,5 +1,5 @@
 {
-  "id": "ping-20260825-remote-v02-01",
-  "action": "PING",
-  "note": "Bidirectional remote-control verification."
+  "id": "healthcheck-20260825-01",
+  "action": "HEALTHCHECK",
+  "note": "Immediate remote validation before first market analysis."
 }
