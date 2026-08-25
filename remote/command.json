@@ -1,5 +1,5 @@
 {
-  "id": "sync-audit-fixes-20260825-01",
-  "action": "PING",
-  "note": "Fast-forward audited ARIS fixes onto the device."
+  "id": "restart-audited-components-20260825-01",
+  "action": "RESTART_COMPONENTS",
+  "note": "Restart monitored components so audited code is loaded; autopilot remains online."
 }
