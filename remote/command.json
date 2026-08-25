@@ -1,5 +1,5 @@
 {
-  "id": "full-healthcheck-20260825-02",
-  "action": "HEALTHCHECK",
-  "note": "Validate all processes, freshness, compilation and first market analysis after audit."
+  "id": "deploy-unified-v01-20260825",
+  "action": "PING",
+  "note": "Deploy unified Spot and P2P monitoring modules."
 }
