@@ -44,6 +44,7 @@ required = (
     "aris_analyze_v01.py",
     "aris_p2p_monitor_v01.py",
     "aris_unified_report_v01.py",
+    "aris_cycle_engine_v01.py",
     "aris_config_v01.json",
     "aris_updater_v02.py",
 )
@@ -88,6 +89,14 @@ try:
 except Exception as exc:
     add("p2p_monitor", False, type(exc).__name__)
 
+cycle_test = None
+try:
+    proc = subprocess.run([sys.executable, "aris_cycle_engine_v01.py", "--self-test"], cwd=ROOT, text=True, capture_output=True, timeout=60)
+    cycle_test = json.loads(proc.stdout) if proc.stdout.strip() else None
+    add("cycle_engine", proc.returncode == 0 and bool(cycle_test and cycle_test.get("ok")), f"cycles={cycle_test.get('cycles_checked') if cycle_test else None}")
+except Exception as exc:
+    add("cycle_engine", False, type(exc).__name__)
+
 analysis = None
 try:
     proc = subprocess.run([sys.executable, "aris_analyze_v01.py"], cwd=ROOT, text=True, capture_output=True, timeout=60)
@@ -109,6 +118,7 @@ report = {
     "time": time.strftime("%Y-%m-%dT%H:%M:%S"),
     "checks": CHECKS,
     "analysis": analysis,
+    "cycle_engine": cycle_test,
     "p2p": p2p_status,
     "unified": unified,
 }
