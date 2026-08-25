@@ -1,5 +1,5 @@
 {
-  "id": "restart-audited-components-20260825-01",
-  "action": "RESTART_COMPONENTS",
-  "note": "Restart monitored components so audited code is loaded; autopilot remains online."
+  "id": "full-healthcheck-20260825-02",
+  "action": "HEALTHCHECK",
+  "note": "Validate all processes, freshness, compilation and first market analysis after audit."
 }
