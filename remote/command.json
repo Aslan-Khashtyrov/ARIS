@@ -1,5 +1,5 @@
 {
-  "id": "deploy-unified-v01-20260825",
-  "action": "PING",
-  "note": "Deploy unified Spot and P2P monitoring modules."
+  "id": "validate-unified-v01-20260825",
+  "action": "HEALTHCHECK",
+  "note": "Validate unified Spot and P2P monitoring modules on device."
 }
