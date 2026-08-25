@@ -1,0 +1,31 @@
+# === ARIS SECRETS ===
+.env
+.env.*
+*.key
+*.pem
+*secret*
+*token*
+*credentials*
+
+# === Runtime / logs ===
+*.log
+__pycache__/
+*.pyc
+.cache/
+
+# === ARIS runtime data ===
+aris_queue/
+guardian_state/
+*.pid
+
+# === Scanner data / history ===
+multi_history*
+*.jsonl
+
+# === Backups / temporary ===
+*.bak
+*.tmp
+
+# === Local ARIS data ===
+backups/
+journal/
