@@ -1,0 +1,5 @@
+{
+  "id": "bootstrap-20260825-01",
+  "action": "PING",
+  "note": "Safe bootstrap command. Arbitrary shell and real trading are disabled."
+}
