@@ -1,5 +1,5 @@
 {
-  "id": "deploy-cycle-engine-v01-20260825",
-  "action": "PING",
-  "note": "Deploy intra-exchange and cross-exchange cycle engine."
+  "id": "validate-cycle-engine-v01-20260825",
+  "action": "HEALTHCHECK",
+  "note": "Validate cycle engine mathematics and system health."
 }
