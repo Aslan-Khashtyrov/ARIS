@@ -30,5 +30,5 @@ start_one scanner multi_scanner_v03.py
 start_one guardian guardian_v04.py
 start_one worker aris_worker_v03.py
 start_one autopilot aris_autopilot_v01.py
-start_one remote_agent aris_remote_agent_v01.py
+start_one remote_agent aris_remote_agent_v02.py
 python aris_local_core_v01.py
