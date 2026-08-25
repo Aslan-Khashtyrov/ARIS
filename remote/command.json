@@ -1,5 +1,5 @@
 {
-  "id": "status-20260825-2121",
-  "action": "STATUS",
-  "note": "First remote status request from A.R.I.S. control channel."
+  "id": "ping-20260825-remote-v02-01",
+  "action": "PING",
+  "note": "Bidirectional remote-control verification."
 }
