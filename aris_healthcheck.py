@@ -42,6 +42,9 @@ required = (
     "aris_autopilot_v01.py",
     "aris_remote_agent_v02.py",
     "aris_analyze_v01.py",
+    "aris_p2p_monitor_v01.py",
+    "aris_unified_report_v01.py",
+    "aris_config_v01.json",
     "aris_updater_v02.py",
 )
 for name in required:
@@ -77,6 +80,14 @@ try:
 except Exception as exc:
     add("python_compile", False, type(exc).__name__)
 
+p2p_status = None
+try:
+    proc = subprocess.run([sys.executable, "aris_p2p_monitor_v01.py"], cwd=ROOT, text=True, capture_output=True, timeout=60)
+    p2p_status = json.loads(proc.stdout) if proc.stdout.strip() else None
+    add("p2p_monitor", proc.returncode == 0 and bool(p2p_status and p2p_status.get("ok")), f"accepted={p2p_status.get('accepted_quotes') if p2p_status else None}")
+except Exception as exc:
+    add("p2p_monitor", False, type(exc).__name__)
+
 analysis = None
 try:
     proc = subprocess.run([sys.executable, "aris_analyze_v01.py"], cwd=ROOT, text=True, capture_output=True, timeout=60)
@@ -85,11 +96,21 @@ try:
 except Exception as exc:
     add("market_analysis", False, type(exc).__name__)
 
+unified = None
+try:
+    proc = subprocess.run([sys.executable, "aris_unified_report_v01.py"], cwd=ROOT, text=True, capture_output=True, timeout=90)
+    unified = json.loads(proc.stdout) if proc.stdout.strip() else None
+    add("unified_report", proc.returncode == 0 and bool(unified and unified.get("ok")), unified.get("decision") if unified else "missing")
+except Exception as exc:
+    add("unified_report", False, type(exc).__name__)
+
 report = {
     "ok": all(item["ok"] for item in CHECKS),
     "time": time.strftime("%Y-%m-%dT%H:%M:%S"),
     "checks": CHECKS,
     "analysis": analysis,
+    "p2p": p2p_status,
+    "unified": unified,
 }
 print(json.dumps(report, ensure_ascii=False, indent=2))
 sys.exit(0 if report["ok"] else 1)
