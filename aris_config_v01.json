@@ -1,0 +1,37 @@
+{
+  "version": "0.1",
+  "mode": "monitoring_and_paper_only",
+  "real_trading": false,
+  "spot": {
+    "assets": ["BTC", "ETH", "SOL", "XRP"],
+    "quote": "USD",
+    "exchanges": ["coinbase", "kraken"]
+  },
+  "p2p": {
+    "fiat": "RUB",
+    "assets": ["USDT", "BTC"],
+    "minimum_completion_rate_percent": 95,
+    "minimum_completed_orders": 50,
+    "providers": {
+      "binance": {
+        "enabled": false,
+        "reason": "No documented official public ads API"
+      },
+      "bybit": {
+        "enabled": false,
+        "reason": "Official P2P API requires General Advertiser status or above"
+      },
+      "okx": {
+        "enabled": false,
+        "reason": "Official P2P API requires eligible merchant status"
+      }
+    }
+  },
+  "safety": {
+    "allow_shell": false,
+    "allow_orders": false,
+    "allow_payments": false,
+    "allow_withdrawals": false,
+    "allow_api_secrets_in_repo": false
+  }
+}
