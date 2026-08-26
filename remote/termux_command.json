@@ -1,7 +1,7 @@
 {
-  "id": "termux-clean-stale-v01",
+  "id": "termux-process-recheck-v01",
   "action": "EXEC",
-  "argv": ["kill", "10576", "30015"],
+  "argv": ["pgrep", "-af", "python"],
   "cwd": "/data/data/com.termux/files/home",
   "timeout": 20
 }
