@@ -1,7 +1,16 @@
 {
-  "ok": false,
-  "id": "audit-live-2109-v01",
+  "ok": true,
+  "id": "audit-live-2110-v02",
   "action": "EXEC",
-  "time": "2026-08-26T21:08:28",
-  "error": "FileNotFoundError: [Errno 2] No such file or directory: '/data/data/com.termux/files/home/aris_healthcheck.py'"
+  "time": "2026-08-26T21:08:57",
+  "result": {
+    "argv": [
+      "python",
+      "Arbitrage/aris_healthcheck.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 2,
+    "stdout": "",
+    "stderr": "/data/data/com.termux/files/usr/bin/python: can't open file '/data/data/com.termux/files/home/Arbitrage/Arbitrage/aris_healthcheck.py': [Errno 2] No such file or directory\n"
+  }
 }
