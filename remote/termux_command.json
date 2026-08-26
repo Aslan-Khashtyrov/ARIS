@@ -1,4 +1,7 @@
 {
-  "id": "deploy-p2p-quick-v01-20260826-2056",
-  "action": "PING"
+  "id": "verify-p2p-quick-v01-20260826-2057",
+  "action": "EXEC",
+  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_p2p_quick_v01.py", "--buy", "80", "--sell", "81", "--capital", "10000", "--method", "MANUAL", "--minimum", "0.3"],
+  "cwd": "Arbitrage",
+  "timeout": 60
 }
