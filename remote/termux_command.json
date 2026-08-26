@@ -1,6 +1,4 @@
 {
-  "id": "publish-cycle-metrics-diff-v01",
-  "action": "WRITE_TEXT",
-  "path": "Arbitrage/journal/developer_feed_v01.json",
-  "content": "{\n  \"id\": \"dev-cycle-metrics-v01\",\n  \"time\": \"2026-08-26T08:46:09.863Z\",\n  \"phase\": \"PREPARE_DIFF\",\n  \"files\": [\n    \"aris_cycle_metrics_v01.py\",\n    \"aris_worker_v03.py\"\n  ],\n  \"goal\": \"Накопительная статистика качества валютных кругов и близости к рабочему порогу.\",\n  \"diff\": [\n    \"+ CSV-снимок каждые 60 секунд\",\n    \"+ best_raw и best_net после execution buffer\",\n    \"+ число котировок, кругов и подключённых бирж\",\n    \"+ доля положительных и достижений +0.30%\",\n    \"+ p50/p95/max и окно наблюдения\",\n    \"+ Worker v0.7 запускает метрики постоянно\"\n  ],\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false\n  }\n}\n"
+  "id": "sync-cycle-metrics-v01",
+  "action": "PING"
 }
