@@ -8,7 +8,7 @@ import sys
 import threading
 import time
 
-VERSION = "0.8"
+VERSION = "0.9"
 CHECK_EVERY = 3
 ROOT = Path.home() / "Arbitrage"
 BASE = ROOT / "aris_queue"
@@ -29,7 +29,8 @@ PROCESSES = {
     "GUARDIAN": "guardian_v04.py",
     "WORKER": "aris_worker_v03.py",
     "AUTOPILOT": "aris_autopilot_v01.py",
-    "REMOTE_AGENT": "aris_remote_agent_v02.py",
+    "TERMUX_CONTROL": "aris_termux_control_v01.py",
+    "FOREMAN": "aris_foreman_v01.py",
 }
 
 def log(message):
