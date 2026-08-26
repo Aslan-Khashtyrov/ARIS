@@ -1,11 +1,5 @@
 {
-  "id": "pause-foreman-p2p-1-20260826",
-  "action": "EXEC",
-  "argv": [
-    "pkill",
-    "-f",
-    "aris_foreman_v01.py"
-  ],
-  "cwd": "Arbitrage",
-  "timeout": 30
+  "id": "read-worker-status-2124-v01",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/aris_queue/results/status-v09-2123.json"
 }
