@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "backup-p2p-manual-v01-20260826-2221",
-  "action": "EXEC",
-  "time": "2026-08-26T22:20:25",
+  "id": "verify-control-v05-2221-v01",
+  "action": "PING",
+  "time": "2026-08-26T22:20:50",
   "result": {
-    "argv": [
-      "cp",
-      "aris_p2p_manual_v01.py",
-      "backups/aris_p2p_manual_v01_before_v02_20260826.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "pong": true,
+    "version": "0.5",
+    "home": "/data/data/com.termux/files/home"
   }
 }
