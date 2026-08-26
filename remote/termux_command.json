@@ -1,7 +1,6 @@
 {
-  "id": "termux-process-recheck-v01",
-  "action": "EXEC",
-  "argv": ["pgrep", "-af", "python"],
-  "cwd": "/data/data/com.termux/files/home",
-  "timeout": 20
+  "id": "create-termux-live-screen-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/aris_watch_control_v01.sh",
+  "content": "#!/data/data/com.termux/files/usr/bin/bash\nROOT=\"$HOME/Arbitrage\"\ncd \"$ROOT\" || exit 1\nwhile true; do\n  clear\n  echo \"========================================================\"\n  echo \" A.R.I.S. — УДАЛЁННОЕ УПРАВЛЕНИЕ TERMUX\"\n  echo \" $(date '+%Y-%m-%d %H:%M:%S')\"\n  echo \"========================================================\"\n  echo\n  echo \"ПОСЛЕДНЯЯ КОМАНДА:\"\n  tail -n 25 remote/termux_command.json 2>/dev/null\n  echo\n  echo \"ПОСЛЕДНИЙ РЕЗУЛЬТАТ:\"\n  tail -n 60 remote/termux_status.json 2>/dev/null\n  echo\n  echo \"ЖУРНАЛ УПРАВЛЕНИЯ:\"\n  tail -n 8 journal/termux_control_audit.jsonl 2>/dev/null\n  echo\n  echo \"Экран обновляется автоматически. Выход: Ctrl+C\"\n  sleep 2\ndone\n"
 }
