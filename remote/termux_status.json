@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "termux-control-bootstrap-v01",
-  "action": "PING",
-  "time": "2026-08-26T09:42:13",
+  "id": "termux-process-check-v01",
+  "action": "EXEC",
+  "time": "2026-08-26T09:43:00",
   "result": {
-    "pong": true,
-    "version": "0.1",
-    "home": "/data/data/com.termux/files/home"
+    "argv": [
+      "pgrep",
+      "-af",
+      "python"
+    ],
+    "cwd": "/data/data/com.termux/files/home",
+    "returncode": 0,
+    "stdout": "10576 python /data/data/com.termux/files/usr/bin/python aris_v01.py\n25071 python /data/data/com.termux/files/usr/bin/python main.py\n25084 python /data/data/com.termux/files/usr/bin/python multi_scanner_v03.py\n25098 python /data/data/com.termux/files/usr/bin/python guardian_v04.py\n25100 python /data/data/com.termux/files/usr/bin/python aris_worker_v03.py\n25114 python /data/data/com.termux/files/usr/bin/python aris_autopilot_v01.py\n25116 python /data/data/com.termux/files/usr/bin/python aris_remote_agent_v02.py\n25142 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\n30015 python /data/data/com.termux/files/usr/bin/python main.py\n",
+    "stderr": ""
   }
 }
