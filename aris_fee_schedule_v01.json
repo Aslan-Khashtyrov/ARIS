@@ -1,0 +1,41 @@
+{
+  "version": "0.1",
+  "mode": "CONSERVATIVE_TAKER_FEE_MODEL",
+  "verified_at": "2026-08-26",
+  "exchanges": {
+    "coinbase": {
+      "taker": 0.006,
+      "maker": 0.004,
+      "status": "verified_base_tier",
+      "note": "Low-volume base tier; account tier can differ."
+    },
+    "kraken": {
+      "taker": 0.008,
+      "maker": 0.004,
+      "status": "verified_base_tier",
+      "note": "Base spot crypto tier; pair/account tier can differ."
+    },
+    "binance": {
+      "taker": 0.001,
+      "maker": 0.001,
+      "status": "conservative_standard_assumption",
+      "note": "Discounts and VIP tiers ignored."
+    },
+    "bybit": {
+      "taker": 0.001,
+      "maker": 0.001,
+      "status": "verified_non_vip_reference",
+      "note": "Region and VIP tier can differ."
+    },
+    "okx": {
+      "taker": 0.001,
+      "maker": 0.0008,
+      "status": "verified_level1_example",
+      "note": "Actual account tier can differ."
+    }
+  },
+  "safety": {
+    "real_trading": false,
+    "account_api": false
+  }
+}
