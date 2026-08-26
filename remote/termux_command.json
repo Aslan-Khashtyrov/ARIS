@@ -1,12 +1,11 @@
 {
-  "id": "reset-main-recovery-2214-v01",
+  "id": "backup-p2p-manual-v01-20260826-2221",
   "action": "EXEC",
   "argv": [
-    "git",
-    "reset",
-    "--hard",
-    "origin/main"
+    "cp",
+    "aris_p2p_manual_v01.py",
+    "backups/aris_p2p_manual_v01_before_v02_20260826.py"
   ],
   "cwd": "Arbitrage",
-  "timeout": 60
+  "timeout": 30
 }
