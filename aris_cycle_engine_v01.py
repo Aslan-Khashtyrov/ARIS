@@ -110,7 +110,7 @@ def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS):
 def analyze(payload):
     edges = trade_edges(payload.get("quotes", [])) + transfer_edges(payload.get("transfers", []))
     cycles = find_cycles(edges)
-    opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT]
+    opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT and c["capacity_start_units"] > 0]
     return {
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
