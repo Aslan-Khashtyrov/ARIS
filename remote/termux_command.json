@@ -1,5 +1,6 @@
 {
-  "id": "aris-hourly-read-operational-2058",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/operational_report_v01.json"
+  "id": "publish-quote-age-plan-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"time\": \"2026-08-26T21:00:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"absolute-quote-age-guard-v01\",\n  \"mode\": \"monitoring and simulation only\",\n  \"files\": [\n    \"aris_cycle_engine_v01.py\",\n    \"aris_operational_report_v01.py\"\n  ],\n  \"changes\": [\n    \"Reject multileg results built from individually stale quote updates\",\n    \"Keep the existing three-second cross-leg synchronization guard\",\n    \"Expose oldest-leg age in the operational report\",\n    \"Verify with self-test and live public data\"\n  ]\n}\n"
 }
