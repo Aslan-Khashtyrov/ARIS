@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "sync-paper-leg-audit-v01",
-  "action": "PING",
-  "time": "2026-08-26T16:04:03",
+  "id": "restart-worker-paper-leg-audit-v01",
+  "action": "EXEC",
+  "time": "2026-08-26T16:04:33",
   "result": {
-    "pong": true,
-    "version": "0.1",
-    "home": "/data/data/com.termux/files/home"
+    "argv": [
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
   }
 }
