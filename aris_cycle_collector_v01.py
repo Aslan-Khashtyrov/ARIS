@@ -25,7 +25,7 @@ OKX_TICKERS_URL = "https://www.okx.com/api/v5/market/tickers?instType=SPOT"
 CB_WS = "wss://advanced-trade-ws.coinbase.com"
 KRAKEN_WS = "wss://ws.kraken.com/v2"
 UNIVERSE = {"USD", "USDT", "USDC", "EUR", "BTC", "ETH", "SOL", "XRP"}
-FEES = {"coinbase": 0.006, "kraken": 0.008, "binance": 0.001, "bybit": 0.001, "okx": 0.001}
+FEE_SCHEDULE = ROOT / "aris_fee_schedule_v01.json"
 FRESH_SECONDS = 15
 SAVE_SECONDS = 5
 SIGNAL_PROFIT_PERCENT = 0.30
@@ -40,6 +40,23 @@ health = {
     "bybit": {"connected": False, "pairs": 0, "updates": 0, "error": None},
     "okx": {"connected": False, "pairs": 0, "updates": 0, "error": None},
 }
+
+def load_fee_schedule():
+    payload = json.loads(FEE_SCHEDULE.read_text(encoding="utf-8"))
+    exchanges = payload.get("exchanges", {})
+    required = {"coinbase", "kraken", "binance", "bybit", "okx"}
+    if not required.issubset(exchanges):
+        raise RuntimeError("fee schedule is incomplete")
+    fees = {}
+    for exchange in required:
+        rate = float(exchanges[exchange]["taker"])
+        if not 0 < rate < 0.05:
+            raise RuntimeError(f"invalid taker fee for {exchange}")
+        fees[exchange] = rate
+    return payload, fees
+
+
+FEE_INFO, FEES = load_fee_schedule()
 
 def request_json(url):
     req = urllib.request.Request(url, headers={"User-Agent": "ARIS-monitor/0.1"})
@@ -93,6 +110,9 @@ def update(exchange, symbol, base, quote, bid, ask, bid_size=0, ask_size=0):
             "bid_size": max(0, bid_size),
             "ask_size": max(0, ask_size),
             "taker_fee": FEES[exchange],
+            "fee_status": FEE_INFO["exchanges"][exchange]["status"],
+            "fee_verified_at": FEE_INFO["verified_at"],
+            "fee_model": FEE_INFO["mode"],
             "updated_at": time.time(),
             "source": "LIVE_PUBLIC_MARKET_DATA",
         }
@@ -329,6 +349,9 @@ def snapshot_loop():
             "signals": 1 if confirmed_signal_ready else 0,
             "best_profit_percent": cycle_report.get("best_cycle", {}).get("profit_percent") if cycle_report.get("best_cycle") else None,
             "exchanges": state,
+            "fee_schedule_version": FEE_INFO["version"],
+            "fee_schedule_verified_at": FEE_INFO["verified_at"],
+            "fee_model": FEE_INFO["mode"],
             "real_trading": False,
         })
         time.sleep(SAVE_SECONDS)
