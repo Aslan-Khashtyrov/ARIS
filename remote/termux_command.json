@@ -1,12 +1,11 @@
 {
-  "id": "direct-fast-forward-2119-v01",
+  "id": "restart-worker-v09-2120-v01",
   "action": "EXEC",
   "argv": [
-    "git",
-    "merge",
-    "--ff-only",
-    "origin/main"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "Arbitrage",
-  "timeout": 90
+  "timeout": 30
 }
