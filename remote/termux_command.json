@@ -1,10 +1,10 @@
 {
-  "id": "mkdir-p2p-backup-20260827-0135",
+  "id": "backup-p2p-manual-v01-20260827-0135b",
   "action": "EXEC",
   "argv": [
-    "mkdir",
-    "-p",
-    "/data/data/com.termux/files/home/aris_backups"
+    "cp",
+    "/data/data/com.termux/files/home/Arbitrage/aris_p2p_manual_v01.py",
+    "/data/data/com.termux/files/home/aris_backups/aris_p2p_manual_v01_before_v02_20260827_0135.py"
   ],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
   "timeout": 30
