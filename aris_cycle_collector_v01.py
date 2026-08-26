@@ -16,10 +16,16 @@ CYCLE_REPORT = JOURNAL / "cycle_report_v01.json"
 SIGNALS = JOURNAL / "cycle_opportunities_v01.jsonl"
 CB_PRODUCTS_URL = "https://api.exchange.coinbase.com/products"
 KRAKEN_PAIRS_URL = "https://api.kraken.com/0/public/AssetPairs"
+BINANCE_INFO_URL = "https://data-api.binance.vision/api/v3/exchangeInfo"
+BINANCE_TICKERS_URL = "https://data-api.binance.vision/api/v3/ticker/bookTicker"
+BYBIT_INFO_URL = "https://api.bybit.com/v5/market/instruments-info?category=spot"
+BYBIT_TICKERS_URL = "https://api.bybit.com/v5/market/tickers?category=spot"
+OKX_INFO_URL = "https://www.okx.com/api/v5/public/instruments?instType=SPOT"
+OKX_TICKERS_URL = "https://www.okx.com/api/v5/market/tickers?instType=SPOT"
 CB_WS = "wss://advanced-trade-ws.coinbase.com"
 KRAKEN_WS = "wss://ws.kraken.com/v2"
 UNIVERSE = {"USD", "USDT", "USDC", "EUR", "BTC", "ETH", "SOL", "XRP"}
-FEES = {"coinbase": 0.006, "kraken": 0.008}
+FEES = {"coinbase": 0.006, "kraken": 0.008, "binance": 0.001, "bybit": 0.001, "okx": 0.001}
 FRESH_SECONDS = 15
 SAVE_SECONDS = 5
 
@@ -28,6 +34,9 @@ quotes = {}
 health = {
     "coinbase": {"connected": False, "pairs": 0, "updates": 0, "error": None},
     "kraken": {"connected": False, "pairs": 0, "updates": 0, "error": None},
+    "binance": {"connected": False, "pairs": 0, "updates": 0, "error": None},
+    "bybit": {"connected": False, "pairs": 0, "updates": 0, "error": None},
+    "okx": {"connected": False, "pairs": 0, "updates": 0, "error": None},
 }
 
 def request_json(url):
@@ -183,6 +192,73 @@ def kraken_loop():
                 except Exception:
                     pass
 
+def rest_market_loop(exchange, discover, fetch_tickers, poll_seconds=2):
+    while True:
+        try:
+            mapping = discover()
+            with lock:
+                health[exchange].update({"connected": True, "pairs": len(mapping), "error": None})
+            if not mapping:
+                raise RuntimeError(f"no supported {exchange} products")
+            while True:
+                for item in fetch_tickers():
+                    symbol = item.get("symbol")
+                    if symbol not in mapping:
+                        continue
+                    base, quote = mapping[symbol]
+                    update(exchange, symbol, base, quote, item.get("bid"), item.get("ask"), item.get("bid_size"), item.get("ask_size"))
+                time.sleep(poll_seconds)
+        except Exception as exc:
+            with lock:
+                health[exchange].update({"connected": False, "error": f"{type(exc).__name__}: {exc}"})
+            time.sleep(5)
+
+
+def discover_binance():
+    payload = request_json(BINANCE_INFO_URL)
+    result = {}
+    for item in payload.get("symbols", []):
+        base, quote = norm_asset(item.get("baseAsset")), norm_asset(item.get("quoteAsset"))
+        if base in UNIVERSE and quote in UNIVERSE and item.get("status") == "TRADING" and item.get("isSpotTradingAllowed", True):
+            result[item["symbol"]] = (base, quote)
+    return result
+
+
+def fetch_binance_tickers():
+    payload = request_json(BINANCE_TICKERS_URL)
+    return [{"symbol": item.get("symbol"), "bid": item.get("bidPrice"), "ask": item.get("askPrice"), "bid_size": item.get("bidQty"), "ask_size": item.get("askQty")} for item in payload]
+
+
+def discover_bybit():
+    payload = request_json(BYBIT_INFO_URL)
+    result = {}
+    for item in payload.get("result", {}).get("list", []):
+        base, quote = norm_asset(item.get("baseCoin")), norm_asset(item.get("quoteCoin"))
+        if base in UNIVERSE and quote in UNIVERSE and item.get("status") == "Trading":
+            result[item["symbol"]] = (base, quote)
+    return result
+
+
+def fetch_bybit_tickers():
+    payload = request_json(BYBIT_TICKERS_URL)
+    return [{"symbol": item.get("symbol"), "bid": item.get("bid1Price"), "ask": item.get("ask1Price"), "bid_size": item.get("bid1Size"), "ask_size": item.get("ask1Size")} for item in payload.get("result", {}).get("list", [])]
+
+
+def discover_okx():
+    payload = request_json(OKX_INFO_URL)
+    result = {}
+    for item in payload.get("data", []):
+        base, quote = norm_asset(item.get("baseCcy")), norm_asset(item.get("quoteCcy"))
+        if base in UNIVERSE and quote in UNIVERSE and item.get("state") == "live":
+            result[item["instId"]] = (base, quote)
+    return result
+
+
+def fetch_okx_tickers():
+    payload = request_json(OKX_TICKERS_URL)
+    return [{"symbol": item.get("instId"), "bid": item.get("bidPx"), "ask": item.get("askPx"), "bid_size": item.get("bidSz"), "ask_size": item.get("askSz")} for item in payload.get("data", [])]
+
+
 def write_atomic(path, payload):
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -238,6 +314,9 @@ def run_forever():
     threads = [
         threading.Thread(target=coinbase_loop, daemon=True, name="cycle-coinbase"),
         threading.Thread(target=kraken_loop, daemon=True, name="cycle-kraken"),
+        threading.Thread(target=rest_market_loop, args=("binance", discover_binance, fetch_binance_tickers), daemon=True, name="cycle-binance"),
+        threading.Thread(target=rest_market_loop, args=("bybit", discover_bybit, fetch_bybit_tickers), daemon=True, name="cycle-bybit"),
+        threading.Thread(target=rest_market_loop, args=("okx", discover_okx, fetch_okx_tickers), daemon=True, name="cycle-okx"),
         threading.Thread(target=snapshot_loop, daemon=True, name="cycle-snapshot"),
     ]
     for thread in threads:
