@@ -1,5 +1,5 @@
 {
-  "id": "verify-cycle-metrics-v01",
+  "id": "verify-operational-report-20260826-1459",
   "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_metrics_summary_v01.json"
+  "path": "Arbitrage/journal/operational_report_v01.json"
 }
