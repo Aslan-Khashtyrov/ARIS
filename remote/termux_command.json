@@ -1,4 +1,12 @@
 {
-  "id": "recover-control-ping-2128-v01",
-  "action": "PING"
+  "id": "backup-diverged-main-2212-v01",
+  "action": "EXEC",
+  "argv": [
+    "git",
+    "branch",
+    "aris-recovery-20260826-2212",
+    "HEAD"
+  ],
+  "cwd": "Arbitrage",
+  "timeout": 60
 }
