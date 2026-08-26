@@ -1,5 +1,5 @@
 {
-  "id": "hourly-health-20260826-1801",
+  "id": "inspect-best-cycle-legs-v01",
   "action": "READ_TEXT",
-  "path": "Arbitrage/journal/operational_report_v01.json"
+  "path": "Arbitrage/journal/cycle_report_v01.json"
 }
