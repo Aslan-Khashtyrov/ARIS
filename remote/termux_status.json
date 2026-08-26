@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "hourly-process-check-20260826-1606",
-  "action": "EXEC",
-  "time": "2026-08-26T16:06:17",
+  "id": "final-hourly-health-20260826-1607",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T16:07:06",
   "result": {
-    "argv": [
-      "pgrep",
-      "-af",
-      "main.py|multi_scanner_v03.py|guardian_v04.py|aris_worker_v03.py|aris_autopilot_v01.py|aris_termux_control_v01.py|aris_foreman_v01.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "7552 python /data/data/com.termux/files/usr/bin/python main.py\n7571 python /data/data/com.termux/files/usr/bin/python multi_scanner_v03.py\n7586 python /data/data/com.termux/files/usr/bin/python guardian_v04.py\n7652 python /data/data/com.termux/files/usr/bin/python aris_autopilot_v01.py\n7677 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\n22196 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py --daemon\n27500 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_worker_v03.py\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
+    "size": 1358,
+    "content": "{\n  \"ok\": false,\n  \"generated_at\": \"2026-08-26T16:07:05\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"DEGRADED\",\n  \"reasons\": [\n    \"disconnected:binance\"\n  ],\n  \"market\": {\n    \"live_quotes\": 85,\n    \"cycles_checked\": 1118,\n    \"connected_exchanges\": [\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.25002756484326366,\n    \"best_raw_profit_percent\": -0.20002756484326367,\n    \"best_executable\": true,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 1602,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 3.9,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 3.9,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 5.0,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 3.5,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
   }
 }
