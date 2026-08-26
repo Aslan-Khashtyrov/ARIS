@@ -1,7 +1,7 @@
 {
-  "id": "direct-market-analysis-20260826-2045",
+  "id": "live-cycle-evaluation-20260826-2047",
   "action": "EXEC",
-  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_analyze_v01.py"],
+  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_cycle_engine_v01.py"],
   "cwd": "Arbitrage",
   "timeout": 60
 }
