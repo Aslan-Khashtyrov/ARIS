@@ -1,5 +1,5 @@
 {
-  "id": "read-five-exchange-collector-status-v01",
+  "id": "recheck-five-exchange-collector-v02",
   "action": "READ_TEXT",
   "path": "Arbitrage/journal/cycle_collector_status_v01.json"
 }
