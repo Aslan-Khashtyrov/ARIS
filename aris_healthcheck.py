@@ -45,6 +45,7 @@ required = (
     "aris_p2p_monitor_v01.py",
     "aris_unified_report_v01.py",
     "aris_cycle_engine_v01.py",
+    "aris_cycle_collector_v01.py",
     "aris_config_v01.json",
     "aris_updater_v02.py",
 )
@@ -63,7 +64,7 @@ for name, script in processes.items():
     ok, detail = valid_process(name, script)
     add(f"process:{name}", ok, detail)
 
-for name in ("session_stats.json", "multi_history_v03.csv"):
+for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.json", "cycle_collector_status_v01.json"):
     path = JOURNAL / name
     file_age = age(path)
     fresh = path.exists() and file_age is not None and file_age <= 180
@@ -97,6 +98,15 @@ try:
 except Exception as exc:
     add("cycle_engine", False, type(exc).__name__)
 
+cycle_live = None
+try:
+    proc = subprocess.run([sys.executable, "aris_cycle_engine_v01.py"], cwd=ROOT, text=True, capture_output=True, timeout=60)
+    cycle_live = json.loads(proc.stdout) if proc.stdout.strip() else None
+    live_ok = proc.returncode == 0 and bool(cycle_live and cycle_live.get("ok"))
+    add("cycle_live", live_ok, f"quotes={cycle_live.get('quotes') if cycle_live else None};cycles={cycle_live.get('cycles_checked') if cycle_live else None};signals={len(cycle_live.get('opportunities', [])) if cycle_live else None}")
+except Exception as exc:
+    add("cycle_live", False, type(exc).__name__)
+
 analysis = None
 try:
     proc = subprocess.run([sys.executable, "aris_analyze_v01.py"], cwd=ROOT, text=True, capture_output=True, timeout=60)
@@ -119,6 +129,7 @@ report = {
     "checks": CHECKS,
     "analysis": analysis,
     "cycle_engine": cycle_test,
+    "cycle_live": cycle_live,
     "p2p": p2p_status,
     "unified": unified,
 }
