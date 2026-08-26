@@ -1,12 +1,12 @@
 {
-  "id": "backup-diverged-main-2212-v01",
+  "id": "fetch-main-recovery-2213-v01",
   "action": "EXEC",
   "argv": [
     "git",
-    "branch",
-    "aris-recovery-20260826-2212",
-    "HEAD"
+    "fetch",
+    "origin",
+    "main"
   ],
   "cwd": "Arbitrage",
-  "timeout": 60
+  "timeout": 90
 }
