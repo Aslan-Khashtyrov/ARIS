@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import sys
+import threading
 import time
 
 VERSION = "0.4"
@@ -101,8 +102,18 @@ def execute(task_file):
     shutil.move(str(task_file), str(DONE / task_file.name))
     log(f"DONE | {task_id} | {action}")
 
+def cycle_collector_supervisor():
+    while True:
+        try:
+            from aris_cycle_collector_v01 import run_forever
+            run_forever()
+        except Exception as exc:
+            log(f"CYCLE COLLECTOR ERROR | {type(exc).__name__}: {exc}")
+            time.sleep(10)
+
 print(f"A.R.I.S. WORKER v{VERSION} | SAFE QUEUE | SHELL DISABLED | REAL TRADING DISABLED")
 log(f"WORKER STARTED | v{VERSION} | SAFE MODE")
+threading.Thread(target=cycle_collector_supervisor, daemon=True, name="cycle-collector-supervisor").start()
 try:
     while True:
         for task_file in sorted(PENDING.glob("*.json")):
