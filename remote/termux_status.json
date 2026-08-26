@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "verify-exchange-reconnects-v01",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T15:13:55",
+  "id": "verify-processes-20260826-1514",
+  "action": "EXEC",
+  "time": "2026-08-26T15:14:48",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
-    "size": 1065,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T15:13:54\",\n  \"live_quotes\": 113,\n  \"cycles_checked\": 1795,\n  \"raw_opportunities\": 0,\n  \"actionable_candidates\": 0,\n  \"candidate_streak\": 0,\n  \"required_confirmations\": 3,\n  \"signal_profit_percent\": 0.3,\n  \"confirmed_signal_ready\": false,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.24991272214004984,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 5225,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": true,\n      \"pairs\": 27,\n      \"updates\": 31730,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": true,\n      \"pairs\": 25,\n      \"updates\": 325,\n      \"error\": null\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 21,\n      \"updates\": 399,\n      \"error\": null\n    },\n    \"okx\": {\n      \"connected\": true,\n      \"pairs\": 22,\n      \"updates\": 374,\n      \"error\": null\n    }\n  },\n  \"fee_schedule_version\": \"0.1\",\n  \"fee_schedule_verified_at\": \"2026-08-26\",\n  \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\",\n  \"real_trading\": false\n}\n"
+    "argv": [
+      "pgrep",
+      "-af",
+      "main.py|multi_scanner_v03.py|guardian_v04.py|aris_worker_v03.py|aris_autopilot_v01.py|aris_termux_control_v01.py|aris_foreman_v01.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "7552 python /data/data/com.termux/files/usr/bin/python main.py\n7571 python /data/data/com.termux/files/usr/bin/python multi_scanner_v03.py\n7586 python /data/data/com.termux/files/usr/bin/python guardian_v04.py\n7652 python /data/data/com.termux/files/usr/bin/python aris_autopilot_v01.py\n7677 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\n14141 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_worker_v03.py\n22196 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py --daemon\n",
+    "stderr": ""
   }
 }
