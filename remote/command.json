@@ -1,5 +1,5 @@
 {
-  "id": "verify-continuous-cycle-v01",
-  "action": "HEALTHCHECK",
-  "note": "Verify five-second live cycle report freshness."
+  "id": "sync-termux-control-v01",
+  "action": "STATUS",
+  "note": "Fast-forward device to protected Termux control agent files."
 }
