@@ -1,6 +1,4 @@
 {
-  "id": "publish-paper-ledger-diff-v01",
-  "action": "WRITE_TEXT",
-  "path": "Arbitrage/journal/developer_feed_v01.json",
-  "content": "{\n  \"id\": \"dev-paper-ledger-v01\",\n  \"time\": \"2026-08-26T08:02:30.301Z\",\n  \"phase\": \"PREPARE_DIFF\",\n  \"files\": [\n    \"aris_cycle_engine_v01.py\",\n    \"aris_paper_ledger_v01.py\",\n    \"aris_worker_v03.py\"\n  ],\n  \"goal\": \"Идемпотентный бумажный журнал только для подтверждённых исполнимых сигналов.\",\n  \"diff\": [\n    \"+ engine: paper_start_units, paper_end_units, paper_profit_units\",\n    \"+ ledger: fingerprint каждого сигнала и защита от двойного зачёта\",\n    \"+ virtual stake ограничен capacity_start_units\",\n    \"+ Worker запускает paper ledger каждые 15 секунд\",\n    \"+ сводка прибыли отдельно по стартовой валюте\"\n  ],\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
+  "id": "sync-paper-ledger-v01",
+  "action": "PING"
 }
