@@ -1,5 +1,5 @@
 {
-  "id": "deploy-continuous-cycle-v01",
-  "action": "PING",
-  "note": "Deploy continuous five-second cycle analysis and live signal journal."
+  "id": "restart-continuous-cycle-v01",
+  "action": "RESTART_COMPONENTS",
+  "note": "Reload Worker with continuous cycle analysis."
 }
