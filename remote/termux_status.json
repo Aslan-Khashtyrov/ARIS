@@ -1,15 +1,10 @@
 {
   "ok": true,
-  "id": "visible-control-test-20260826-1002",
-  "action": "EXEC",
-  "time": "2026-08-26T10:00:49",
+  "id": "update-live-command-display-v03",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T10:01:39",
   "result": {
-    "argv": [
-      "date"
-    ],
-    "cwd": "/data/data/com.termux/files/home",
-    "returncode": 0,
-    "stdout": "Wed Aug 26 10:00:49 MSK 2026\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/aris_watch_control_v01.sh",
+    "bytes": 1808
   }
 }
