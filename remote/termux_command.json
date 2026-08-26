@@ -1,5 +1,6 @@
 {
-  "id": "hourly-cycle-metrics-20260826-1601",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_metrics_summary_v01.json"
+  "id": "publish-paper-leg-audit-plan-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"time\": \"2026-08-26T16:02:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"paper-leg-execution-audit-v01\",\n  \"mode\": \"public monitoring and paper only\",\n  \"files\": [\n    \"aris_cycle_engine_v01.py\"\n  ],\n  \"changes\": [\n    \"Record input and output amount for every cycle leg\",\n    \"Record top-of-book capacity utilization per leg\",\n    \"Expose the bottleneck leg and verify every paper leg fits available size\",\n    \"Keep the existing fee model and final execution buffer\"\n  ]\n}\n"
 }
