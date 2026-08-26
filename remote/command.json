@@ -1,5 +1,5 @@
 {
-  "id": "deploy-versioned-fees-v01",
-  "action": "RESTART_COMPONENTS",
-  "note": "Deploy validated versioned conservative taker fees."
+  "id": "healthcheck-versioned-fees-v01",
+  "action": "HEALTHCHECK",
+  "note": "Validate fee schedule deployment and live collector."
 }
