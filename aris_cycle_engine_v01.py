@@ -110,6 +110,51 @@ def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS):
             unique[key] = cycle
     return sorted(unique.values(), key=lambda item: item["profit_percent"], reverse=True)
 
+def simulate_route(start_units, route):
+    amount = float(start_units)
+    legs = []
+    capacity_verified = True
+    bottleneck = None
+    highest_utilization = -1.0
+    for index, edge in enumerate(route, start=1):
+        capacity = float(edge.get("capacity_src", 0) or 0)
+        tolerance = max(1e-12, abs(capacity) * 1e-12)
+        within_capacity = capacity > 0 and amount <= capacity + tolerance
+        utilization = (amount / capacity * 100) if capacity > 0 and math.isfinite(capacity) else None
+        amount_out = amount * float(edge["rate"])
+        leg = {
+            "leg": index,
+            "exchange": edge.get("exchange"),
+            "pair": edge.get("pair"),
+            "side": edge.get("side"),
+            "src": edge["src"],
+            "dst": edge["dst"],
+            "amount_in": amount,
+            "amount_out": amount_out,
+            "capacity_src": capacity,
+            "capacity_utilization_percent": utilization,
+            "within_top_of_book_capacity": within_capacity,
+        }
+        legs.append(leg)
+        capacity_verified = capacity_verified and within_capacity
+        if utilization is not None and utilization > highest_utilization:
+            highest_utilization = utilization
+            bottleneck = {
+                "leg": index,
+                "exchange": edge.get("exchange"),
+                "pair": edge.get("pair"),
+                "side": edge.get("side"),
+                "capacity_utilization_percent": utilization,
+            }
+        amount = amount_out
+    return {
+        "legs": legs,
+        "end_units_before_buffer": amount,
+        "capacity_verified": capacity_verified,
+        "bottleneck": bottleneck,
+    }
+
+
 def analyze(payload):
     edges = trade_edges(payload.get("quotes", [])) + transfer_edges(payload.get("transfers", []))
     cycles = find_cycles(edges)
@@ -120,15 +165,20 @@ def analyze(payload):
         start_units = max(0.0, min(requested, cycle["capacity_start_units"]))
         raw_profit = cycle["profit_percent"]
         conservative_profit = raw_profit - EXECUTION_BUFFER_PERCENT
+        simulation = simulate_route(start_units, cycle["route"])
         cycle["raw_profit_percent"] = raw_profit
         cycle["execution_buffer_percent"] = EXECUTION_BUFFER_PERCENT
         cycle["profit_percent"] = conservative_profit
         cycle["paper_start_units"] = start_units
+        cycle["paper_end_before_buffer_units"] = simulation["end_units_before_buffer"]
         cycle["paper_end_units"] = start_units * (1 + conservative_profit / 100)
         cycle["paper_profit_units"] = cycle["paper_end_units"] - start_units
         cycle["paper_asset"] = start_asset
+        cycle["paper_legs"] = simulation["legs"]
+        cycle["capacity_verified"] = simulation["capacity_verified"]
+        cycle["bottleneck_leg"] = simulation["bottleneck"]
         cycle["minimum_executable_units"] = minimum
-        cycle["executable"] = start_units >= minimum
+        cycle["executable"] = start_units >= minimum and simulation["capacity_verified"]
     cycles.sort(key=lambda item: item["profit_percent"], reverse=True)
     opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT and c["executable"]]
     return {
@@ -165,6 +215,9 @@ def self_test():
     result = analyze(payload)
     assert result["cycles_checked"] > 0
     assert result["best_cycle"] is not None
+    assert result["best_cycle"]["paper_legs"]
+    assert result["best_cycle"]["capacity_verified"] is True
+    assert result["best_cycle"]["bottleneck_leg"] is not None
     return {"ok": True, "cycles_checked": result["cycles_checked"], "best_profit_percent": result["best_cycle"]["profit_percent"]}
 
 def main():
