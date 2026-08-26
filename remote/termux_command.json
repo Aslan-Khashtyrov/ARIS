@@ -1,9 +1,6 @@
 {
-  "id": "visible-control-test-20260826-1002",
-  "action": "EXEC",
-  "argv": [
-    "date"
-  ],
-  "cwd": "/data/data/com.termux/files/home",
-  "timeout": 10
+  "id": "update-live-command-display-v03",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/aris_watch_control_v01.sh",
+  "content": "#!/data/data/com.termux/files/usr/bin/bash\nROOT=\"$HOME/Arbitrage\"\nCOMMAND=\"$ROOT/remote/termux_command.json\"\nSTATUS=\"$ROOT/remote/termux_status.json\"\nAUDIT=\"$ROOT/journal/termux_control_audit.jsonl\"\ncd \"$ROOT\" || exit 1\n\njson_id(){\n  python - \"$1\" <<'PY'\nimport json\nimport sys\ntry:\n    with open(sys.argv[1], encoding=\"utf-8\") as handle:\n        print(json.load(handle).get(\"id\", \"\"))\nexcept Exception:\n    print(\"\")\nPY\n}\n\necho \"========================================================\"\necho \" A.R.I.S. — ЖИВОЙ ПОТОК УПРАВЛЕНИЯ TERMUX\"\necho \"========================================================\"\necho \"Команда показывается сразу, результат — после выполнения.\"\necho \"Выход из экрана: Ctrl+C. A.R.I.S. продолжит работу.\"\necho\n\nlast_command_id=\"\"\nlast_status_id=\"\"\nwhile true; do\n  command_id=\"$(json_id \"$COMMAND\")\"\n  status_id=\"$(json_id \"$STATUS\")\"\n\n  if [ -n \"$command_id\" ] && [ \"$command_id\" != \"$last_command_id\" ]; then\n    echo\n    echo \">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\"\n    echo \"[$(date '+%Y-%m-%d %H:%M:%S')] КОМАНДА ОТПРАВЛЕНА\"\n    echo \">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\"\n    cat \"$COMMAND\" 2>/dev/null\n    echo\n    last_command_id=\"$command_id\"\n  fi\n\n  if [ -n \"$status_id\" ] && [ \"$status_id\" != \"$last_status_id\" ]; then\n    echo\n    echo \"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\"\n    echo \"[$(date '+%Y-%m-%d %H:%M:%S')] РЕЗУЛЬТАТ ПОЛУЧЕН\"\n    echo \"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\"\n    cat \"$STATUS\" 2>/dev/null\n    echo\n    echo \"ПОСЛЕДНИЕ СОБЫТИЯ:\"\n    tail -n 4 \"$AUDIT\" 2>/dev/null\n    echo\n    last_status_id=\"$status_id\"\n  fi\n  sleep 1\ndone\n"
 }
