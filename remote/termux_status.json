@@ -1,11 +1,7 @@
 {
-  "ok": true,
-  "id": "verify-paper-ledger-v01",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T11:05:27",
-  "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/paper_ledger_summary_v01.json",
-    "size": 241,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T11:05:19\",\n  \"mode\": \"PAPER_ONLY\",\n  \"real_trading\": false,\n  \"paper_trades\": 0,\n  \"profit_by_asset\": {},\n  \"minimum_profit_percent\": 0.3,\n  \"minimum_confirmations\": 3,\n  \"added_this_cycle\": 0\n}\n"
-  }
+  "ok": false,
+  "id": "publish-execution-quality-diff-v01",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T11:27:57",
+  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
 }
