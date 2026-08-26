@@ -15,6 +15,7 @@ MIN_PROFIT_PERCENT = 0.10
 PAPER_STAKES = {"USD": 100.0, "USDT": 100.0, "USDC": 100.0, "EUR": 100.0, "RUB": 10000.0, "BTC": 0.001}
 MIN_EXECUTABLE = {"USD": 25.0, "USDT": 25.0, "USDC": 25.0, "EUR": 25.0, "RUB": 2500.0, "BTC": 0.00025}
 EXECUTION_BUFFER_PERCENT = 0.05
+MAX_QUOTE_SKEW_SECONDS = 3.0
 
 def trade_edges(quotes):
     edges = []
@@ -28,6 +29,7 @@ def trade_edges(quotes):
             bid_size = float(q.get("bid_size", 0) or 0)
             ask_size = float(q.get("ask_size", 0) or 0)
             fee = float(q.get("taker_fee", 0))
+            quote_updated_at = float(q.get("updated_at", 0) or 0)
         except (KeyError, TypeError, ValueError):
             continue
         if min(bid, ask) <= 0 or bid > ask or not 0 <= fee < 1:
@@ -38,13 +40,13 @@ def trade_edges(quotes):
             "kind": "TRADE", "exchange": exchange, "pair": f"{base}/{quote}",
             "src": base_node, "dst": quote_node,
             "rate": bid * (1 - fee), "capacity_src": bid_size,
-            "side": "SELL", "fee": fee,
+            "side": "SELL", "fee": fee, "quote_updated_at": quote_updated_at,
         })
         edges.append({
             "kind": "TRADE", "exchange": exchange, "pair": f"{base}/{quote}",
             "src": quote_node, "dst": base_node,
             "rate": (1 / ask) * (1 - fee), "capacity_src": ask * ask_size,
-            "side": "BUY", "fee": fee,
+            "side": "BUY", "fee": fee, "quote_updated_at": quote_updated_at,
         })
     return edges
 
@@ -90,12 +92,19 @@ def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS):
                 next_path = path + [edge]
                 if edge["dst"] == start and len(next_path) >= 2:
                     profit = (next_amount - 1) * 100
+                    trade_legs = [item for item in next_path if item["kind"] == "TRADE"]
+                    quote_times = [item.get("quote_updated_at", 0) for item in trade_legs if item.get("quote_updated_at", 0) > 0]
+                    timestamps_complete = len(quote_times) == len(trade_legs) and bool(trade_legs)
+                    quote_skew = (max(quote_times) - min(quote_times)) if timestamps_complete else None
                     found.append({
                         "start": start,
                         "legs": len(next_path),
                         "profit_percent": profit,
                         "capacity_start_units": next_capacity,
                         "contains_transfer": any(item["kind"] == "TRANSFER" for item in next_path),
+                        "quote_skew_seconds": quote_skew,
+                        "maximum_quote_skew_seconds": MAX_QUOTE_SKEW_SECONDS,
+                        "quote_synchronized": timestamps_complete and quote_skew <= MAX_QUOTE_SKEW_SECONDS,
                         "route": next_path,
                     })
                     continue
@@ -134,6 +143,7 @@ def simulate_route(start_units, route):
             "capacity_src": capacity,
             "capacity_utilization_percent": utilization,
             "within_top_of_book_capacity": within_capacity,
+            "quote_updated_at": edge.get("quote_updated_at"),
         }
         legs.append(leg)
         capacity_verified = capacity_verified and within_capacity
@@ -178,7 +188,7 @@ def analyze(payload):
         cycle["capacity_verified"] = simulation["capacity_verified"]
         cycle["bottleneck_leg"] = simulation["bottleneck"]
         cycle["minimum_executable_units"] = minimum
-        cycle["executable"] = start_units >= minimum and simulation["capacity_verified"]
+        cycle["executable"] = start_units >= minimum and simulation["capacity_verified"] and cycle["quote_synchronized"]
     cycles.sort(key=lambda item: item["profit_percent"], reverse=True)
     opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT and c["executable"]]
     return {
@@ -193,10 +203,12 @@ def analyze(payload):
         "best_cycle": cycles[0] if cycles else None,
         "minimum_profit_percent": MIN_PROFIT_PERCENT,
         "execution_buffer_percent": EXECUTION_BUFFER_PERCENT,
+        "maximum_quote_skew_seconds": MAX_QUOTE_SKEW_SECONDS,
         "minimum_executable": MIN_EXECUTABLE,
         "warnings": [
             "Top-of-book capacity must meet the configured minimum executable amount.",
             "A conservative execution buffer is deducted from raw profit.",
+            "All trade-leg quotes must fit the configured timestamp-skew window.",
             "Order-book depth can change before all legs execute.",
             "Transfer routes are informational and include delay risk.",
             "No orders, payments, transfers or withdrawals are performed."
@@ -206,7 +218,7 @@ def analyze(payload):
 def self_test():
     payload = {
         "quotes": [
-            {"exchange":"test","base":"BTC","quote":"USDT","bid":100,"ask":101,"bid_size":10,"ask_size":10,"taker_fee":0},
+            {"exchange":"test","base":"BTC","quote":"USDT","bid":100,"ask":101,"bid_size":10,"ask_size":10,"taker_fee":0,"updated_at":1000.0},
             {"exchange":"test","base":"ETH","quote":"BTC","bid":0.051,"ask":0.052,"bid_size":100,"ask_size":100,"taker_fee":0},
             {"exchange":"test","base":"ETH","quote":"USDT","bid":5.4,"ask":5.5,"bid_size":100,"ask_size":100,"taker_fee":0}
         ],
@@ -218,6 +230,7 @@ def self_test():
     assert result["best_cycle"]["paper_legs"]
     assert result["best_cycle"]["capacity_verified"] is True
     assert result["best_cycle"]["bottleneck_leg"] is not None
+    assert result["best_cycle"]["quote_synchronized"] is True
     return {"ok": True, "cycles_checked": result["cycles_checked"], "best_profit_percent": result["best_cycle"]["profit_percent"]}
 
 def main():
