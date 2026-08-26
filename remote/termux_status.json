@@ -1,11 +1,10 @@
 {
   "ok": true,
-  "id": "inspect-binance-after-targeted-query-v01",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T16:07:58",
+  "id": "publish-binance-websocket-plan-v01",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T16:09:32",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
-    "size": 1061,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T16:07:57\",\n  \"live_quotes\": 88,\n  \"cycles_checked\": 1346,\n  \"raw_opportunities\": 0,\n  \"actionable_candidates\": 0,\n  \"candidate_streak\": 0,\n  \"required_confirmations\": 3,\n  \"signal_profit_percent\": 0.3,\n  \"confirmed_signal_ready\": false,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.2500276224272568,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 8874,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": true,\n      \"pairs\": 27,\n      \"updates\": 15137,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": false,\n      \"pairs\": 0,\n      \"updates\": 0,\n      \"error\": null\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 21,\n      \"updates\": 630,\n      \"error\": null\n    },\n    \"okx\": {\n      \"connected\": true,\n      \"pairs\": 22,\n      \"updates\": 352,\n      \"error\": null\n    }\n  },\n  \"fee_schedule_version\": \"0.1\",\n  \"fee_schedule_verified_at\": \"2026-08-26\",\n  \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\",\n  \"real_trading\": false\n}\n"
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/developer_feed_v01.json",
+    "bytes": 512
   }
 }
