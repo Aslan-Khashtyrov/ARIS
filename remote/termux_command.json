@@ -1,10 +1,5 @@
 {
-  "id": "deploy-worker-v09-2116-v01",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
-  ],
-  "cwd": "Arbitrage",
-  "timeout": 180
+  "id": "read-p2p-manual-v01-20260826-2117",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/aris_p2p_manual_v01.py"
 }
