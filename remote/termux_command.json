@@ -1,6 +1,10 @@
 {
-  "id": "publish-quote-age-result-v01",
-  "action": "WRITE_TEXT",
-  "path": "Arbitrage/journal/developer_feed_v01.json",
-  "content": "{\n  \"time\": \"2026-08-26T21:04:00+03:00\",\n  \"event\": \"completed_change\",\n  \"id\": \"absolute-quote-age-guard-v01\",\n  \"result\": \"verified\",\n  \"changes\": [\n    \"Executable cycles now require every quote update to be no older than five seconds\",\n    \"The existing three-second cross-leg synchronization check remains active\",\n    \"Operational status now shows oldest-leg age and freshness\",\n    \"Self-test passed and Worker restarted safely\",\n    \"All seven A.R.I.S. processes verified online\"\n  ],\n  \"live\": {\n    \"exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"okx\",\n      \"coinbase\",\n      \"kraken\"\n    ],\n    \"live_quotes\": 112,\n    \"cycles_checked\": 1545,\n    \"executable_cycles_checked\": 1301,\n    \"best_executable_net_percent\": -0.32570600474980943,\n    \"best_quote_age_seconds\": 0.7576141357421875,\n    \"maximum_quote_age_seconds\": 5,\n    \"actionable_candidates\": 0,\n    \"simulated_ledger_entries\": 0\n  },\n  \"mode\": \"monitoring and simulation only\"\n}\n"
+  "id": "audit-live-2109-v01",
+  "action": "EXEC",
+  "argv": [
+    "python",
+    "aris_healthcheck.py"
+  ],
+  "cwd": "Arbitrage",
+  "timeout": 180
 }
