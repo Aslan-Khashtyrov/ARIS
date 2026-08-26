@@ -1,10 +1,11 @@
 {
   "ok": true,
-  "id": "publish-fee-model-code-v01",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-26T10:47:15",
+  "id": "diagnose-foreman-after-recovery-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T10:54:27",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/developer_feed_v01.json",
-    "bytes": 1617
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/foreman.out.log",
+    "size": 24,
+    "content": "foreman already running\n"
   }
 }
