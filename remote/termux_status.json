@@ -1,17 +1,16 @@
 {
   "ok": true,
-  "id": "backup-p2p-manual-v01-20260827-0135b",
+  "id": "deploy-p2p-manual-v02-20260827-0136",
   "action": "EXEC",
-  "time": "2026-08-27T01:35:32",
+  "time": "2026-08-27T01:36:18",
   "result": {
     "argv": [
-      "cp",
-      "/data/data/com.termux/files/home/Arbitrage/aris_p2p_manual_v01.py",
-      "/data/data/com.termux/files/home/aris_backups/aris_p2p_manual_v01_before_v02_20260827_0135.py"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
+    "returncode": 2,
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-27 01:36:18\n========================================================\n[STOP] Working tree is not clean.\n?? aris_watch_control_v01.sh\nNo files were changed.\n",
     "stderr": ""
   }
 }
