@@ -191,7 +191,8 @@ def analyze(payload):
         cycle["minimum_executable_units"] = minimum
         cycle["executable"] = start_units >= minimum and simulation["capacity_verified"] and cycle["quote_synchronized"]
     cycles.sort(key=lambda item: item["profit_percent"], reverse=True)
-    opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT and c["executable"]]
+    executable_cycles = [cycle for cycle in cycles if cycle["executable"]]
+    opportunities = [cycle for cycle in executable_cycles if cycle["profit_percent"] >= MIN_PROFIT_PERCENT]
     return {
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -202,6 +203,8 @@ def analyze(payload):
         "cycles_checked": len(cycles),
         "opportunities": opportunities[:50],
         "best_cycle": cycles[0] if cycles else None,
+        "best_executable_cycle": executable_cycles[0] if executable_cycles else None,
+        "executable_cycles_checked": len(executable_cycles),
         "minimum_profit_percent": MIN_PROFIT_PERCENT,
         "minimum_cycle_legs": MIN_CYCLE_LEGS,
         "execution_buffer_percent": EXECUTION_BUFFER_PERCENT,
@@ -230,6 +233,7 @@ def self_test():
     result = analyze(payload)
     assert result["cycles_checked"] > 0
     assert result["best_cycle"] is not None
+    assert result["best_executable_cycle"] is not None
     assert result["best_cycle"]["legs"] >= MIN_CYCLE_LEGS
     assert result["best_cycle"]["paper_legs"]
     assert result["best_cycle"]["capacity_verified"] is True
