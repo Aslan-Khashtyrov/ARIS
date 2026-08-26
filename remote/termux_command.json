@@ -1,10 +1,11 @@
 {
-  "id": "deploy-p2p-v02-tests-20260827-0140",
+  "id": "run-p2p-v02-tests-20260827-0141",
   "action": "EXEC",
   "argv": [
     "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+    "/data/data/com.termux/files/home/Arbitrage/test_aris_p2p_manual_v02.py",
+    "-v"
   ],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 300
+  "timeout": 120
 }
