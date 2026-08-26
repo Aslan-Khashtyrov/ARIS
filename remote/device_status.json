@@ -1,25 +1,25 @@
 {
   "ok": true,
-  "id": "deploy-five-exchange-spot-v01",
+  "id": "deploy-persistent-cycle-signals-v01",
   "action": "RESTART_COMPONENTS",
-  "time": "2026-08-26T10:30:06",
+  "time": "2026-08-26T10:43:51",
   "result": {
     "stopped": [
       {
         "name": "worker",
-        "pid": 25100
+        "pid": 18356
       },
       {
         "name": "guardian",
-        "pid": 25098
+        "pid": 18346
       },
       {
         "name": "scanner",
-        "pid": 25084
+        "pid": 18324
       },
       {
         "name": "main",
-        "pid": 25071
+        "pid": 18308
       }
     ],
     "note": "autopilot will restart missing components"
