@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "restart-worker-quote-skew-guard-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T17:05:33",
+  "id": "verify-live-quote-skew-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T17:06:42",
   "result": {
-    "argv": [
-      "pkill",
-      "-f",
-      "aris_worker_v03.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_report_v01.json",
+    "size": 3328,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T17:06:39\",\n  \"mode\": \"PAPER_ONLY\",\n  \"real_trading\": false,\n  \"quotes\": 114,\n  \"edges\": 228,\n  \"cycles_checked\": 1813,\n  \"opportunities\": [],\n  \"best_cycle\": {\n    \"start\": \"binance:BTC\",\n    \"legs\": 2,\n    \"profit_percent\": -0.24991270803171312,\n    \"capacity_start_units\": 0.21114116802677216,\n    \"contains_transfer\": false,\n    \"quote_skew_seconds\": 0.0,\n    \"maximum_quote_skew_seconds\": 3.0,\n    \"quote_synchronized\": true,\n    \"route\": [\n      {\n        \"kind\": \"TRADE\",\n        \"exchange\": \"binance\",\n        \"pair\": \"BTC/USDC\",\n        \"src\": \"binance:BTC\",\n        \"dst\": \"binance:USDC\",\n        \"rate\": 78454.54692000001,\n        \"capacity_src\": 0.62928,\n        \"side\": \"SELL\",\n        \"fee\": 0.001,\n        \"quote_updated_at\": 1787753199.6202922\n      },\n      {\n        \"kind\": \"TRADE\",\n        \"exchange\": \"binance\",\n        \"pair\": \"BTC/USDC\",\n        \"src\": \"binance:USDC\",\n        \"dst\": \"binance:BTC\",\n        \"rate\": 1.2720752487900324e-05,\n        \"capacity_src\": 16564.9846737,\n        \"side\": \"BUY\",\n        \"fee\": 0.001,\n        \"quote_updated_at\": 1787753199.6202922\n      }\n    ],\n    \"raw_profit_percent\": -0.19991270803171313,\n    \"execution_buffer_percent\": 0.05,\n    \"paper_start_units\": 0.001,\n    \"paper_end_before_buffer_units\": 0.000998000872919683,\n    \"paper_end_units\": 0.0009975008729196828,\n    \"paper_profit_units\": -2.4991270803171803e-06,\n    \"paper_asset\": \"BTC\",\n    \"paper_legs\": [\n      {\n        \"leg\": 1,\n        \"exchange\": \"binance\",\n        \"pair\": \"BTC/USDC\",\n        \"side\": \"SELL\",\n        \"src\": \"binance:BTC\",\n        \"dst\": \"binance:USDC\",\n        \"amount_in\": 0.001,\n        \"amount_out\": 78.45454692000001,\n        \"capacity_src\": 0.62928,\n        \"capacity_utilization_percent\": 0.15891177218408342,\n        \"within_top_of_book_capacity\": true,\n        \"quote_updated_at\": 1787753199.6202922\n      },\n      {\n        \"leg\": 2,\n        \"exchange\": \"binance\",\n        \"pair\": \"BTC/USDC\",\n        \"side\": \"BUY\",\n        \"src\": \"binance:USDC\",\n        \"dst\": \"binance:BTC\",\n        \"amount_in\": 78.45454692000001,\n        \"amount_out\": 0.000998000872919683,\n        \"capacity_src\": 16564.9846737,\n        \"capacity_utilization_percent\": 0.4736167794019226,\n        \"within_top_of_book_capacity\": true,\n        \"quote_updated_at\": 1787753199.6202922\n      }\n    ],\n    \"capacity_verified\": true,\n    \"bottleneck_leg\": {\n      \"leg\": 2,\n      \"exchange\": \"binance\",\n      \"pair\": \"BTC/USDC\",\n      \"side\": \"BUY\",\n      \"capacity_utilization_percent\": 0.4736167794019226\n    },\n    \"minimum_executable_units\": 0.00025,\n    \"executable\": true\n  },\n  \"minimum_profit_percent\": 0.1,\n  \"execution_buffer_percent\": 0.05,\n  \"maximum_quote_skew_seconds\": 3.0,\n  \"minimum_executable\": {\n    \"USD\": 25.0,\n    \"USDT\": 25.0,\n    \"USDC\": 25.0,\n    \"EUR\": 25.0,\n    \"RUB\": 2500.0,\n    \"BTC\": 0.00025\n  },\n  \"warnings\": [\n    \"Top-of-book capacity must meet the configured minimum executable amount.\",\n    \"A conservative execution buffer is deducted from raw profit.\",\n    \"All trade-leg quotes must fit the configured timestamp-skew window.\",\n    \"Order-book depth can change before all legs execute.\",\n    \"Transfer routes are informational and include delay risk.\",\n    \"No orders, payments, transfers or withdrawals are performed.\"\n  ]\n}\n"
   }
 }
