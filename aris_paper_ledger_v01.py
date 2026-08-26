@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import hashlib
+import json
+import time
+from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
+
+ROOT = Path.home() / "Arbitrage"
+JOURNAL = ROOT / "journal"
+SIGNALS = JOURNAL / "cycle_opportunities_v01.jsonl"
+LEDGER = JOURNAL / "paper_ledger_v01.jsonl"
+STATE = JOURNAL / "paper_ledger_state_v01.json"
+SUMMARY = JOURNAL / "paper_ledger_summary_v01.json"
+MIN_PROFIT_PERCENT = 0.30
+MIN_CONFIRMATIONS = 3
+
+
+def atomic_json(path, payload):
+    temp = path.with_suffix(path.suffix + ".tmp")
+    temp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temp.replace(path)
+
+
+def fingerprint(signal):
+    route = signal.get("cycle", {}).get("route", [])
+    identity = {
+        "detected_at": signal.get("detected_at"),
+        "route": [(item.get("src"), item.get("dst"), item.get("kind")) for item in route],
+    }
+    return hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+
+
+def load_processed():
+    try:
+        return set(json.loads(STATE.read_text(encoding="utf-8")).get("processed", []))
+    except Exception:
+        return set()
+
+
+def existing_rows():
+    rows = []
+    if not LEDGER.exists():
+        return rows
+    for line in LEDGER.read_text(encoding="utf-8", errors="replace").splitlines():
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError:
+            pass
+    return rows
+
+
+def build_summary(rows):
+    totals = defaultdict(float)
+    for row in rows:
+        totals[row["asset"]] += float(row["paper_profit_units"])
+    return {
+        "ok": True,
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "mode": "PAPER_ONLY",
+        "real_trading": False,
+        "paper_trades": len(rows),
+        "profit_by_asset": dict(sorted(totals.items())),
+        "minimum_profit_percent": MIN_PROFIT_PERCENT,
+        "minimum_confirmations": MIN_CONFIRMATIONS,
+    }
+
+
+def process_once():
+    JOURNAL.mkdir(parents=True, exist_ok=True)
+    processed = load_processed()
+    added = 0
+    if SIGNALS.exists():
+        for line in SIGNALS.read_text(encoding="utf-8", errors="replace").splitlines():
+            try:
+                signal = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            key = fingerprint(signal)
+            if key in processed or signal.get("real_trading") is not False:
+                continue
+            cycle = signal.get("cycle", {})
+            confirmations = int(signal.get("confirmation_snapshots", 0) or 0)
+            profit_percent = float(cycle.get("profit_percent", -999))
+            start_units = float(cycle.get("paper_start_units", 0) or 0)
+            end_units = float(cycle.get("paper_end_units", 0) or 0)
+            asset = str(cycle.get("paper_asset", "")).upper()
+            if confirmations < MIN_CONFIRMATIONS or profit_percent < MIN_PROFIT_PERCENT or start_units <= 0 or end_units <= 0 or not asset:
+                processed.add(key)
+                continue
+            record = {
+                "fingerprint": key,
+                "recorded_at": datetime.now().isoformat(timespec="seconds"),
+                "detected_at": signal.get("detected_at"),
+                "asset": asset,
+                "paper_start_units": start_units,
+                "paper_end_units": end_units,
+                "paper_profit_units": end_units - start_units,
+                "profit_percent": profit_percent,
+                "confirmation_snapshots": confirmations,
+                "capacity_start_units": cycle.get("capacity_start_units"),
+                "route": cycle.get("route", []),
+                "real_trading": False,
+            }
+            with LEDGER.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+            processed.add(key)
+            added += 1
+    atomic_json(STATE, {"processed": sorted(processed), "updated_at": datetime.now().isoformat(timespec="seconds")})
+    rows = existing_rows()
+    summary = build_summary(rows)
+    summary["added_this_cycle"] = added
+    atomic_json(SUMMARY, summary)
+    return summary
+
+
+def run_forever():
+    while True:
+        try:
+            process_once()
+        except Exception as exc:
+            atomic_json(SUMMARY, {"ok": False, "time": datetime.now().isoformat(timespec="seconds"), "error": f"{type(exc).__name__}: {exc}", "real_trading": False})
+        time.sleep(15)
+
+
+if __name__ == "__main__":
+    print(json.dumps(process_once(), ensure_ascii=False, indent=2))
