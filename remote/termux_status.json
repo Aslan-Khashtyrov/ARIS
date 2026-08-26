@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-p2p-manual-v02-20260827-0136",
+  "id": "preserve-watch-script-20260827-0137",
   "action": "EXEC",
-  "time": "2026-08-27T01:36:18",
+  "time": "2026-08-27T01:37:04",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+      "mv",
+      "/data/data/com.termux/files/home/Arbitrage/aris_watch_control_v01.sh",
+      "/data/data/com.termux/files/home/aris_backups/aris_watch_control_v01.sh"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 2,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-27 01:36:18\n========================================================\n[STOP] Working tree is not clean.\n?? aris_watch_control_v01.sh\nNo files were changed.\n",
+    "returncode": 0,
+    "stdout": "",
     "stderr": ""
   }
 }
