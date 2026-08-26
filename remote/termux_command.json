@@ -1,5 +1,5 @@
 {
-  "id": "recheck-operational-report-v02",
+  "id": "check-binance-recovery-v01",
   "action": "READ_TEXT",
   "path": "Arbitrage/journal/operational_report_v01.json"
 }
