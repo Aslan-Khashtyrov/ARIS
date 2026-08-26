@@ -1,11 +1,10 @@
 {
   "ok": true,
-  "id": "inspect-metrics-model-compat-v01",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T20:00:42",
+  "id": "publish-metrics-v02-plan-v01",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T20:01:29",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_metrics_summary_v01.json",
-    "size": 548,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T20:00:08\",\n  \"mode\": \"MONITORING_ONLY\",\n  \"real_trading\": false,\n  \"samples\": 476,\n  \"window\": {\n    \"first\": \"2026-08-26T11:49:07\",\n    \"last\": \"2026-08-26T20:00:02\"\n  },\n  \"best_raw_percent\": -0.19991264784851026,\n  \"best_net_percent\": -0.24991264784851025,\n  \"median_net_percent\": -0.24991278683299528,\n  \"p95_net_percent\": -0.24991267407428458,\n  \"positive_raw_samples\": 0,\n  \"positive_net_samples\": 0,\n  \"positive_net_rate_percent\": 0.0,\n  \"signal_threshold_percent\": 0.3,\n  \"threshold_hits\": 0\n}\n"
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/developer_feed_v01.json",
+    "bytes": 526
   }
 }
