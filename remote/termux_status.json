@@ -1,17 +1,16 @@
 {
   "ok": true,
-  "id": "test-paper-ledger-validation-20260827-0208",
+  "id": "verify-paper-ledger-live-20260827-0210",
   "action": "EXEC",
-  "time": "2026-08-27T02:03:12",
+  "time": "2026-08-27T02:03:37",
   "result": {
     "argv": [
       "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_aris_paper_ledger_v01.py",
-      "-v"
+      "/data/data/com.termux/files/home/Arbitrage/aris_paper_ledger_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "",
-    "stderr": "test_accepts_consistent_executable_cycle (__main__.PaperLedgerValidationTests.test_accepts_consistent_executable_cycle) ... ok\ntest_rejects_insufficient_leg_capacity (__main__.PaperLedgerValidationTests.test_rejects_insufficient_leg_capacity) ... ok\ntest_rejects_profit_mismatch (__main__.PaperLedgerValidationTests.test_rejects_profit_mismatch) ... ok\ntest_rejects_stale_quotes (__main__.PaperLedgerValidationTests.test_rejects_stale_quotes) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-27T02:03:37\",\n  \"mode\": \"PAPER_ONLY\",\n  \"real_trading\": false,\n  \"paper_trades\": 0,\n  \"profit_by_asset\": {},\n  \"minimum_profit_percent\": 0.3,\n  \"minimum_confirmations\": 3,\n  \"added_this_cycle\": 0,\n  \"rejected_this_cycle\": 0,\n  \"rejection_reasons\": {},\n  \"validation_model\": \"executable-paper-v02\"\n}\n",
+    "stderr": ""
   }
 }
