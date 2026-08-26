@@ -49,7 +49,8 @@ def build_once():
         decision = "PAPER_SIGNAL_READY"
     else:
         decision = "MONITORING"
-    best = cycles.get("best_cycle") or {}
+    best_any = cycles.get("best_cycle") or {}
+    best = cycles.get("best_executable_cycle") or {}
     report = {
         "ok": not stale and not disconnected,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -63,6 +64,9 @@ def build_once():
             "best_profit_percent": best.get("profit_percent"),
             "best_raw_profit_percent": best.get("raw_profit_percent"),
             "best_executable": best.get("executable"),
+            "best_any_profit_percent": best_any.get("profit_percent"),
+            "best_any_executable": best_any.get("executable"),
+            "executable_cycles_checked": cycles.get("executable_cycles_checked", 0),
             "actionable_candidates": collector.get("actionable_candidates", 0),
             "candidate_streak": collector.get("candidate_streak", 0),
             "required_confirmations": collector.get("required_confirmations", 3),
