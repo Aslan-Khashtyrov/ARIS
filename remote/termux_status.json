@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "read-metrics-v02-summary-v01",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T20:06:04",
+  "id": "verify-processes-metrics-v02-v01",
+  "action": "EXEC",
+  "time": "2026-08-26T20:06:52",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_metrics_summary_v02.json",
-    "size": 715,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T20:05:39\",\n  \"mode\": \"MONITORING_ONLY\",\n  \"real_trading\": false,\n  \"model_version\": \"multileg-executable-v01\",\n  \"samples\": 2,\n  \"samples_with_executable_result\": 2,\n  \"window\": {\n    \"first\": \"2026-08-26T20:04:22\",\n    \"last\": \"2026-08-26T20:05:29\"\n  },\n  \"best_raw_percent\": -0.2728235013516156,\n  \"best_net_percent\": -0.3228235013516156,\n  \"best_any_percent\": -0.3228235013516156,\n  \"median_net_percent\": -0.3262897762809302,\n  \"p95_net_percent\": -0.32317012884454704,\n  \"latest_executable_cycles_checked\": 1131,\n  \"positive_raw_samples\": 0,\n  \"positive_net_samples\": 0,\n  \"positive_net_rate_percent\": 0.0,\n  \"signal_threshold_percent\": 0.3,\n  \"threshold_hits\": 0\n}\n"
+    "argv": [
+      "pgrep",
+      "-af",
+      "main.py|multi_scanner_v03.py|guardian_v04.py|aris_worker_v03.py|aris_autopilot_v01.py|aris_termux_control_v01.py|aris_foreman_v01.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "7552 python /data/data/com.termux/files/usr/bin/python main.py\n7571 python /data/data/com.termux/files/usr/bin/python multi_scanner_v03.py\n7586 python /data/data/com.termux/files/usr/bin/python guardian_v04.py\n7652 python /data/data/com.termux/files/usr/bin/python aris_autopilot_v01.py\n7677 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\n22196 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py --daemon\n31809 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_worker_v03.py\n",
+    "stderr": ""
   }
 }
