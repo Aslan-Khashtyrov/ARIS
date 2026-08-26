@@ -64,7 +64,7 @@ for name, script in processes.items():
     ok, detail = valid_process(name, script)
     add(f"process:{name}", ok, detail)
 
-for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.json", "cycle_collector_status_v01.json"):
+for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.json", "cycle_collector_status_v01.json", "cycle_report_v01.json"):
     path = JOURNAL / name
     file_age = age(path)
     fresh = path.exists() and file_age is not None and file_age <= 180
