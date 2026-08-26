@@ -78,13 +78,13 @@ try:
     proc = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT, text=True, capture_output=True, timeout=10)
     add("git_clean", proc.returncode == 0 and not proc.stdout.strip(), proc.stdout.strip() or "clean")
 except Exception as exc:
-    add("git_clean", False, type(exc).__name__)
+    add("git_clean", False, f"{type(exc).__name__}: {exc}")
 
 try:
     proc = subprocess.run([sys.executable, "-m", "compileall", "-q", str(ROOT)], text=True, capture_output=True, timeout=60)
     add("python_compile", proc.returncode == 0, (proc.stderr or proc.stdout).strip())
 except Exception as exc:
-    add("python_compile", False, type(exc).__name__)
+    add("python_compile", False, f"{type(exc).__name__}: {exc}")
 
 p2p_status = None
 try:
@@ -92,7 +92,7 @@ try:
     p2p_status = json.loads(proc.stdout) if proc.stdout.strip() else None
     add("p2p_monitor", proc.returncode == 0 and bool(p2p_status and p2p_status.get("ok")), f"accepted={p2p_status.get('accepted_quotes') if p2p_status else None}")
 except Exception as exc:
-    add("p2p_monitor", False, type(exc).__name__)
+    add("p2p_monitor", False, f"{type(exc).__name__}: {exc}")
 
 cycle_test = None
 try:
@@ -100,7 +100,7 @@ try:
     cycle_test = json.loads(proc.stdout) if proc.stdout.strip() else None
     add("cycle_engine", proc.returncode == 0 and bool(cycle_test and cycle_test.get("ok")), f"cycles={cycle_test.get('cycles_checked') if cycle_test else None}")
 except Exception as exc:
-    add("cycle_engine", False, type(exc).__name__)
+    add("cycle_engine", False, f"{type(exc).__name__}: {exc}")
 
 cycle_live = None
 try:
@@ -109,7 +109,7 @@ try:
     live_ok = proc.returncode == 0 and bool(cycle_live and cycle_live.get("ok"))
     add("cycle_live", live_ok, f"quotes={cycle_live.get('quotes') if cycle_live else None};cycles={cycle_live.get('cycles_checked') if cycle_live else None};signals={len(cycle_live.get('opportunities', [])) if cycle_live else None}")
 except Exception as exc:
-    add("cycle_live", False, type(exc).__name__)
+    add("cycle_live", False, f"{type(exc).__name__}: {exc}")
 
 analysis = None
 try:
@@ -117,7 +117,7 @@ try:
     analysis = json.loads(proc.stdout) if proc.stdout.strip() else None
     add("market_analysis", proc.returncode == 0 and bool(analysis and analysis.get("ok")), f"rows={analysis.get('rows') if analysis else None}")
 except Exception as exc:
-    add("market_analysis", False, type(exc).__name__)
+    add("market_analysis", False, f"{type(exc).__name__}: {exc}")
 
 unified = None
 try:
@@ -125,7 +125,7 @@ try:
     unified = json.loads(proc.stdout) if proc.stdout.strip() else None
     add("unified_report", proc.returncode == 0 and bool(unified and unified.get("ok")), unified.get("decision") if unified else "missing")
 except Exception as exc:
-    add("unified_report", False, type(exc).__name__)
+    add("unified_report", False, f"{type(exc).__name__}: {exc}")
 
 report = {
     "ok": all(item["ok"] for item in CHECKS),
