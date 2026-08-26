@@ -1,4 +1,7 @@
 {
-  "id": "termux-control-bootstrap-v01",
-  "action": "PING"
+  "id": "termux-process-check-v01",
+  "action": "EXEC",
+  "argv": ["pgrep", "-af", "python"],
+  "cwd": "/data/data/com.termux/files/home",
+  "timeout": 20
 }
