@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "restart-worker-quote-age-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T21:01:37",
+  "id": "verify-live-quote-age-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T21:02:05",
   "result": {
-    "argv": [
-      "pkill",
-      "-f",
-      "aris_worker_v03.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
+    "size": 1610,
+    "content": "{\n  \"ok\": false,\n  \"generated_at\": \"2026-08-26T21:02:03\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"DEGRADED\",\n  \"reasons\": [\n    \"disconnected:kraken\",\n    \"disconnected:okx\"\n  ],\n  \"market\": {\n    \"live_quotes\": 62,\n    \"cycles_checked\": 683,\n    \"connected_exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"coinbase\"\n    ],\n    \"best_profit_percent\": -0.33475659961865184,\n    \"best_raw_profit_percent\": -0.28475659961865185,\n    \"best_executable\": true,\n    \"best_quote_age_seconds\": 4.612289905548096,\n    \"maximum_quote_age_seconds\": 5.0,\n    \"best_quotes_fresh\": true,\n    \"best_any_profit_percent\": -0.33475659961865184,\n    \"best_any_executable\": true,\n    \"executable_cycles_checked\": 526,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 3370,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 4.9,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 4.9,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 5.0,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 9.3,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
   }
 }
