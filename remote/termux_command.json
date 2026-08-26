@@ -1,10 +1,11 @@
 {
-  "id": "deploy-p2p-manual-v02-20260827-0136",
+  "id": "preserve-watch-script-20260827-0137",
   "action": "EXEC",
   "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+    "mv",
+    "/data/data/com.termux/files/home/Arbitrage/aris_watch_control_v01.sh",
+    "/data/data/com.termux/files/home/aris_backups/aris_watch_control_v01.sh"
   ],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 300
+  "timeout": 30
 }
