@@ -1,5 +1,6 @@
 {
-  "id": "check-connectors-before-unified-v01",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_collector_status_v01.json"
+  "id": "publish-operational-report-diff-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"id\": \"dev-operational-report-v01\",\n  \"time\": \"2026-08-26T08:36:34.835Z\",\n  \"phase\": \"PREPARE_DIFF\",\n  \"files\": [\n    \"aris_operational_report_v01.py\",\n    \"aris_worker_v03.py\"\n  ],\n  \"goal\": \"Единый свежий отчёт без запуска дочерних процессов.\",\n  \"diff\": [\n    \"+ collector status + cycle report + paper ledger + Foreman\",\n    \"+ контроль возраста каждого файла\",\n    \"+ решения MONITORING / DEGRADED / PAPER_SIGNAL_READY\",\n    \"+ Worker обновляет отчёт каждые 10 секунд\",\n    \"+ никаких subprocess, ключей или торговых действий\"\n  ],\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false\n  }\n}\n"
 }
