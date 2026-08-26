@@ -1,16 +1,11 @@
 {
   "ok": true,
-  "id": "p2p-pipeline-evaluation-20260826-2050",
-  "action": "EXEC",
-  "time": "2026-08-26T20:46:16",
+  "id": "deploy-p2p-manual-v01-20260826-2053",
+  "action": "PING",
+  "time": "2026-08-26T20:48:30",
   "result": {
-    "argv": [
-      "python3",
-      "/data/data/com.termux/files/home/Arbitrage/aris_p2p_monitor_v01.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "{\n  \"ok\": true,\n  \"time\": \"2026-08-26T20:46:16\",\n  \"mode\": \"MONITORING_ONLY\",\n  \"real_trading\": false,\n  \"fiat\": \"RUB\",\n  \"accepted_quotes\": 0,\n  \"rejected_quotes\": 0,\n  \"providers\": {\n    \"binance\": {\n      \"enabled\": false,\n      \"reason\": \"No documented official public ads API\"\n    },\n    \"bybit\": {\n      \"enabled\": false,\n      \"reason\": \"Official P2P API requires General Advertiser status or above\"\n    },\n    \"okx\": {\n      \"enabled\": false,\n      \"reason\": \"Official P2P API requires eligible merchant status\"\n    }\n  },\n  \"history_exists\": false,\n  \"note\": \"Official provider access is required before live P2P ads can be ingested.\"\n}\n",
-    "stderr": ""
+    "pong": true,
+    "version": "0.1",
+    "home": "/data/data/com.termux/files/home"
   }
 }
