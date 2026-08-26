@@ -47,6 +47,9 @@ required = (
     "aris_cycle_engine_v01.py",
     "aris_cycle_collector_v01.py",
     "aris_config_v01.json",
+    "aris_fee_schedule_v01.json",
+    "aris_foreman_v01.py",
+    "aris_termux_control_v01.py",
     "aris_updater_v02.py",
 )
 for name in required:
@@ -59,6 +62,8 @@ processes = {
     "worker": "aris_worker_v03.py",
     "autopilot": "aris_autopilot_v01.py",
     "remote_agent": "aris_remote_agent_v02.py",
+    "termux_control": "aris_termux_control_v01.py",
+    "foreman": "aris_foreman_v01.py",
 }
 for name, script in processes.items():
     ok, detail = valid_process(name, script)
