@@ -1,5 +1,6 @@
 {
-  "id": "hourly-cycle-report-20260826-1901",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_report_v01.json"
+  "id": "publish-best-executable-plan-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"time\": \"2026-08-26T19:02:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"best-executable-cycle-v01\",\n  \"mode\": \"public monitoring and paper only\",\n  \"files\": [\n    \"aris_cycle_engine_v01.py\",\n    \"aris_operational_report_v01.py\"\n  ],\n  \"changes\": [\n    \"Store the best cycle regardless of capacity separately\",\n    \"Store the best fully executable cycle separately\",\n    \"Use the executable cycle for headline profit and metrics\",\n    \"Expose the unconstrained best result only as diagnostic context\"\n  ]\n}\n"
 }
