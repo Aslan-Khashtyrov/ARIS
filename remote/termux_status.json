@@ -1,11 +1,26 @@
 {
   "ok": true,
-  "id": "verify-live-quote-age-v01",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T21:02:05",
+  "id": "verify-p2p-stale-guard-v02-20260826-2103",
+  "action": "EXEC",
+  "time": "2026-08-26T21:02:33",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
-    "size": 1610,
-    "content": "{\n  \"ok\": false,\n  \"generated_at\": \"2026-08-26T21:02:03\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"DEGRADED\",\n  \"reasons\": [\n    \"disconnected:kraken\",\n    \"disconnected:okx\"\n  ],\n  \"market\": {\n    \"live_quotes\": 62,\n    \"cycles_checked\": 683,\n    \"connected_exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"coinbase\"\n    ],\n    \"best_profit_percent\": -0.33475659961865184,\n    \"best_raw_profit_percent\": -0.28475659961865185,\n    \"best_executable\": true,\n    \"best_quote_age_seconds\": 4.612289905548096,\n    \"maximum_quote_age_seconds\": 5.0,\n    \"best_quotes_fresh\": true,\n    \"best_any_profit_percent\": -0.33475659961865184,\n    \"best_any_executable\": true,\n    \"executable_cycles_checked\": 526,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 3370,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 4.9,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 4.9,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 5.0,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 9.3,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
+    "argv": [
+      "python3",
+      "/data/data/com.termux/files/home/Arbitrage/aris_p2p_quick_v01.py",
+      "--buy",
+      "80",
+      "--sell",
+      "81",
+      "--capital",
+      "10000",
+      "--quoted-at",
+      "2026-08-26T20:00:00",
+      "--max-age",
+      "120"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"version\": \"0.2\",\n  \"generated_at\": \"2026-08-26T21:02:33\",\n  \"mode\": \"QUICK_MANUAL_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"quote\": {\n    \"quoted_at\": \"2026-08-26T20:00:00\",\n    \"age_seconds\": 3753.8,\n    \"maximum_age_seconds\": 120.0,\n    \"fresh\": false\n  },\n  \"input\": {\n    \"buy_price_rub\": 80.0,\n    \"sell_price_rub\": 81.0,\n    \"capital_rub\": 10000.0,\n    \"payment_method\": \"MANUAL\",\n    \"buy_fee_percent\": 0.0,\n    \"sell_fee_percent\": 0.0,\n    \"fixed_cost_rub\": 0.0,\n    \"minimum_net_percent\": 0.3\n  },\n  \"result\": {\n    \"buy_ad\": \"quick-buy\",\n    \"sell_ad\": \"quick-sell\",\n    \"buy_platform\": \"manual\",\n    \"sell_platform\": \"manual\",\n    \"payment_methods\": [\n      \"MANUAL\"\n    ],\n    \"amount_usdt\": 125.0,\n    \"buy_cost_rub\": 10000.0,\n    \"sell_proceeds_rub\": 10125.0,\n    \"net_profit_rub\": 125.0,\n    \"net_profit_percent\": 1.25,\n    \"meets_threshold\": true,\n    \"manual_confirmation_required\": true\n  },\n  \"decision\": \"SKIP\",\n  \"decision_reasons\": [\n    \"STALE_QUOTE\"\n  ],\n  \"history_file\": \"/data/data/com.termux/files/home/Arbitrage/journal/p2p_manual_history_v01.jsonl\",\n  \"warning\": \"Manual calculation only. Account, counterparty, platform, bank and legal risks require human verification.\"\n}\n",
+    "stderr": ""
   }
 }
