@@ -1,7 +1,7 @@
 {
-  "id": "visible-channel-test-20260826-2032",
+  "id": "full-healthcheck-20260826-2035",
   "action": "EXEC",
-  "argv": ["date"],
+  "argv": ["python3", "Arbitrage/aris_healthcheck.py"],
   "cwd": "Arbitrage",
-  "timeout": 15
+  "timeout": 120
 }
