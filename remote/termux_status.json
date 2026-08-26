@@ -1,11 +1,7 @@
 {
-  "ok": true,
-  "id": "verify-fee-model-single-writer-v01",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T10:57:21",
-  "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
-    "size": 1065,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T10:57:19\",\n  \"live_quotes\": 113,\n  \"cycles_checked\": 1710,\n  \"raw_opportunities\": 0,\n  \"actionable_candidates\": 0,\n  \"candidate_streak\": 0,\n  \"required_confirmations\": 3,\n  \"signal_profit_percent\": 0.3,\n  \"confirmed_signal_ready\": false,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.19991263676145676,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 7807,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": true,\n      \"pairs\": 27,\n      \"updates\": 45087,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": true,\n      \"pairs\": 25,\n      \"updates\": 225,\n      \"error\": null\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 21,\n      \"updates\": 840,\n      \"error\": null\n    },\n    \"okx\": {\n      \"connected\": true,\n      \"pairs\": 22,\n      \"updates\": 616,\n      \"error\": null\n    }\n  },\n  \"fee_schedule_version\": \"0.1\",\n  \"fee_schedule_verified_at\": \"2026-08-26\",\n  \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\",\n  \"real_trading\": false\n}\n"
-  }
+  "ok": false,
+  "id": "publish-paper-ledger-diff-v01",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T11:02:39",
+  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
 }
