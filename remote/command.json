@@ -1,5 +1,5 @@
 {
-  "id": "deploy-persistent-cycle-signals-v01",
+  "id": "deploy-versioned-fees-v01",
   "action": "RESTART_COMPONENTS",
-  "note": "Deploy 0.30 percent and three-snapshot signal confirmation."
+  "note": "Deploy validated versioned conservative taker fees."
 }
