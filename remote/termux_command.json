@@ -1,11 +1,5 @@
 {
-  "id": "start-foreman-daemon-v01",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py",
-    "--daemon"
-  ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 20
+  "id": "verify-foreman-continuous-v01",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/journal/foreman_status_v01.json"
 }
