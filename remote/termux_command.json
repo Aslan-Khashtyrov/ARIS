@@ -1,5 +1,6 @@
 {
-  "id": "hourly-health-20260826-1701",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/operational_report_v01.json"
+  "id": "publish-quote-skew-plan-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"time\": \"2026-08-26T17:03:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"cycle-quote-skew-guard-v01\",\n  \"mode\": \"public monitoring and paper only\",\n  \"files\": [\n    \"aris_cycle_engine_v01.py\"\n  ],\n  \"changes\": [\n    \"Carry quote receive timestamps into every trade edge\",\n    \"Measure the timestamp spread across each candidate cycle\",\n    \"Require all trade legs to be within a conservative three-second window\",\n    \"Expose synchronization status in paper reports\"\n  ]\n}\n"
 }
