@@ -1,5 +1,5 @@
 {
-  "id": "validate-live-cycle-collector-v01",
-  "action": "HEALTHCHECK",
-  "note": "Validate live pair discovery, quote freshness, executable depth and cycle results."
+  "id": "deploy-continuous-cycle-v01",
+  "action": "PING",
+  "note": "Deploy continuous five-second cycle analysis and live signal journal."
 }
