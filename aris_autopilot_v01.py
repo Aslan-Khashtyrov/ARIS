@@ -18,6 +18,8 @@ COMPONENTS = {
     "scanner": "multi_scanner_v03.py",
     "guardian": "guardian_v04.py",
     "worker": "aris_worker_v03.py",
+    "termux_control": "aris_termux_control_v01.py",
+    "foreman": "aris_foreman_v01.py",
 }
 
 STATE.mkdir(parents=True, exist_ok=True)
