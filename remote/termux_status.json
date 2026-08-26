@@ -1,10 +1,7 @@
 {
-  "ok": true,
-  "id": "create-transparent-developer-feed-v01",
+  "ok": false,
+  "id": "publish-cycle-persistence-diff-v01",
   "action": "WRITE_TEXT",
-  "time": "2026-08-26T10:41:14",
-  "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/developer_feed_v01.json",
-    "bytes": 858
-  }
+  "time": "2026-08-26T10:43:08",
+  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
 }
