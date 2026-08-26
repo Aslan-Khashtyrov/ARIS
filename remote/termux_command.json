@@ -1,5 +1,5 @@
 {
-  "id": "hourly-health-20260826-2000",
+  "id": "inspect-metrics-model-compat-v01",
   "action": "READ_TEXT",
-  "path": "Arbitrage/journal/operational_report_v01.json"
+  "path": "Arbitrage/journal/cycle_metrics_summary_v01.json"
 }
