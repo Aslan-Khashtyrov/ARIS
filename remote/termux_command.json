@@ -1,6 +1,4 @@
 {
-  "id": "publish-metrics-v02-plan-v01",
-  "action": "WRITE_TEXT",
-  "path": "Arbitrage/journal/developer_feed_v01.json",
-  "content": "{\n  \"time\": \"2026-08-26T20:01:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"versioned-cycle-metrics-v02\",\n  \"mode\": \"public monitoring and paper only\",\n  \"files\": [\n    \"aris_cycle_metrics_v02.py\",\n    \"aris_worker_v03.py\"\n  ],\n  \"changes\": [\n    \"Preserve the old mixed metric series as an archive\",\n    \"Start a clean v0.2 series for multileg executable cycles\",\n    \"Record executable-cycle count and diagnostic unconstrained best result\",\n    \"Calculate summary statistics only inside one explicit model version\"\n  ]\n}\n"
+  "id": "sync-metrics-v02-v01",
+  "action": "PING"
 }
