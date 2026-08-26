@@ -1,11 +1,10 @@
 {
   "ok": true,
-  "id": "read-operational-2122-v02",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T21:18:06",
+  "id": "queue-worker-status-2123-v02",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T21:18:55",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
-    "size": 1624,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T21:18:04\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"MONITORING\",\n  \"reasons\": [\n    \"no_confirmed_opportunity\"\n  ],\n  \"market\": {\n    \"live_quotes\": 113,\n    \"cycles_checked\": 1646,\n    \"connected_exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.32709042011088146,\n    \"best_raw_profit_percent\": -0.2770904201108815,\n    \"best_executable\": true,\n    \"best_quote_age_seconds\": 1.0857479572296143,\n    \"maximum_quote_age_seconds\": 5.0,\n    \"best_quotes_fresh\": true,\n    \"best_any_profit_percent\": -0.32709042011088146,\n    \"best_any_executable\": true,\n    \"executable_cycles_checked\": 1352,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 3467,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 3.9,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 3.9,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 5.0,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 0.0,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
+    "path": "/data/data/com.termux/files/home/Arbitrage/aris_queue/pending/status-v09-2123.json",
+    "bytes": 82
   }
 }
