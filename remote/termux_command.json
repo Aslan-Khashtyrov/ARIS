@@ -1,5 +1,5 @@
 {
-  "id": "verify-binance-websocket-v01",
+  "id": "final-health-binance-websocket-v01",
   "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_collector_status_v01.json"
+  "path": "Arbitrage/journal/operational_report_v01.json"
 }
