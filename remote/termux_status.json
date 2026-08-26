@@ -1,11 +1,10 @@
 {
   "ok": true,
-  "id": "aris-hourly-read-operational-2058",
-  "action": "READ_TEXT",
-  "time": "2026-08-26T20:59:11",
+  "id": "publish-quote-age-plan-v01",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T20:59:58",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
-    "size": 1505,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T20:59:03\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"MONITORING\",\n  \"reasons\": [\n    \"no_confirmed_opportunity\"\n  ],\n  \"market\": {\n    \"live_quotes\": 112,\n    \"cycles_checked\": 1578,\n    \"connected_exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.3273238600252803,\n    \"best_raw_profit_percent\": -0.2773238600252803,\n    \"best_executable\": true,\n    \"best_any_profit_percent\": -0.32390968691487493,\n    \"best_any_executable\": false,\n    \"executable_cycles_checked\": 1009,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 3352,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 2.9,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 2.9,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 6.7,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 9.5,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/developer_feed_v01.json",
+    "bytes": 511
   }
 }
