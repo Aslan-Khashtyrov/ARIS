@@ -1,0 +1,34 @@
+{
+  "config": {
+    "capital_rub": 10000,
+    "buy_fee_percent": 0,
+    "sell_fee_percent": 0,
+    "fixed_cost_rub": 0,
+    "minimum_net_percent": 0.3,
+    "require_shared_payment_method": true
+  },
+  "buy_ads": [
+    {
+      "id": "buy-example-1",
+      "platform": "manual",
+      "merchant": "example",
+      "price_rub": 80.0,
+      "available_usdt": 500,
+      "min_rub": 1000,
+      "max_rub": 40000,
+      "payment_methods": ["BANK_A"]
+    }
+  ],
+  "sell_ads": [
+    {
+      "id": "sell-example-1",
+      "platform": "manual",
+      "merchant": "example",
+      "price_rub": 81.0,
+      "available_usdt": 500,
+      "min_rub": 1000,
+      "max_rub": 40000,
+      "payment_methods": ["BANK_A"]
+    }
+  ]
+}
