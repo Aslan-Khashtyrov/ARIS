@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "sync-metrics-v02-v01",
-  "action": "PING",
-  "time": "2026-08-26T20:03:42",
+  "id": "restart-worker-metrics-v02-v01",
+  "action": "EXEC",
+  "time": "2026-08-26T20:04:31",
   "result": {
-    "pong": true,
-    "version": "0.1",
-    "home": "/data/data/com.termux/files/home"
+    "argv": [
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
   }
 }
