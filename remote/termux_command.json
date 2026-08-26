@@ -1,6 +1,10 @@
 {
-  "id": "publish-single-writer-diff-v01",
-  "action": "WRITE_TEXT",
-  "path": "Arbitrage/journal/developer_feed_v01.json",
-  "content": "{\n  \"id\": \"dev-single-git-writer-v01\",\n  \"time\": \"2026-08-26T07:55:18.724Z\",\n  \"phase\": \"PREPARE_DIFF\",\n  \"files\": [\n    \"aris_start_safe.sh\",\n    \"aris_foreman_v01.py\",\n    \"aris_healthcheck.py\",\n    \"aris_termux_control_v01.py\"\n  ],\n  \"goal\": \"Устранить гонку двух процессов, одновременно коммитящих отчёты в origin/main.\",\n  \"diff\": [\n    \"- автозапуск aris_remote_agent_v02.py\",\n    \"- контроль remote_agent как обязательного процесса\",\n    \"+ termux_control — единственный Git writer\",\n    \"+ сохранить системные переменные PREFIX/TMPDIR/LD_PRELOAD для вложенных проверок\",\n    \"+ старый файл remote_agent оставить в репозитории только для истории/отката\"\n  ],\n  \"recovery\": \"aris-recovery-20260826-1052\"\n}\n"
+  "id": "activate-single-git-writer-v01",
+  "action": "EXEC",
+  "argv": [
+    "kill",
+    "7654"
+  ],
+  "cwd": "/data/data/com.termux/files/home/Arbitrage",
+  "timeout": 20
 }
