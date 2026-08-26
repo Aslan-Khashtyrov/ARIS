@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "sync-binance-websocket-v01",
-  "action": "PING",
-  "time": "2026-08-26T16:10:47",
+  "id": "restart-worker-binance-websocket-v01",
+  "action": "EXEC",
+  "time": "2026-08-26T16:11:37",
   "result": {
-    "pong": true,
-    "version": "0.1",
-    "home": "/data/data/com.termux/files/home"
+    "argv": [
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
   }
 }
