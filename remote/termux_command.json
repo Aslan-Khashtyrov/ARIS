@@ -1,11 +1,5 @@
 {
-  "id": "verify-processes-20260826-1514",
-  "action": "EXEC",
-  "argv": [
-    "pgrep",
-    "-af",
-    "main.py|multi_scanner_v03.py|guardian_v04.py|aris_worker_v03.py|aris_autopilot_v01.py|aris_termux_control_v01.py|aris_foreman_v01.py"
-  ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 20
+  "id": "final-operational-check-20260826-1515",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/journal/operational_report_v01.json"
 }
