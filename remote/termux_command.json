@@ -1,4 +1,7 @@
 {
-  "id": "deploy-healthcheck-diagnostics-20260826-2040",
-  "action": "PING"
+  "id": "detailed-healthcheck-20260826-2041",
+  "action": "EXEC",
+  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],
+  "cwd": "Arbitrage",
+  "timeout": 120
 }
