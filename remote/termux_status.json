@@ -1,17 +1,16 @@
 {
   "ok": true,
-  "id": "preserve-watch-script-20260827-0137",
+  "id": "deploy-p2p-manual-v02-20260827-0137b",
   "action": "EXEC",
-  "time": "2026-08-27T01:37:04",
+  "time": "2026-08-27T01:37:55",
   "result": {
     "argv": [
-      "mv",
-      "/data/data/com.termux/files/home/Arbitrage/aris_watch_control_v01.sh",
-      "/data/data/com.termux/files/home/aris_backups/aris_watch_control_v01.sh"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "",
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-27 01:37:50\n========================================================\n[1] Checking GitHub...\nLOCAL : 519d96340c\nREMOTE: c5154be4e6\n[2] Update available\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260827-013751\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 519d96340c\nNEW : c5154be4e6\nBACKUP TAG: aris-backup-20260827-013751\n========================================================\n",
     "stderr": ""
   }
 }
