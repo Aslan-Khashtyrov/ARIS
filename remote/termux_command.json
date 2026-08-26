@@ -1,5 +1,5 @@
 {
-  "id": "verify-versioned-fees-v01",
+  "id": "diagnose-foreman-after-recovery-v01",
   "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_collector_status_v01.json"
+  "path": "Arbitrage/journal/foreman.out.log"
 }
