@@ -1,5 +1,5 @@
 {
-  "id": "inventory-p2p-files-v01-20260826",
+  "id": "inventory-p2p-files-v02-20260826-2111",
   "action": "EXEC",
   "argv": [
     "find",
@@ -10,5 +10,5 @@
     "f"
   ],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "note": "Read-only inventory to locate current P2P calculator and integration files. Do not stop or modify live processes."
+  "note": "Read-only file inventory. Do not stop or modify any live process."
 }
