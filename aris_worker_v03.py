@@ -8,7 +8,7 @@ import sys
 import threading
 import time
 
-VERSION = "0.7"
+VERSION = "0.8"
 CHECK_EVERY = 3
 ROOT = Path.home() / "Arbitrage"
 BASE = ROOT / "aris_queue"
@@ -105,7 +105,7 @@ def execute(task_file):
 def cycle_metrics_supervisor():
     while True:
         try:
-            from aris_cycle_metrics_v01 import run_forever
+            from aris_cycle_metrics_v02 import run_forever
             run_forever()
         except Exception as exc:
             log(f"CYCLE METRICS ERROR | {type(exc).__name__}: {exc}")
