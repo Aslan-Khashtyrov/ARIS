@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "sync-quote-skew-guard-v01",
-  "action": "PING",
-  "time": "2026-08-26T17:04:45",
+  "id": "restart-worker-quote-skew-guard-v01",
+  "action": "EXEC",
+  "time": "2026-08-26T17:05:33",
   "result": {
-    "pong": true,
-    "version": "0.1",
-    "home": "/data/data/com.termux/files/home"
+    "argv": [
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
   }
 }
