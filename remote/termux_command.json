@@ -1,7 +1,7 @@
 {
-  "id": "live-cycle-evaluation-20260826-2047",
+  "id": "p2p-pipeline-evaluation-20260826-2050",
   "action": "EXEC",
-  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_cycle_engine_v01.py"],
+  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_p2p_monitor_v01.py"],
   "cwd": "Arbitrage",
   "timeout": 60
 }
