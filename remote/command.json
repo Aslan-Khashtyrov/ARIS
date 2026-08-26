@@ -1,5 +1,5 @@
 {
-  "id": "deploy-live-cycle-collector-v01",
-  "action": "PING",
-  "note": "Deploy live public cross-pair collector and depth-safe cycle signals."
+  "id": "restart-for-live-cycle-collector-v01",
+  "action": "RESTART_COMPONENTS",
+  "note": "Reload Worker so the live cycle collector starts."
 }
