@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "id": "verify-cycle-metrics-v01",
+  "id": "verify-operational-report-20260826-1459",
   "action": "READ_TEXT",
-  "time": "2026-08-26T14:58:48",
+  "time": "2026-08-26T14:59:44",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_metrics_summary_v01.json",
-    "size": 547,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T14:58:09\",\n  \"mode\": \"MONITORING_ONLY\",\n  \"real_trading\": false,\n  \"samples\": 180,\n  \"window\": {\n    \"first\": \"2026-08-26T11:49:07\",\n    \"last\": \"2026-08-26T14:58:06\"\n  },\n  \"best_raw_percent\": -0.19991264784851026,\n  \"best_net_percent\": -0.24991264784851025,\n  \"median_net_percent\": -0.2499127214785512,\n  \"p95_net_percent\": -0.24991266217728675,\n  \"positive_raw_samples\": 0,\n  \"positive_net_samples\": 0,\n  \"positive_net_rate_percent\": 0.0,\n  \"signal_threshold_percent\": 0.3,\n  \"threshold_hits\": 0\n}\n"
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
+    "size": 1358,
+    "content": "{\n  \"ok\": false,\n  \"generated_at\": \"2026-08-26T14:59:36\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"DEGRADED\",\n  \"reasons\": [\n    \"disconnected:binance\"\n  ],\n  \"market\": {\n    \"live_quotes\": 67,\n    \"cycles_checked\": 1071,\n    \"connected_exchanges\": [\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.25002716596032587,\n    \"best_raw_profit_percent\": -0.20002716596032588,\n    \"best_executable\": true,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 1197,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 0.7,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 0.7,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 8.5,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 8.2,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
   }
 }
