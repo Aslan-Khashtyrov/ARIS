@@ -8,7 +8,7 @@ import sys
 import threading
 import time
 
-VERSION = "0.5"
+VERSION = "0.6"
 CHECK_EVERY = 3
 ROOT = Path.home() / "Arbitrage"
 BASE = ROOT / "aris_queue"
@@ -102,6 +102,16 @@ def execute(task_file):
     shutil.move(str(task_file), str(DONE / task_file.name))
     log(f"DONE | {task_id} | {action}")
 
+def operational_report_supervisor():
+    while True:
+        try:
+            from aris_operational_report_v01 import run_forever
+            run_forever()
+        except Exception as exc:
+            log(f"OPERATIONAL REPORT ERROR | {type(exc).__name__}: {exc}")
+            time.sleep(10)
+
+
 def paper_ledger_supervisor():
     while True:
         try:
@@ -125,6 +135,7 @@ print(f"A.R.I.S. WORKER v{VERSION} | SAFE QUEUE | SHELL DISABLED | REAL TRADING 
 log(f"WORKER STARTED | v{VERSION} | SAFE MODE")
 threading.Thread(target=cycle_collector_supervisor, daemon=True, name="cycle-collector-supervisor").start()
 threading.Thread(target=paper_ledger_supervisor, daemon=True, name="paper-ledger-supervisor").start()
+threading.Thread(target=operational_report_supervisor, daemon=True, name="operational-report-supervisor").start()
 try:
     while True:
         for task_file in sorted(PENDING.glob("*.json")):
