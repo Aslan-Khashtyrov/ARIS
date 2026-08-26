@@ -1,15 +1,16 @@
 {
   "ok": true,
-  "id": "visible-channel-test-20260826-2032",
+  "id": "full-healthcheck-20260826-2035",
   "action": "EXEC",
-  "time": "2026-08-26T20:31:08",
+  "time": "2026-08-26T20:33:53",
   "result": {
     "argv": [
-      "date"
+      "python3",
+      "Arbitrage/aris_healthcheck.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "Wed Aug 26 20:31:08 MSK 2026\n",
-    "stderr": ""
+    "returncode": 2,
+    "stdout": "",
+    "stderr": "/data/data/com.termux/files/usr/bin/python3: can't open file '/data/data/com.termux/files/home/Arbitrage/Arbitrage/aris_healthcheck.py': [Errno 2] No such file or directory\n"
   }
 }
