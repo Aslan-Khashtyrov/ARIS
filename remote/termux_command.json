@@ -1,11 +1,10 @@
 {
-  "id": "test-paper-ledger-validation-20260827-0208",
+  "id": "verify-paper-ledger-live-20260827-0210",
   "action": "EXEC",
   "argv": [
     "python",
-    "~/Arbitrage/test_aris_paper_ledger_v01.py",
-    "-v"
+    "~/Arbitrage/aris_paper_ledger_v01.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 60
 }
