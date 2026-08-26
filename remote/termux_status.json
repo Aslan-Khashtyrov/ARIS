@@ -1,17 +1,10 @@
 {
   "ok": true,
-  "id": "termux-process-recheck-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T09:44:53",
+  "id": "create-termux-live-screen-v01",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T09:51:18",
   "result": {
-    "argv": [
-      "pgrep",
-      "-af",
-      "python"
-    ],
-    "cwd": "/data/data/com.termux/files/home",
-    "returncode": 0,
-    "stdout": "25071 python /data/data/com.termux/files/usr/bin/python main.py\n25084 python /data/data/com.termux/files/usr/bin/python multi_scanner_v03.py\n25098 python /data/data/com.termux/files/usr/bin/python guardian_v04.py\n25100 python /data/data/com.termux/files/usr/bin/python aris_worker_v03.py\n25114 python /data/data/com.termux/files/usr/bin/python aris_autopilot_v01.py\n25116 python /data/data/com.termux/files/usr/bin/python aris_remote_agent_v02.py\n25142 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/aris_watch_control_v01.sh",
+    "bytes": 782
   }
 }
