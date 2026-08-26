@@ -1,13 +1,11 @@
 {
-  "id": "sync-foreman-v01",
+  "id": "start-foreman-daemon-v01",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py",
+    "--daemon"
   ],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 90
+  "timeout": 20
 }
