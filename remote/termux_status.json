@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "restart-worker-best-executable-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T19:03:59",
+  "id": "verify-best-executable-cycle-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T19:05:29",
   "result": {
-    "argv": [
-      "pkill",
-      "-f",
-      "aris_worker_v03.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
+    "size": 1502,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T19:05:27\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"MONITORING\",\n  \"reasons\": [\n    \"no_confirmed_opportunity\"\n  ],\n  \"market\": {\n    \"live_quotes\": 112,\n    \"cycles_checked\": 1546,\n    \"connected_exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.3305323906369783,\n    \"best_raw_profit_percent\": -0.2805323906369783,\n    \"best_executable\": true,\n    \"best_any_profit_percent\": -0.3305323906369783,\n    \"best_any_executable\": true,\n    \"executable_cycles_checked\": 923,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 2671,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 3.7,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 3.7,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 5.1,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 9.2,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
   }
 }
