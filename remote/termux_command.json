@@ -1,9 +1,9 @@
 {
-  "id": "audit-live-2110-v02",
+  "id": "audit-live-2111-v03",
   "action": "EXEC",
   "argv": [
     "python",
-    "Arbitrage/aris_healthcheck.py"
+    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "Arbitrage",
   "timeout": 180
