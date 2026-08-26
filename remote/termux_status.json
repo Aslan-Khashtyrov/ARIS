@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "id": "recheck-operational-binance-20260826-1500",
+  "id": "inspect-binance-collector-20260826-1503",
   "action": "READ_TEXT",
-  "time": "2026-08-26T15:01:02",
+  "time": "2026-08-26T15:05:41",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
-    "size": 1357,
-    "content": "{\n  \"ok\": false,\n  \"generated_at\": \"2026-08-26T15:00:56\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"DEGRADED\",\n  \"reasons\": [\n    \"disconnected:binance\"\n  ],\n  \"market\": {\n    \"live_quotes\": 64,\n    \"cycles_checked\": 902,\n    \"connected_exchanges\": [\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.2500271397159414,\n    \"best_raw_profit_percent\": -0.20002713971594144,\n    \"best_executable\": true,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 1205,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 0.1,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 0.1,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 13.5,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 8.2,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
+    "size": 1187,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T15:05:38\",\n  \"live_quotes\": 41,\n  \"cycles_checked\": 479,\n  \"raw_opportunities\": 0,\n  \"actionable_candidates\": 0,\n  \"candidate_streak\": 0,\n  \"required_confirmations\": 3,\n  \"signal_profit_percent\": 0.3,\n  \"confirmed_signal_ready\": false,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.25002711736817335,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 441428,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": true,\n      \"pairs\": 27,\n      \"updates\": 2319943,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": false,\n      \"pairs\": 25,\n      \"updates\": 22800,\n      \"error\": \"IncompleteRead: IncompleteRead(3677970 bytes read, 13854895 more expected)\"\n    },\n    \"bybit\": {\n      \"connected\": false,\n      \"pairs\": 21,\n      \"updates\": 42861,\n      \"error\": \"TimeoutError: The read operation timed out\"\n    },\n    \"okx\": {\n      \"connected\": true,\n      \"pairs\": 22,\n      \"updates\": 36520,\n      \"error\": null\n    }\n  },\n  \"fee_schedule_version\": \"0.1\",\n  \"fee_schedule_verified_at\": \"2026-08-26\",\n  \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\",\n  \"real_trading\": false\n}\n"
   }
 }
