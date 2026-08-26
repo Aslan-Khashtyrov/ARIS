@@ -28,6 +28,8 @@ UNIVERSE = {"USD", "USDT", "USDC", "EUR", "BTC", "ETH", "SOL", "XRP"}
 FEES = {"coinbase": 0.006, "kraken": 0.008, "binance": 0.001, "bybit": 0.001, "okx": 0.001}
 FRESH_SECONDS = 15
 SAVE_SECONDS = 5
+SIGNAL_PROFIT_PERCENT = 0.30
+SIGNAL_CONFIRMATIONS = 3
 
 lock = threading.Lock()
 quotes = {}
@@ -268,6 +270,8 @@ def snapshot_loop():
     JOURNAL.mkdir(parents=True, exist_ok=True)
     last_signal_signature = None
     last_signal_time = 0.0
+    candidate_signature = None
+    candidate_streak = 0
     while True:
         now = time.time()
         with lock:
@@ -284,26 +288,45 @@ def snapshot_loop():
         cycle_report = analyze_cycles(payload)
         write_atomic(CYCLE_REPORT, cycle_report)
         opportunities = cycle_report.get("opportunities", [])
-        if opportunities:
-            best = opportunities[0]
+        actionable = [item for item in opportunities if item.get("profit_percent", -999) >= SIGNAL_PROFIT_PERCENT]
+        confirmed_signal_ready = False
+        if actionable:
+            best = actionable[0]
             signature = tuple((edge["src"], edge["dst"], edge["kind"]) for edge in best["route"])
-            if signature != last_signal_signature or now - last_signal_time >= 60:
+            if signature == candidate_signature:
+                candidate_streak += 1
+            else:
+                candidate_signature = signature
+                candidate_streak = 1
+            confirmed_signal_ready = candidate_streak >= SIGNAL_CONFIRMATIONS
+            if confirmed_signal_ready and (signature != last_signal_signature or now - last_signal_time >= 60):
                 record = {
                     "detected_at": payload["generated_at"],
                     "source": "LIVE_PUBLIC_MARKET_DATA",
                     "real_trading": False,
+                    "confirmation_snapshots": candidate_streak,
+                    "minimum_profit_percent": SIGNAL_PROFIT_PERCENT,
                     "cycle": best,
                 }
                 with SIGNALS.open("a", encoding="utf-8") as handle:
                     handle.write(json.dumps(record, ensure_ascii=False) + "\n")
                 last_signal_signature = signature
                 last_signal_time = now
+        else:
+            candidate_signature = None
+            candidate_streak = 0
         write_atomic(STATUS, {
             "ok": True,
             "generated_at": payload["generated_at"],
             "live_quotes": len(live),
             "cycles_checked": cycle_report.get("cycles_checked", 0),
-            "signals": len(cycle_report.get("opportunities", [])),
+            "raw_opportunities": len(opportunities),
+            "actionable_candidates": len(actionable),
+            "candidate_streak": candidate_streak,
+            "required_confirmations": SIGNAL_CONFIRMATIONS,
+            "signal_profit_percent": SIGNAL_PROFIT_PERCENT,
+            "confirmed_signal_ready": confirmed_signal_ready,
+            "signals": 1 if confirmed_signal_ready else 0,
             "best_profit_percent": cycle_report.get("best_cycle", {}).get("profit_percent") if cycle_report.get("best_cycle") else None,
             "exchanges": state,
             "real_trading": False,
