@@ -1,11 +1,26 @@
 {
   "ok": true,
-  "id": "deploy-p2p-quick-v01-20260826-2056",
-  "action": "PING",
-  "time": "2026-08-26T20:54:12",
+  "id": "verify-p2p-quick-v01-20260826-2057",
+  "action": "EXEC",
+  "time": "2026-08-26T20:54:37",
   "result": {
-    "pong": true,
-    "version": "0.1",
-    "home": "/data/data/com.termux/files/home"
+    "argv": [
+      "python3",
+      "/data/data/com.termux/files/home/Arbitrage/aris_p2p_quick_v01.py",
+      "--buy",
+      "80",
+      "--sell",
+      "81",
+      "--capital",
+      "10000",
+      "--method",
+      "MANUAL",
+      "--minimum",
+      "0.3"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T20:54:37\",\n  \"mode\": \"QUICK_MANUAL_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"input\": {\n    \"buy_price_rub\": 80.0,\n    \"sell_price_rub\": 81.0,\n    \"capital_rub\": 10000.0,\n    \"payment_method\": \"MANUAL\",\n    \"buy_fee_percent\": 0.0,\n    \"sell_fee_percent\": 0.0,\n    \"fixed_cost_rub\": 0.0,\n    \"minimum_net_percent\": 0.3\n  },\n  \"result\": {\n    \"buy_ad\": \"quick-buy\",\n    \"sell_ad\": \"quick-sell\",\n    \"buy_platform\": \"manual\",\n    \"sell_platform\": \"manual\",\n    \"payment_methods\": [\n      \"MANUAL\"\n    ],\n    \"amount_usdt\": 125.0,\n    \"buy_cost_rub\": 10000.0,\n    \"sell_proceeds_rub\": 10125.0,\n    \"net_profit_rub\": 125.0,\n    \"net_profit_percent\": 1.25,\n    \"meets_threshold\": true,\n    \"manual_confirmation_required\": true\n  },\n  \"decision\": \"REVIEW_MANUALLY\",\n  \"warning\": \"Manual calculation only. Quote freshness, account, counterparty and bank risks require human verification.\"\n}\n",
+    "stderr": ""
   }
 }
