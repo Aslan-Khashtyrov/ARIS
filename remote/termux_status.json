@@ -1,10 +1,19 @@
 {
   "ok": true,
-  "id": "update-live-command-display-v03",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-26T10:01:39",
+  "id": "sync-foreman-v01",
+  "action": "EXEC",
+  "time": "2026-08-26T10:20:08",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/aris_watch_control_v01.sh",
-    "bytes": 1808
+    "argv": [
+      "git",
+      "pull",
+      "--ff-only",
+      "origin",
+      "main"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "fatal: cannot exec 'fetch': Permission denied\n"
   }
 }
