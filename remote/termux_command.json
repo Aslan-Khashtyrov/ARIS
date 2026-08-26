@@ -1,12 +1,12 @@
 {
-  "id": "fetch-main-recovery-2213-v01",
+  "id": "reset-main-recovery-2214-v01",
   "action": "EXEC",
   "argv": [
     "git",
-    "fetch",
-    "origin",
-    "main"
+    "reset",
+    "--hard",
+    "origin/main"
   ],
   "cwd": "Arbitrage",
-  "timeout": 90
+  "timeout": 60
 }
