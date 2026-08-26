@@ -1,10 +1,6 @@
 {
-  "id": "deploy-p2p-manual-v02-20260827-0137b",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
-  ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 300
+  "id": "write-p2p-v02-fresh-test-20260827-0139",
+  "action": "WRITE_TEXT",
+  "path": "/data/data/com.termux/files/home/aris_backups/p2p_v02_fresh_test.json",
+  "content": "{\n  \"config\": {\n    \"capital_rub\": 10000,\n    \"maximum_quote_age_seconds\": 300,\n    \"minimum_net_percent\": 0.3,\n    \"require_shared_payment_method\": true\n  },\n  \"buy_ads\": [\n    {\n      \"id\": \"fresh-buy\",\n      \"platform\": \"test\",\n      \"merchant\": \"test\",\n      \"price_rub\": 80,\n      \"available_usdt\": 1000,\n      \"min_rub\": 100,\n      \"max_rub\": 100000,\n      \"payment_methods\": [\n        \"TEST_BANK\"\n      ],\n      \"quoted_at\": \"2026-08-27T01:38:30\"\n    }\n  ],\n  \"sell_ads\": [\n    {\n      \"id\": \"fresh-sell\",\n      \"platform\": \"test\",\n      \"merchant\": \"test\",\n      \"price_rub\": 81,\n      \"available_usdt\": 1000,\n      \"min_rub\": 100,\n      \"max_rub\": 100000,\n      \"payment_methods\": [\n        \"TEST_BANK\"\n      ],\n      \"quoted_at\": \"2026-08-27T01:38:30\"\n    }\n  ]\n}\n"
 }
