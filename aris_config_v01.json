@@ -1,15 +1,37 @@
 {
-  "version": "0.1",
+  "version": "0.2",
   "mode": "monitoring_and_paper_only",
   "real_trading": false,
   "spot": {
-    "assets": ["BTC", "ETH", "SOL", "XRP"],
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
     "quote": "USD",
-    "exchanges": ["coinbase", "kraken"]
+    "exchanges": [
+      "coinbase",
+      "kraken",
+      "binance",
+      "bybit",
+      "okx"
+    ],
+    "public_market_data_only": true,
+    "fee_assumptions": {
+      "coinbase": 0.006,
+      "kraken": 0.008,
+      "binance": 0.001,
+      "bybit": 0.001,
+      "okx": 0.001
+    }
   },
   "p2p": {
     "fiat": "RUB",
-    "assets": ["USDT", "BTC"],
+    "assets": [
+      "USDT",
+      "BTC"
+    ],
     "minimum_completion_rate_percent": 95,
     "minimum_completed_orders": 50,
     "providers": {
