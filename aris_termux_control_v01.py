@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.2"
+VERSION = "0.3"
 HOME = Path.home().resolve()
 ROOT = (HOME / "Arbitrage").resolve()
 STATE = ROOT / "guardian_state"
@@ -177,7 +177,10 @@ def exec_argv(command: dict) -> dict:
     if not cwd.is_dir():
         raise NotADirectoryError(str(cwd))
     timeout = max(1, min(int(command.get("timeout", 60)), 300))
-    safe_env_keys = ("PATH", "PREFIX", "TMPDIR", "LD_PRELOAD", "LD_LIBRARY_PATH", "SHELL", "TERM", "COLORTERM")\n    safe_env = {key: os.environ[key] for key in safe_env_keys if os.environ.get(key)}\n    safe_env.update({"HOME": str(HOME), "LANG": os.environ.get("LANG", "C.UTF-8")})\n    proc = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=safe_env)
+    safe_env_keys = ("PATH", "PREFIX", "TMPDIR", "LD_PRELOAD", "LD_LIBRARY_PATH", "SHELL", "TERM", "COLORTERM")
+    safe_env = {key: os.environ[key] for key in safe_env_keys if os.environ.get(key)}
+    safe_env.update({"HOME": str(HOME), "LANG": os.environ.get("LANG", "C.UTF-8")})
+    proc = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=safe_env)
     return {"argv": argv, "cwd": str(cwd), "returncode": proc.returncode, "stdout": redact(proc.stdout), "stderr": redact(proc.stderr)}
 
 
