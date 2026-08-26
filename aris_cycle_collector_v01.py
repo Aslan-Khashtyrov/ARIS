@@ -6,10 +6,14 @@ import time
 import urllib.request
 import websocket
 
+from aris_cycle_engine_v01 import analyze as analyze_cycles
+
 ROOT = Path.home() / "Arbitrage"
 JOURNAL = ROOT / "journal"
 SNAPSHOT = JOURNAL / "cycle_quotes_v01.json"
 STATUS = JOURNAL / "cycle_collector_status_v01.json"
+CYCLE_REPORT = JOURNAL / "cycle_report_v01.json"
+SIGNALS = JOURNAL / "cycle_opportunities_v01.jsonl"
 CB_PRODUCTS_URL = "https://api.exchange.coinbase.com/products"
 KRAKEN_PAIRS_URL = "https://api.kraken.com/0/public/AssetPairs"
 CB_WS = "wss://advanced-trade-ws.coinbase.com"
@@ -186,6 +190,8 @@ def write_atomic(path, payload):
 
 def snapshot_loop():
     JOURNAL.mkdir(parents=True, exist_ok=True)
+    last_signal_signature = None
+    last_signal_time = 0.0
     while True:
         now = time.time()
         with lock:
@@ -199,10 +205,30 @@ def snapshot_loop():
             "transfers": [],
         }
         write_atomic(SNAPSHOT, payload)
+        cycle_report = analyze_cycles(payload)
+        write_atomic(CYCLE_REPORT, cycle_report)
+        opportunities = cycle_report.get("opportunities", [])
+        if opportunities:
+            best = opportunities[0]
+            signature = tuple((edge["src"], edge["dst"], edge["kind"]) for edge in best["route"])
+            if signature != last_signal_signature or now - last_signal_time >= 60:
+                record = {
+                    "detected_at": payload["generated_at"],
+                    "source": "LIVE_PUBLIC_MARKET_DATA",
+                    "real_trading": False,
+                    "cycle": best,
+                }
+                with SIGNALS.open("a", encoding="utf-8") as handle:
+                    handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+                last_signal_signature = signature
+                last_signal_time = now
         write_atomic(STATUS, {
             "ok": True,
             "generated_at": payload["generated_at"],
             "live_quotes": len(live),
+            "cycles_checked": cycle_report.get("cycles_checked", 0),
+            "signals": len(cycle_report.get("opportunities", [])),
+            "best_profit_percent": cycle_report.get("best_cycle", {}).get("profit_percent") if cycle_report.get("best_cycle") else None,
             "exchanges": state,
             "real_trading": False,
         })
