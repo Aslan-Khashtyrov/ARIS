@@ -68,10 +68,44 @@ def build_summary(rows):
     }
 
 
+def validate_cycle(cycle):
+    try:
+        profit_percent = float(cycle.get("profit_percent", -999))
+        start_units = float(cycle.get("paper_start_units", 0) or 0)
+        end_units = float(cycle.get("paper_end_units", 0) or 0)
+    except (TypeError, ValueError):
+        return False, "invalid_numeric_fields"
+
+    required_flags = {
+        "executable": cycle.get("executable") is True,
+        "capacity_verified": cycle.get("capacity_verified") is True,
+        "quote_synchronized": cycle.get("quote_synchronized") is True,
+        "quotes_fresh": cycle.get("quotes_fresh") is True,
+        "no_transfer": cycle.get("contains_transfer") is False,
+    }
+    for name, valid in required_flags.items():
+        if not valid:
+            return False, name
+
+    legs = cycle.get("paper_legs")
+    if not isinstance(legs, list) or len(legs) < 3:
+        return False, "paper_legs"
+    if any(leg.get("within_top_of_book_capacity") is not True for leg in legs):
+        return False, "leg_capacity"
+
+    if start_units <= 0 or end_units <= 0:
+        return False, "paper_amounts"
+    recomputed = (end_units / start_units - 1.0) * 100.0
+    if abs(recomputed - profit_percent) > 1e-6:
+        return False, "profit_mismatch"
+    return True, "validated"
+
+
 def process_once():
     JOURNAL.mkdir(parents=True, exist_ok=True)
     processed = load_processed()
     added = 0
+    rejected = defaultdict(int)
     if SIGNALS.exists():
         for line in SIGNALS.read_text(encoding="utf-8", errors="replace").splitlines():
             try:
@@ -87,7 +121,18 @@ def process_once():
             start_units = float(cycle.get("paper_start_units", 0) or 0)
             end_units = float(cycle.get("paper_end_units", 0) or 0)
             asset = str(cycle.get("paper_asset", "")).upper()
-            if confirmations < MIN_CONFIRMATIONS or profit_percent < MIN_PROFIT_PERCENT or start_units <= 0 or end_units <= 0 or not asset:
+            valid_cycle, validation_reason = validate_cycle(cycle)
+            if confirmations < MIN_CONFIRMATIONS:
+                validation_reason = "confirmations"
+                valid_cycle = False
+            elif profit_percent < MIN_PROFIT_PERCENT:
+                validation_reason = "profit_threshold"
+                valid_cycle = False
+            elif not asset:
+                validation_reason = "asset"
+                valid_cycle = False
+            if not valid_cycle:
+                rejected[validation_reason] += 1
                 processed.add(key)
                 continue
             record = {
@@ -112,6 +157,9 @@ def process_once():
     rows = existing_rows()
     summary = build_summary(rows)
     summary["added_this_cycle"] = added
+    summary["rejected_this_cycle"] = sum(rejected.values())
+    summary["rejection_reasons"] = dict(sorted(rejected.items()))
+    summary["validation_model"] = "executable-paper-v02"
     atomic_json(SUMMARY, summary)
     return summary
 
