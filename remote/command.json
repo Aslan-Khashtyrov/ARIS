@@ -1,5 +1,5 @@
 {
-  "id": "healthcheck-versioned-fees-v01",
+  "id": "post-link-healthcheck-20260826-2029",
   "action": "HEALTHCHECK",
-  "note": "Validate fee schedule deployment and live collector."
+  "note": "Verify A.R.I.S. after restoring managed channel."
 }
