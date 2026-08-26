@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import datetime
 import json
 import os
+import signal
 import subprocess
 import sys
 import time
@@ -12,6 +13,9 @@ JOURNAL = ROOT / "journal"
 STOP_FLAG = STATE / "intentional_stop"
 LOG = JOURNAL / "autopilot_v01.log"
 CHECK_EVERY = 15
+VERSION = "0.2"
+CONTROL_HEARTBEAT = STATE / "termux_control_heartbeat.json"
+CONTROL_MAX_HEARTBEAT_AGE = 90
 
 COMPONENTS = {
     "main": "main.py",
@@ -47,6 +51,24 @@ def valid_process(pid, script):
     except Exception:
         return False
 
+
+def heartbeat_age(path):
+    try:
+        return time.time() - path.stat().st_mtime
+    except OSError:
+        return None
+
+
+def stop_stale_control(pid, age):
+    try:
+        os.kill(pid, signal.SIGTERM)
+        log("stale_control_stopped", component="termux_control", pid=pid, heartbeat_age_seconds=age)
+        time.sleep(2)
+    except ProcessLookupError:
+        pass
+    except Exception as exc:
+        log("stale_control_stop_failed", component="termux_control", pid=pid, error=f"{type(exc).__name__}: {exc}")
+
 def start_component(name, script):
     logfile = JOURNAL / f"{name}.out.log"
     with logfile.open("ab") as output:
@@ -63,13 +85,19 @@ def start_component(name, script):
     log("restart", component=name, script=script, pid=proc.pid, ok=ok)
     return ok
 
-log("started", mode="monitoring_only", real_trading=False, shell_access=False)
+log("started", version=VERSION, mode="monitoring_only", real_trading=False, shell_access=False)
 while True:
     if STOP_FLAG.exists():
         time.sleep(CHECK_EVERY)
         continue
     for name, script in COMPONENTS.items():
         pid = tracked_pid(name)
-        if not valid_process(pid, script):
+        online = valid_process(pid, script)
+        if name == "termux_control" and online:
+            age = heartbeat_age(CONTROL_HEARTBEAT)
+            if age is None or age > CONTROL_MAX_HEARTBEAT_AGE:
+                stop_stale_control(pid, age)
+                online = False
+        if not online:
             start_component(name, script)
     time.sleep(CHECK_EVERY)
