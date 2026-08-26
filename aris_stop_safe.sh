@@ -24,6 +24,7 @@ stop_one(){
   echo "$name stopped"
 }
 
+stop_one termux_control
 stop_one remote_agent
 stop_one autopilot
 stop_one worker
