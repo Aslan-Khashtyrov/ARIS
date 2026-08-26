@@ -1,10 +1,18 @@
 {
   "ok": true,
-  "id": "queue-worker-status-2123-v02",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-26T21:18:55",
+  "id": "reset-main-recovery-2214-v01",
+  "action": "EXEC",
+  "time": "2026-08-26T22:19:11",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/aris_queue/pending/status-v09-2123.json",
-    "bytes": 82
+    "argv": [
+      "git",
+      "reset",
+      "--hard",
+      "origin/main"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "HEAD is now at cc4d381 Restore Termux main after preserving recovery branch\n",
+    "stderr": ""
   }
 }
