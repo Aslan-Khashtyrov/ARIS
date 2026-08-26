@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "id": "hourly-health-20260826-2000",
+  "id": "inspect-metrics-model-compat-v01",
   "action": "READ_TEXT",
-  "time": "2026-08-26T19:59:56",
+  "time": "2026-08-26T20:00:42",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
-    "size": 1506,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T19:59:52\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"MONITORING\",\n  \"reasons\": [\n    \"no_confirmed_opportunity\"\n  ],\n  \"market\": {\n    \"live_quotes\": 113,\n    \"cycles_checked\": 1646,\n    \"connected_exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.33555390361194587,\n    \"best_raw_profit_percent\": -0.2855539036119459,\n    \"best_executable\": true,\n    \"best_any_profit_percent\": -0.33555390361194587,\n    \"best_any_executable\": true,\n    \"executable_cycles_checked\": 1162,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 2998,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 4.3,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 4.3,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 11.5,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 1.2,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_metrics_summary_v01.json",
+    "size": 548,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T20:00:08\",\n  \"mode\": \"MONITORING_ONLY\",\n  \"real_trading\": false,\n  \"samples\": 476,\n  \"window\": {\n    \"first\": \"2026-08-26T11:49:07\",\n    \"last\": \"2026-08-26T20:00:02\"\n  },\n  \"best_raw_percent\": -0.19991264784851026,\n  \"best_net_percent\": -0.24991264784851025,\n  \"median_net_percent\": -0.24991278683299528,\n  \"p95_net_percent\": -0.24991267407428458,\n  \"positive_raw_samples\": 0,\n  \"positive_net_samples\": 0,\n  \"positive_net_rate_percent\": 0.0,\n  \"signal_threshold_percent\": 0.3,\n  \"threshold_hits\": 0\n}\n"
   }
 }
