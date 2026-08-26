@@ -1,10 +1,15 @@
 {
-  "id": "audit-live-2111-v03",
+  "id": "inventory-p2p-files-v03-20260826-2113",
   "action": "EXEC",
   "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"
+    "find",
+    ".",
+    "-maxdepth",
+    "3",
+    "-type",
+    "f"
   ],
   "cwd": "Arbitrage",
-  "timeout": 180
+  "timeout": 60,
+  "note": "Read-only inventory; do not stop or modify live processes."
 }
