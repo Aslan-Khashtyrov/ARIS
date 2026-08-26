@@ -1,5 +1,6 @@
 {
-  "id": "read-operational-after-metrics-v02-v01",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/operational_report_v01.json"
+  "id": "publish-metrics-v02-result-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"time\": \"2026-08-26T20:08:00+03:00\",\n  \"event\": \"completed_change\",\n  \"id\": \"versioned-cycle-metrics-v02\",\n  \"result\": \"verified\",\n  \"changes\": [\n    \"Old mixed v0.1 metric history preserved as archive\",\n    \"Clean v0.2 history records only multileg executable-cycle model\",\n    \"Worker upgraded to v0.8 and restarted safely\",\n    \"All seven A.R.I.S. processes verified online\"\n  ],\n  \"live\": {\n    \"exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"okx\",\n      \"coinbase\",\n      \"kraken\"\n    ],\n    \"live_quotes\": 111,\n    \"cycles_checked\": 1507,\n    \"executable_cycles_checked\": 964,\n    \"best_executable_net_percent\": -0.3264856742020094,\n    \"actionable_candidates\": 0,\n    \"paper_trades\": 0\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
 }
