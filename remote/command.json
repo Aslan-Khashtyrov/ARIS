@@ -1,14 +1,5 @@
 {
-  "id": "inventory-p2p-files-v02-20260826-2111",
-  "action": "EXEC",
-  "argv": [
-    "find",
-    ".",
-    "-maxdepth",
-    "3",
-    "-type",
-    "f"
-  ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "note": "Read-only file inventory. Do not stop or modify any live process."
+  "id": "status-after-channel-lock-20260826-2125",
+  "action": "STATUS",
+  "note": "Read-only status after command-channel contention."
 }
