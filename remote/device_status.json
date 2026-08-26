@@ -1,36 +1,27 @@
 {
   "ok": true,
-  "id": "deploy-live-cycle-collector-v01",
-  "action": "PING",
-  "time": "2026-08-26T04:05:49",
+  "id": "restart-for-live-cycle-collector-v01",
+  "action": "RESTART_COMPONENTS",
+  "time": "2026-08-26T04:06:54",
   "result": {
-    "pong": true,
-    "components": {
-      "main": {
-        "online": true,
-        "pid": 30932,
-        "script": "main.py"
+    "stopped": [
+      {
+        "name": "worker",
+        "pid": 30969
       },
-      "scanner": {
-        "online": true,
-        "pid": 30954,
-        "script": "multi_scanner_v03.py"
+      {
+        "name": "guardian",
+        "pid": 30968
       },
-      "guardian": {
-        "online": true,
-        "pid": 30968,
-        "script": "guardian_v04.py"
+      {
+        "name": "scanner",
+        "pid": 30954
       },
-      "worker": {
-        "online": true,
-        "pid": 30969,
-        "script": "aris_worker_v03.py"
-      },
-      "autopilot": {
-        "online": true,
-        "pid": 27834,
-        "script": "aris_autopilot_v01.py"
+      {
+        "name": "main",
+        "pid": 30932
       }
-    }
+    ],
+    "note": "autopilot will restart missing components"
   }
 }
