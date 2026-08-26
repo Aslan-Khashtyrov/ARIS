@@ -1,11 +1,5 @@
 {
-  "id": "verify-five-exchange-deploy-processes-v01",
-  "action": "EXEC",
-  "argv": [
-    "pgrep",
-    "-af",
-    "python"
-  ],
-  "cwd": "/data/data/com.termux/files/home",
-  "timeout": 20
+  "id": "read-five-exchange-collector-status-v01",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/journal/cycle_collector_status_v01.json"
 }
