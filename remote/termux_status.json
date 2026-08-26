@@ -1,18 +1,18 @@
 {
   "ok": true,
-  "id": "direct-git-status-2118-v01",
+  "id": "direct-fast-forward-2119-v01",
   "action": "EXEC",
-  "time": "2026-08-26T21:14:19",
+  "time": "2026-08-26T21:15:10",
   "result": {
     "argv": [
       "git",
-      "status",
-      "--porcelain=v1",
-      "--branch"
+      "merge",
+      "--ff-only",
+      "origin/main"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "## main...origin/main [behind 1]\n?? aris_watch_control_v01.sh\n",
-    "stderr": ""
+    "stdout": "Updating 0d335cd..e75151b\nFast-forward\n remote/termux_command.json | 10 +++++-----\n 1 file changed, 5 insertions(+), 5 deletions(-)\n",
+    "stderr": "fatal: cannot exec 'maintenance': Permission denied\n"
   }
 }
