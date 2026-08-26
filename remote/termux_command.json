@@ -1,10 +1,11 @@
 {
-  "id": "verify-healthcheck-live-20260827-0109",
+  "id": "restart-foreman-20260827-0111",
   "action": "EXEC",
   "argv": [
     "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "~/Arbitrage/aris_foreman_v01.py",
+    "--daemon"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
