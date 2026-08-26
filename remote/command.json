@@ -1,5 +1,14 @@
 {
-  "id": "post-link-healthcheck-20260826-2029",
-  "action": "HEALTHCHECK",
-  "note": "Verify A.R.I.S. after restoring managed channel."
+  "id": "inventory-p2p-files-v01-20260826",
+  "action": "EXEC",
+  "argv": [
+    "find",
+    ".",
+    "-maxdepth",
+    "3",
+    "-type",
+    "f"
+  ],
+  "cwd": "/data/data/com.termux/files/home/Arbitrage",
+  "note": "Read-only inventory to locate current P2P calculator and integration files. Do not stop or modify live processes."
 }
