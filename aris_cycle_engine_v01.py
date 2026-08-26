@@ -12,6 +12,7 @@ REPORT = JOURNAL / "cycle_report_v01.json"
 ANCHORS = ("USDT", "USDC", "USD", "EUR", "RUB", "BTC")
 MAX_LEGS = 4
 MIN_PROFIT_PERCENT = 0.10
+PAPER_STAKES = {"USD": 100.0, "USDT": 100.0, "USDC": 100.0, "EUR": 100.0, "RUB": 10000.0, "BTC": 0.001}
 
 def trade_edges(quotes):
     edges = []
@@ -110,7 +111,15 @@ def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS):
 def analyze(payload):
     edges = trade_edges(payload.get("quotes", [])) + transfer_edges(payload.get("transfers", []))
     cycles = find_cycles(edges)
-    opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT and c["capacity_start_units"] > 0]
+    for cycle in cycles:
+        start_asset = cycle["start"].split(":", 1)[1]
+        requested = PAPER_STAKES.get(start_asset, 1.0)
+        start_units = max(0.0, min(requested, cycle["capacity_start_units"]))
+        cycle["paper_start_units"] = start_units
+        cycle["paper_end_units"] = start_units * (1 + cycle["profit_percent"] / 100)
+        cycle["paper_profit_units"] = cycle["paper_end_units"] - start_units
+        cycle["paper_asset"] = start_asset
+    opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT and c["paper_start_units"] > 0]
     return {
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
