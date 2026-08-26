@@ -1,5 +1,5 @@
 {
-  "id": "status-20260826-current-01",
-  "action": "HEALTHCHECK",
-  "note": "Current overnight ARIS status and data freshness check."
+  "id": "deploy-live-cycle-collector-v01",
+  "action": "PING",
+  "note": "Deploy live public cross-pair collector and depth-safe cycle signals."
 }
