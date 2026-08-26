@@ -1,5 +1,5 @@
 {
-  "id": "restart-continuous-cycle-v01",
-  "action": "RESTART_COMPONENTS",
-  "note": "Reload Worker with continuous cycle analysis."
+  "id": "verify-continuous-cycle-v01",
+  "action": "HEALTHCHECK",
+  "note": "Verify five-second live cycle report freshness."
 }
