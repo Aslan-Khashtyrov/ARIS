@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.4"
+VERSION = "0.5"
 HOME = Path.home().resolve()
 ROOT = (HOME / "Arbitrage").resolve()
 STATE = ROOT / "guardian_state"
@@ -19,6 +19,7 @@ COMMAND_PATH = "remote/termux_command.json"
 REPORT_PATH = ROOT / "remote" / "termux_status.json"
 LAST_ID = STATE / "termux_control_last_id"
 AUDIT = JOURNAL / "termux_control_audit.jsonl"
+HEARTBEAT = STATE / "termux_control_heartbeat.json"
 POLL_EVERY = 20
 MAX_OUTPUT = 48_000
 MAX_READ = 128_000
@@ -61,6 +62,13 @@ def audit(event: str, **fields) -> None:
     record = {"time": now(), "event": event, **fields}
     with AUDIT.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def write_heartbeat(phase: str, **fields) -> None:
+    payload = {"time": now(), "pid": os.getpid(), "version": VERSION, "phase": phase, **fields}
+    temp = HEARTBEAT.with_suffix(".tmp")
+    temp.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
+    os.replace(temp, HEARTBEAT)
 
 
 def git_run(args: list[str], timeout: int = 60) -> subprocess.CompletedProcess:
@@ -229,8 +237,10 @@ def publish(payload: dict) -> None:
 audit("started", version=VERSION, mode="managed_termux", real_trading=False)
 while True:
     try:
+        write_heartbeat("polling")
         fetch = git_run(["git", "fetch", "--quiet", "origin", "main"], timeout=45)
         if fetch.returncode != 0:
+            write_heartbeat("fetch_error", returncode=fetch.returncode)
             audit("fetch_error", detail=fetch.stderr[-500:])
             time.sleep(POLL_EVERY)
             continue
@@ -254,7 +264,9 @@ while True:
             audit("denied_or_failed", id=command_id, action=action, detail=payload["error"])
         LAST_ID.write_text(command_id, encoding="utf-8")
         publish(payload)
+        write_heartbeat("published", command_id=command_id, action=action)
         audit("published", id=command_id, action=action)
     except Exception as exc:
+        write_heartbeat("loop_error", error_type=type(exc).__name__)
         audit("loop_error", detail=f"{type(exc).__name__}: {exc}")
     time.sleep(POLL_EVERY)
