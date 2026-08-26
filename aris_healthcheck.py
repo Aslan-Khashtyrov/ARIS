@@ -61,7 +61,6 @@ processes = {
     "guardian": "guardian_v04.py",
     "worker": "aris_worker_v03.py",
     "autopilot": "aris_autopilot_v01.py",
-    "remote_agent": "aris_remote_agent_v02.py",
     "termux_control": "aris_termux_control_v01.py",
     "foreman": "aris_foreman_v01.py",
 }
