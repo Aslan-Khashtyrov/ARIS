@@ -1,6 +1,4 @@
 {
-  "id": "publish-binance-websocket-plan-v01",
-  "action": "WRITE_TEXT",
-  "path": "Arbitrage/journal/developer_feed_v01.json",
-  "content": "{\n  \"time\": \"2026-08-26T16:09:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"binance-public-websocket-v01\",\n  \"mode\": \"public market monitoring only\",\n  \"files\": [\n    \"aris_cycle_collector_v01.py\"\n  ],\n  \"changes\": [\n    \"Replace Binance full exchange discovery with public individual bookTicker streams\",\n    \"Subscribe only to symbol combinations from the configured asset universe\",\n    \"Track active Binance pairs from received public messages\",\n    \"Reconnect automatically after transport errors\"\n  ]\n}\n"
+  "id": "sync-binance-websocket-v01",
+  "action": "PING"
 }
