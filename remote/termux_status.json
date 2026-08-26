@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "restart-worker-execution-quality-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T11:29:39",
+  "id": "verify-execution-quality-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T11:30:07",
   "result": {
-    "argv": [
-      "pkill",
-      "-f",
-      "aris_worker_v03.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_report_v01.json",
+    "size": 1806,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T11:30:05\",\n  \"mode\": \"PAPER_ONLY\",\n  \"real_trading\": false,\n  \"quotes\": 21,\n  \"edges\": 42,\n  \"cycles_checked\": 275,\n  \"opportunities\": [],\n  \"best_cycle\": {\n    \"start\": \"bybit:BTC\",\n    \"legs\": 2,\n    \"profit_percent\": -0.25002637243108355,\n    \"capacity_start_units\": 0.196714,\n    \"contains_transfer\": false,\n    \"route\": [\n      {\n        \"kind\": \"TRADE\",\n        \"exchange\": \"bybit\",\n        \"pair\": \"BTC/USDT\",\n        \"src\": \"bybit:BTC\",\n        \"dst\": \"bybit:USDT\",\n        \"rate\": 78893.9271,\n        \"capacity_src\": 0.196714,\n        \"side\": \"SELL\",\n        \"fee\": 0.001\n      },\n      {\n        \"kind\": \"TRADE\",\n        \"exchange\": \"bybit\",\n        \"pair\": \"BTC/USDT\",\n        \"src\": \"bybit:USDT\",\n        \"dst\": \"bybit:BTC\",\n        \"rate\": 1.2649893001405544e-05,\n        \"capacity_src\": 50250.125035000005,\n        \"side\": \"BUY\",\n        \"fee\": 0.001\n      }\n    ],\n    \"raw_profit_percent\": -0.20002637243108357,\n    \"execution_buffer_percent\": 0.05,\n    \"paper_start_units\": 0.001,\n    \"paper_end_units\": 0.0009974997362756893,\n    \"paper_profit_units\": -2.5002637243107338e-06,\n    \"paper_asset\": \"BTC\",\n    \"minimum_executable_units\": 0.00025,\n    \"executable\": true\n  },\n  \"minimum_profit_percent\": 0.1,\n  \"execution_buffer_percent\": 0.05,\n  \"minimum_executable\": {\n    \"USD\": 25.0,\n    \"USDT\": 25.0,\n    \"USDC\": 25.0,\n    \"EUR\": 25.0,\n    \"RUB\": 2500.0,\n    \"BTC\": 0.00025\n  },\n  \"warnings\": [\n    \"Top-of-book capacity must meet the configured minimum executable amount.\",\n    \"A conservative execution buffer is deducted from raw profit.\",\n    \"Order-book depth can change before all legs execute.\",\n    \"Transfer routes are informational and include delay risk.\",\n    \"No orders, payments, transfers or withdrawals are performed.\"\n  ]\n}\n"
   }
 }
