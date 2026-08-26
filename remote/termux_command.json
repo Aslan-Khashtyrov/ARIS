@@ -1,6 +1,10 @@
 {
-  "id": "update-termux-live-stream-v02",
-  "action": "WRITE_TEXT",
-  "path": "Arbitrage/aris_watch_control_v01.sh",
-  "content": "#!/data/data/com.termux/files/usr/bin/bash\nROOT=\"$HOME/Arbitrage\"\nCOMMAND=\"$ROOT/remote/termux_command.json\"\nSTATUS=\"$ROOT/remote/termux_status.json\"\nAUDIT=\"$ROOT/journal/termux_control_audit.jsonl\"\ncd \"$ROOT\" || exit 1\n\necho \"========================================================\"\necho \" A.R.I.S. — ЖИВОЙ ПОТОК УПРАВЛЕНИЯ TERMUX\"\necho \"========================================================\"\necho \"Новые команды и результаты появятся ниже без мигания.\"\necho \"Выход из экрана: Ctrl+C. Сам A.R.I.S. продолжит работу.\"\necho\n\nlast_id=\"\"\nwhile true; do\n  current_id=\"$(python - \"$STATUS\" <<'PY'\nimport json\nimport sys\ntry:\n    with open(sys.argv[1], encoding=\"utf-8\") as handle:\n        print(json.load(handle).get(\"id\", \"\"))\nexcept Exception:\n    print(\"\")\nPY\n)\"\n  if [ -n \"$current_id\" ] && [ \"$current_id\" != \"$last_id\" ]; then\n    echo\n    echo \"--------------------------------------------------------\"\n    echo \"[$(date '+%Y-%m-%d %H:%M:%S')] КОМАНДА И РЕЗУЛЬТАТ\"\n    echo \"--------------------------------------------------------\"\n    echo \"КОМАНДА:\"\n    cat \"$COMMAND\" 2>/dev/null\n    echo\n    echo \"РЕЗУЛЬТАТ:\"\n    cat \"$STATUS\" 2>/dev/null\n    echo\n    echo \"ПОСЛЕДНИЕ СОБЫТИЯ:\"\n    tail -n 4 \"$AUDIT\" 2>/dev/null\n    echo\n    last_id=\"$current_id\"\n  fi\n  sleep 1\ndone\n"
+  "id": "termux-full-healthcheck-20260826-0958",
+  "action": "EXEC",
+  "argv": [
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"
+  ],
+  "cwd": "/data/data/com.termux/files/home/Arbitrage",
+  "timeout": 180
 }
