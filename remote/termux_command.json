@@ -1,7 +1,4 @@
 {
-  "id": "p2p-pipeline-evaluation-20260826-2050",
-  "action": "EXEC",
-  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_p2p_monitor_v01.py"],
-  "cwd": "Arbitrage",
-  "timeout": 60
+  "id": "deploy-p2p-manual-v01-20260826-2053",
+  "action": "PING"
 }
