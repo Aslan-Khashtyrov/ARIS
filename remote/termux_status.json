@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "id": "termux-control-bootstrap-v01",
+  "action": "PING",
+  "time": "2026-08-26T09:42:13",
+  "result": {
+    "pong": true,
+    "version": "0.1",
+    "home": "/data/data/com.termux/files/home"
+  }
+}
