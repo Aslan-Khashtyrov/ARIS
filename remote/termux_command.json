@@ -1,7 +1,7 @@
 {
-  "id": "full-healthcheck-20260826-2036-fixed",
+  "id": "diagnose-permission-git-20260826-2038",
   "action": "EXEC",
-  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],
+  "argv": ["git", "status", "--porcelain"],
   "cwd": "Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
