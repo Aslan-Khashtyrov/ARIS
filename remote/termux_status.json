@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "restart-worker-paper-leg-audit-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T16:04:33",
+  "id": "verify-paper-leg-audit-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T16:05:49",
   "result": {
-    "argv": [
-      "pkill",
-      "-f",
-      "aris_worker_v03.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_report_v01.json",
+    "size": 2874,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T16:05:45\",\n  \"mode\": \"PAPER_ONLY\",\n  \"real_trading\": false,\n  \"quotes\": 67,\n  \"edges\": 134,\n  \"cycles_checked\": 1068,\n  \"opportunities\": [],\n  \"best_cycle\": {\n    \"start\": \"bybit:USDT\",\n    \"legs\": 2,\n    \"profit_percent\": -0.2500276110042054,\n    \"capacity_start_units\": 22597.29455205205,\n    \"contains_transfer\": false,\n    \"route\": [\n      {\n        \"kind\": \"TRADE\",\n        \"exchange\": \"bybit\",\n        \"pair\": \"BTC/USDT\",\n        \"src\": \"bybit:USDT\",\n        \"dst\": \"bybit:BTC\",\n        \"rate\": 1.2773874294336148e-05,\n        \"capacity_src\": 44502.5485535,\n        \"side\": \"BUY\",\n        \"fee\": 0.001\n      },\n      {\n        \"kind\": \"TRADE\",\n        \"exchange\": \"bybit\",\n        \"pair\": \"BTC/USDT\",\n        \"src\": \"bybit:BTC\",\n        \"dst\": \"bybit:USDT\",\n        \"rate\": 78128.1936,\n        \"capacity_src\": 0.288655,\n        \"side\": \"SELL\",\n        \"fee\": 0.001\n      }\n    ],\n    \"raw_profit_percent\": -0.2000276110042054,\n    \"execution_buffer_percent\": 0.05,\n    \"paper_start_units\": 100.0,\n    \"paper_end_before_buffer_units\": 99.7999723889958,\n    \"paper_end_units\": 99.7499723889958,\n    \"paper_profit_units\": -0.25002761100419946,\n    \"paper_asset\": \"USDT\",\n    \"paper_legs\": [\n      {\n        \"leg\": 1,\n        \"exchange\": \"bybit\",\n        \"pair\": \"BTC/USDT\",\n        \"side\": \"BUY\",\n        \"src\": \"bybit:USDT\",\n        \"dst\": \"bybit:BTC\",\n        \"amount_in\": 100.0,\n        \"amount_out\": 0.0012773874294336148,\n        \"capacity_src\": 44502.5485535,\n        \"capacity_utilization_percent\": 0.22470623200327994,\n        \"within_top_of_book_capacity\": true\n      },\n      {\n        \"leg\": 2,\n        \"exchange\": \"bybit\",\n        \"pair\": \"BTC/USDT\",\n        \"side\": \"SELL\",\n        \"src\": \"bybit:BTC\",\n        \"dst\": \"bybit:USDT\",\n        \"amount_in\": 0.0012773874294336148,\n        \"amount_out\": 99.7999723889958,\n        \"capacity_src\": 0.288655,\n        \"capacity_utilization_percent\": 0.442530851512572,\n        \"within_top_of_book_capacity\": true\n      }\n    ],\n    \"capacity_verified\": true,\n    \"bottleneck_leg\": {\n      \"leg\": 2,\n      \"exchange\": \"bybit\",\n      \"pair\": \"BTC/USDT\",\n      \"side\": \"SELL\",\n      \"capacity_utilization_percent\": 0.442530851512572\n    },\n    \"minimum_executable_units\": 25.0,\n    \"executable\": true\n  },\n  \"minimum_profit_percent\": 0.1,\n  \"execution_buffer_percent\": 0.05,\n  \"minimum_executable\": {\n    \"USD\": 25.0,\n    \"USDT\": 25.0,\n    \"USDC\": 25.0,\n    \"EUR\": 25.0,\n    \"RUB\": 2500.0,\n    \"BTC\": 0.00025\n  },\n  \"warnings\": [\n    \"Top-of-book capacity must meet the configured minimum executable amount.\",\n    \"A conservative execution buffer is deducted from raw profit.\",\n    \"Order-book depth can change before all legs execute.\",\n    \"Transfer routes are informational and include delay risk.\",\n    \"No orders, payments, transfers or withdrawals are performed.\"\n  ]\n}\n"
   }
 }
