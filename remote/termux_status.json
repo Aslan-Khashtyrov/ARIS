@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "verify-five-exchange-deploy-processes-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T10:30:57",
+  "id": "read-five-exchange-collector-status-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T10:31:24",
   "result": {
-    "argv": [
-      "pgrep",
-      "-af",
-      "python"
-    ],
-    "cwd": "/data/data/com.termux/files/home",
-    "returncode": 0,
-    "stdout": "13413 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py --daemon\n18308 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/main.py\n18324 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/multi_scanner_v03.py\n18346 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/guardian_v04.py\n18356 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_worker_v03.py\n25114 python /data/data/com.termux/files/usr/bin/python aris_autopilot_v01.py\n25116 python /data/data/com.termux/files/usr/bin/python aris_remote_agent_v02.py\n25142 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
+    "size": 751,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T10:31:23\",\n  \"live_quotes\": 39,\n  \"cycles_checked\": 440,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.20002646002258428,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 813,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": false,\n      \"pairs\": 27,\n      \"updates\": 0,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": false,\n      \"pairs\": 0,\n      \"updates\": 0,\n      \"error\": null\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 21,\n      \"updates\": 84,\n      \"error\": null\n    },\n    \"okx\": {\n      \"connected\": false,\n      \"pairs\": 0,\n      \"updates\": 0,\n      \"error\": null\n    }\n  },\n  \"real_trading\": false\n}\n"
   }
 }
