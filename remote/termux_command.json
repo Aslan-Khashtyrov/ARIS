@@ -1,5 +1,6 @@
 {
-  "id": "verify-paper-ledger-v01",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/paper_ledger_summary_v01.json"
+  "id": "publish-execution-quality-diff-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"id\": \"dev-execution-quality-v01\",\n  \"time\": \"2026-08-26T08:27:52.848Z\",\n  \"phase\": \"PREPARE_DIFF\",\n  \"file\": \"aris_cycle_engine_v01.py\",\n  \"goal\": \"Отбрасывать прибыльные проценты, которые нельзя исполнить на нормальной минимальной сумме.\",\n  \"diff\": [\n    \"+ EXECUTION_BUFFER_PERCENT = 0.05\",\n    \"+ минимумы: 25 USD/USDT/USDC/EUR, 2500 RUB, 0.00025 BTC\",\n    \"+ raw_profit_percent отдельно от консервативного profit_percent\",\n    \"+ executable = объём >= минимального и итог после буфера положительный\",\n    \"- сигнал на микроскопической ликвидности\"\n  ],\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false\n  }\n}\n"
 }
