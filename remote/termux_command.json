@@ -1,7 +1,7 @@
 {
-  "id": "full-healthcheck-20260826-2035",
+  "id": "full-healthcheck-20260826-2036-fixed",
   "action": "EXEC",
-  "argv": ["python3", "Arbitrage/aris_healthcheck.py"],
+  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],
   "cwd": "Arbitrage",
   "timeout": 120
 }
