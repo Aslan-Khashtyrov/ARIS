@@ -1,4 +1,11 @@
 {
-  "id": "sync-collector-resilience-v01",
-  "action": "PING"
+  "id": "restart-worker-collector-resilience-v01",
+  "action": "EXEC",
+  "argv": [
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
+  ],
+  "cwd": "/data/data/com.termux/files/home/Arbitrage",
+  "timeout": 20
 }
