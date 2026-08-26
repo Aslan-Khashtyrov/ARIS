@@ -1,17 +1,17 @@
 {
   "ok": true,
-  "id": "backup-p2p-manual-v01-20260827-0133",
+  "id": "mkdir-p2p-backup-20260827-0135",
   "action": "EXEC",
-  "time": "2026-08-27T01:34:18",
+  "time": "2026-08-27T01:35:04",
   "result": {
     "argv": [
-      "cp",
-      "~/Arbitrage/aris_p2p_manual_v01.py",
-      "~/aris_backups/aris_p2p_manual_v01_before_v02_20260827_0133.py"
+      "mkdir",
+      "-p",
+      "/data/data/com.termux/files/home/aris_backups"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 1,
+    "returncode": 0,
     "stdout": "",
-    "stderr": "cp: cannot stat '~/Arbitrage/aris_p2p_manual_v01.py': No such file or directory\n"
+    "stderr": ""
   }
 }
