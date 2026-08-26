@@ -1,15 +1,6 @@
 {
-  "id": "inventory-p2p-files-v03-20260826-2113",
-  "action": "EXEC",
-  "argv": [
-    "find",
-    ".",
-    "-maxdepth",
-    "3",
-    "-type",
-    "f"
-  ],
-  "cwd": "Arbitrage",
-  "timeout": 60,
-  "note": "Read-only inventory; do not stop or modify live processes."
+  "id": "publish-status-fix-plan-2114-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"time\": \"2026-08-26T21:14:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"worker-status-map-v01\",\n  \"findings\": [\n    \"Seven core processes are currently online\",\n    \"Worker STATUS still checks the retired remote-agent instead of Termux Control and Foreman\",\n    \"Healthcheck subprocess diagnostics can report false negatives when invoked through the restricted controller\"\n  ],\n  \"plan\": [\n    \"Update Worker STATUS to the current seven-process topology\",\n    \"Keep controller restrictions and all financial blocks unchanged\",\n    \"Compile, restart Worker safely, and verify live status plus monitoring reports\"\n  ],\n  \"mode\": \"monitoring and paper simulation only\"\n}\n"
 }
