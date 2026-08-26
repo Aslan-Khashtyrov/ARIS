@@ -1,10 +1,5 @@
 {
-  "id": "activate-single-git-writer-v01",
-  "action": "EXEC",
-  "argv": [
-    "kill",
-    "7654"
-  ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 20
+  "id": "verify-fee-model-single-writer-v01",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/journal/cycle_collector_status_v01.json"
 }
