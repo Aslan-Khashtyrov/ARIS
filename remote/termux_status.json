@@ -1,7 +1,11 @@
 {
-  "ok": false,
-  "id": "install-p2p-manual-v02-20260826-2222",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-26T22:21:26",
-  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
+  "ok": true,
+  "id": "healthcheck-20260827-0103",
+  "action": "PING",
+  "time": "2026-08-27T01:02:32",
+  "result": {
+    "pong": true,
+    "version": "0.5",
+    "home": "/data/data/com.termux/files/home"
+  }
 }
