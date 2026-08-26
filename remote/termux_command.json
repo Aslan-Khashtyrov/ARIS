@@ -1,5 +1,11 @@
 {
-  "id": "read-operational-2122-v02",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/operational_report_v01.json"
+  "id": "pause-foreman-for-p2p-upgrade-20260826-2123",
+  "action": "EXEC",
+  "argv": [
+    "pkill",
+    "-f",
+    "aris_foreman_v01.py"
+  ],
+  "cwd": "Arbitrage",
+  "timeout": 30
 }
