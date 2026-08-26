@@ -1,12 +1,12 @@
 {
-  "id": "direct-git-status-2118-v01",
+  "id": "direct-fast-forward-2119-v01",
   "action": "EXEC",
   "argv": [
     "git",
-    "status",
-    "--porcelain=v1",
-    "--branch"
+    "merge",
+    "--ff-only",
+    "origin/main"
   ],
   "cwd": "Arbitrage",
-  "timeout": 60
+  "timeout": 90
 }
