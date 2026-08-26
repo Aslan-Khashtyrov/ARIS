@@ -1,5 +1,5 @@
 {
-  "id": "sync-termux-control-v01",
+  "id": "sync-foreman-via-core-v01",
   "action": "STATUS",
-  "note": "Fast-forward device to protected Termux control agent files."
+  "note": "Fast-forward Foreman files through core remote agent."
 }
