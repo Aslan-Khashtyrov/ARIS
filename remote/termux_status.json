@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "verify-processes-best-executable-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T19:06:16",
+  "id": "hourly-health-20260826-2000",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T19:59:56",
   "result": {
-    "argv": [
-      "pgrep",
-      "-af",
-      "main.py|multi_scanner_v03.py|guardian_v04.py|aris_worker_v03.py|aris_autopilot_v01.py|aris_termux_control_v01.py|aris_foreman_v01.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "7552 python /data/data/com.termux/files/usr/bin/python main.py\n7571 python /data/data/com.termux/files/usr/bin/python multi_scanner_v03.py\n7586 python /data/data/com.termux/files/usr/bin/python guardian_v04.py\n7652 python /data/data/com.termux/files/usr/bin/python aris_autopilot_v01.py\n7677 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\n14118 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_worker_v03.py\n22196 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py --daemon\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
+    "size": 1506,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T19:59:52\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"MONITORING\",\n  \"reasons\": [\n    \"no_confirmed_opportunity\"\n  ],\n  \"market\": {\n    \"live_quotes\": 113,\n    \"cycles_checked\": 1646,\n    \"connected_exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.33555390361194587,\n    \"best_raw_profit_percent\": -0.2855539036119459,\n    \"best_executable\": true,\n    \"best_any_profit_percent\": -0.33555390361194587,\n    \"best_any_executable\": true,\n    \"executable_cycles_checked\": 1162,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 2998,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 4.3,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 4.3,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 11.5,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 1.2,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
   }
 }
