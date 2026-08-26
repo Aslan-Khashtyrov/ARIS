@@ -1,5 +1,6 @@
 {
-  "id": "inspect-binance-collector-20260826-1503",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_collector_status_v01.json"
+  "id": "publish-collector-fix-plan-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"time\": \"2026-08-26T15:07:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"fix-rest-collector-resilience-v01\",\n  \"safety\": {\n    \"real_trading\": false,\n    \"api_secrets\": false,\n    \"orders\": false\n  },\n  \"files\": [\n    \"aris_cycle_collector_v01.py\"\n  ],\n  \"changes\": [\n    \"Reuse the last valid product mapping after transient REST failures\",\n    \"Refresh discovery periodically instead of after every timeout\",\n    \"Request Binance bookTicker only for the supported symbol list\",\n    \"Keep monitoring and paper-only behavior unchanged\"\n  ]\n}\n"
 }
