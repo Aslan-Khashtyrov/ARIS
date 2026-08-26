@@ -1,26 +1,11 @@
 {
   "ok": true,
-  "id": "verify-p2p-quick-v01-20260826-2057",
-  "action": "EXEC",
-  "time": "2026-08-26T20:54:37",
+  "id": "aris-hourly-read-operational-2058",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T20:59:11",
   "result": {
-    "argv": [
-      "python3",
-      "/data/data/com.termux/files/home/Arbitrage/aris_p2p_quick_v01.py",
-      "--buy",
-      "80",
-      "--sell",
-      "81",
-      "--capital",
-      "10000",
-      "--method",
-      "MANUAL",
-      "--minimum",
-      "0.3"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T20:54:37\",\n  \"mode\": \"QUICK_MANUAL_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"input\": {\n    \"buy_price_rub\": 80.0,\n    \"sell_price_rub\": 81.0,\n    \"capital_rub\": 10000.0,\n    \"payment_method\": \"MANUAL\",\n    \"buy_fee_percent\": 0.0,\n    \"sell_fee_percent\": 0.0,\n    \"fixed_cost_rub\": 0.0,\n    \"minimum_net_percent\": 0.3\n  },\n  \"result\": {\n    \"buy_ad\": \"quick-buy\",\n    \"sell_ad\": \"quick-sell\",\n    \"buy_platform\": \"manual\",\n    \"sell_platform\": \"manual\",\n    \"payment_methods\": [\n      \"MANUAL\"\n    ],\n    \"amount_usdt\": 125.0,\n    \"buy_cost_rub\": 10000.0,\n    \"sell_proceeds_rub\": 10125.0,\n    \"net_profit_rub\": 125.0,\n    \"net_profit_percent\": 1.25,\n    \"meets_threshold\": true,\n    \"manual_confirmation_required\": true\n  },\n  \"decision\": \"REVIEW_MANUALLY\",\n  \"warning\": \"Manual calculation only. Quote freshness, account, counterparty and bank risks require human verification.\"\n}\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
+    "size": 1505,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T20:59:03\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"MONITORING\",\n  \"reasons\": [\n    \"no_confirmed_opportunity\"\n  ],\n  \"market\": {\n    \"live_quotes\": 112,\n    \"cycles_checked\": 1578,\n    \"connected_exchanges\": [\n      \"binance\",\n      \"bybit\",\n      \"coinbase\",\n      \"kraken\",\n      \"okx\"\n    ],\n    \"best_profit_percent\": -0.3273238600252803,\n    \"best_raw_profit_percent\": -0.2773238600252803,\n    \"best_executable\": true,\n    \"best_any_profit_percent\": -0.32390968691487493,\n    \"best_any_executable\": false,\n    \"executable_cycles_checked\": 1009,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 3352,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 2.9,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 2.9,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 6.7,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 9.5,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
   }
 }
