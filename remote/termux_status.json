@@ -1,10 +1,11 @@
 {
   "ok": true,
-  "id": "publish-collector-fix-plan-v02",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-26T15:08:50",
+  "id": "sync-collector-resilience-v01",
+  "action": "PING",
+  "time": "2026-08-26T15:10:26",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/developer_feed_v01.json",
-    "bytes": 500
+    "pong": true,
+    "version": "0.1",
+    "home": "/data/data/com.termux/files/home"
   }
 }
