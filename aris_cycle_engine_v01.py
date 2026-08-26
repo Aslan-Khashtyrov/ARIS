@@ -11,6 +11,7 @@ SNAPSHOT = JOURNAL / "cycle_quotes_v01.json"
 REPORT = JOURNAL / "cycle_report_v01.json"
 ANCHORS = ("USDT", "USDC", "USD", "EUR", "RUB", "BTC")
 MAX_LEGS = 4
+MIN_CYCLE_LEGS = 3
 MIN_PROFIT_PERCENT = 0.10
 PAPER_STAKES = {"USD": 100.0, "USDT": 100.0, "USDC": 100.0, "EUR": 100.0, "RUB": 10000.0, "BTC": 0.001}
 MIN_EXECUTABLE = {"USD": 25.0, "USDT": 25.0, "USDC": 25.0, "EUR": 25.0, "RUB": 2500.0, "BTC": 0.00025}
@@ -74,7 +75,7 @@ def transfer_edges(transfers):
         })
     return edges
 
-def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS):
+def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS, min_legs=MIN_CYCLE_LEGS):
     adjacency = {}
     for edge in edges:
         adjacency.setdefault(edge["src"], []).append(edge)
@@ -90,7 +91,7 @@ def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS):
                 next_amount = amount * edge["rate"]
                 next_capacity = min(capacity, edge.get("capacity_src", float("inf")) / amount if amount else 0)
                 next_path = path + [edge]
-                if edge["dst"] == start and len(next_path) >= 2:
+                if edge["dst"] == start and len(next_path) >= min_legs:
                     profit = (next_amount - 1) * 100
                     trade_legs = [item for item in next_path if item["kind"] == "TRADE"]
                     quote_times = [item.get("quote_updated_at", 0) for item in trade_legs if item.get("quote_updated_at", 0) > 0]
@@ -202,10 +203,12 @@ def analyze(payload):
         "opportunities": opportunities[:50],
         "best_cycle": cycles[0] if cycles else None,
         "minimum_profit_percent": MIN_PROFIT_PERCENT,
+        "minimum_cycle_legs": MIN_CYCLE_LEGS,
         "execution_buffer_percent": EXECUTION_BUFFER_PERCENT,
         "maximum_quote_skew_seconds": MAX_QUOTE_SKEW_SECONDS,
         "minimum_executable": MIN_EXECUTABLE,
         "warnings": [
+            "Trade cycles require at least three legs; same-pair round trips are excluded.",
             "Top-of-book capacity must meet the configured minimum executable amount.",
             "A conservative execution buffer is deducted from raw profit.",
             "All trade-leg quotes must fit the configured timestamp-skew window.",
@@ -227,6 +230,7 @@ def self_test():
     result = analyze(payload)
     assert result["cycles_checked"] > 0
     assert result["best_cycle"] is not None
+    assert result["best_cycle"]["legs"] >= MIN_CYCLE_LEGS
     assert result["best_cycle"]["paper_legs"]
     assert result["best_cycle"]["capacity_verified"] is True
     assert result["best_cycle"]["bottleneck_leg"] is not None
