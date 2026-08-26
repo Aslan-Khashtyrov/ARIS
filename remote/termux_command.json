@@ -1,11 +1,10 @@
 {
-  "id": "run-p2p-v02-tests-20260827-0141",
+  "id": "hourly-healthcheck-20260827-0201",
   "action": "EXEC",
   "argv": [
     "python",
-    "/data/data/com.termux/files/home/Arbitrage/test_aris_p2p_manual_v02.py",
-    "-v"
+    "~/Arbitrage/aris_healthcheck.py"
   ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
+  "cwd": "~/Arbitrage",
   "timeout": 120
 }
