@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-p2p-v02-tests-20260827-0140",
+  "id": "run-p2p-v02-tests-20260827-0141",
   "action": "EXEC",
-  "time": "2026-08-27T01:40:15",
+  "time": "2026-08-27T01:41:01",
   "result": {
     "argv": [
       "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+      "/data/data/com.termux/files/home/Arbitrage/test_aris_p2p_manual_v02.py",
+      "-v"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-27 01:40:10\n========================================================\n[1] Checking GitHub...\nLOCAL : 633c0468f3\nREMOTE: b2dda901d5\n[2] Update available\n - remote/termux_command.json\n - test_aris_p2p_manual_v02.py\n[3] Backup tag: aris-backup-20260827-014012\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 633c0468f3\nNEW : b2dda901d5\nBACKUP TAG: aris-backup-20260827-014012\n========================================================\n",
-    "stderr": ""
+    "stdout": "",
+    "stderr": "test_fresh_profitable_route_requires_manual_review (__main__.ManualP2PV02Tests.test_fresh_profitable_route_requires_manual_review) ... ok\ntest_stale_route_is_skipped (__main__.ManualP2PV02Tests.test_stale_route_is_skipped) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.149s\n\nOK\n"
   }
 }
