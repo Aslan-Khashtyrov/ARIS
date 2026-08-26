@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "id": "verify-collector-resilience-v01",
+  "id": "verify-exchange-reconnects-v01",
   "action": "READ_TEXT",
-  "time": "2026-08-26T15:11:57",
+  "time": "2026-08-26T15:13:55",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/operational_report_v01.json",
-    "size": 1390,
-    "content": "{\n  \"ok\": false,\n  \"generated_at\": \"2026-08-26T15:11:53\",\n  \"mode\": \"MONITORING_AND_PAPER_ONLY\",\n  \"decision\": \"DEGRADED\",\n  \"reasons\": [\n    \"disconnected:binance\",\n    \"disconnected:bybit\",\n    \"disconnected:kraken\",\n    \"disconnected:okx\"\n  ],\n  \"market\": {\n    \"live_quotes\": 19,\n    \"cycles_checked\": 183,\n    \"connected_exchanges\": [\n      \"coinbase\"\n    ],\n    \"best_profit_percent\": -1.2464126029999412,\n    \"best_raw_profit_percent\": -1.1964126029999411,\n    \"best_executable\": false,\n    \"actionable_candidates\": 0,\n    \"candidate_streak\": 0,\n    \"required_confirmations\": 3,\n    \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\"\n  },\n  \"paper\": {\n    \"trades\": 0,\n    \"profit_by_asset\": {},\n    \"minimum_profit_percent\": 0.3\n  },\n  \"system\": {\n    \"foreman_cycle\": 1271,\n    \"foreman_problems\": [],\n    \"source_freshness\": {\n      \"collector\": {\n        \"ok\": true,\n        \"age_seconds\": 4.8,\n        \"maximum_age\": 30\n      },\n      \"cycles\": {\n        \"ok\": true,\n        \"age_seconds\": 4.8,\n        \"maximum_age\": 30\n      },\n      \"paper\": {\n        \"ok\": true,\n        \"age_seconds\": 10.0,\n        \"maximum_age\": 45\n      },\n      \"foreman\": {\n        \"ok\": true,\n        \"age_seconds\": 4.0,\n        \"maximum_age\": 30\n      }\n    }\n  },\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
+    "size": 1065,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T15:13:54\",\n  \"live_quotes\": 113,\n  \"cycles_checked\": 1795,\n  \"raw_opportunities\": 0,\n  \"actionable_candidates\": 0,\n  \"candidate_streak\": 0,\n  \"required_confirmations\": 3,\n  \"signal_profit_percent\": 0.3,\n  \"confirmed_signal_ready\": false,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.24991272214004984,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 5225,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": true,\n      \"pairs\": 27,\n      \"updates\": 31730,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": true,\n      \"pairs\": 25,\n      \"updates\": 325,\n      \"error\": null\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 21,\n      \"updates\": 399,\n      \"error\": null\n    },\n    \"okx\": {\n      \"connected\": true,\n      \"pairs\": 22,\n      \"updates\": 374,\n      \"error\": null\n    }\n  },\n  \"fee_schedule_version\": \"0.1\",\n  \"fee_schedule_verified_at\": \"2026-08-26\",\n  \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\",\n  \"real_trading\": false\n}\n"
   }
 }
