@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "restart-worker-metrics-v02-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T20:04:31",
+  "id": "read-metrics-v02-summary-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T20:06:04",
   "result": {
-    "argv": [
-      "pkill",
-      "-f",
-      "aris_worker_v03.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_metrics_summary_v02.json",
+    "size": 715,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T20:05:39\",\n  \"mode\": \"MONITORING_ONLY\",\n  \"real_trading\": false,\n  \"model_version\": \"multileg-executable-v01\",\n  \"samples\": 2,\n  \"samples_with_executable_result\": 2,\n  \"window\": {\n    \"first\": \"2026-08-26T20:04:22\",\n    \"last\": \"2026-08-26T20:05:29\"\n  },\n  \"best_raw_percent\": -0.2728235013516156,\n  \"best_net_percent\": -0.3228235013516156,\n  \"best_any_percent\": -0.3228235013516156,\n  \"median_net_percent\": -0.3262897762809302,\n  \"p95_net_percent\": -0.32317012884454704,\n  \"latest_executable_cycles_checked\": 1131,\n  \"positive_raw_samples\": 0,\n  \"positive_net_samples\": 0,\n  \"positive_net_rate_percent\": 0.0,\n  \"signal_threshold_percent\": 0.3,\n  \"threshold_hits\": 0\n}\n"
   }
 }
