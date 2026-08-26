@@ -1,7 +1,4 @@
 {
-  "id": "diagnose-permission-git-20260826-2038",
-  "action": "EXEC",
-  "argv": ["git", "status", "--porcelain"],
-  "cwd": "Arbitrage",
-  "timeout": 30
+  "id": "deploy-healthcheck-diagnostics-20260826-2040",
+  "action": "PING"
 }
