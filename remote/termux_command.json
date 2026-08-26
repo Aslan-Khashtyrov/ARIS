@@ -1,11 +1,5 @@
 {
-  "id": "restart-worker-paper-leg-audit-v01",
-  "action": "EXEC",
-  "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
-  ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 20
+  "id": "verify-paper-leg-audit-v01",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/journal/cycle_report_v01.json"
 }
