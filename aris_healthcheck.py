@@ -19,15 +19,34 @@ def age(path):
     except OSError:
         return None
 
+def process_cmdline(pid):
+    try:
+        os.kill(pid, 0)
+        return Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace")
+    except (OSError, ValueError):
+        return ""
+
+
 def valid_process(name, script):
     pidfile = STATE / f"{name}.pid"
     try:
         pid = int(pidfile.read_text(encoding="utf-8").strip())
-        os.kill(pid, 0)
-        cmd = Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace")
-        return script in cmd, f"pid={pid}"
-    except Exception as exc:
-        return False, type(exc).__name__
+        cmd = process_cmdline(pid)
+        if script in cmd:
+            return True, f"pid={pid};source=pidfile"
+    except (OSError, ValueError):
+        pass
+
+    # Supervisors and recovery scripts may start a component without refreshing
+    # its pidfile. Verify the live /proc command line before declaring it down.
+    for entry in Path("/proc").iterdir():
+        if not entry.name.isdigit():
+            continue
+        pid = int(entry.name)
+        if script in process_cmdline(pid):
+            return True, f"pid={pid};source=proc"
+
+    return False, "not_running"
 
 add("project_exists", ROOT.exists(), str(ROOT))
 add("git_repo", (ROOT / ".git").exists())
@@ -75,7 +94,7 @@ for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.js
     add(f"runtime:{name}", fresh, f"age_seconds={file_age}")
 
 try:
-    proc = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT, text=True, capture_output=True, timeout=10)
+    proc = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, text=True, capture_output=True, timeout=10)
     add("git_clean", proc.returncode == 0 and not proc.stdout.strip(), proc.stdout.strip() or "clean")
 except Exception as exc:
     add("git_clean", False, f"{type(exc).__name__}: {exc}")
