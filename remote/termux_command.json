@@ -1,10 +1,9 @@
 {
-  "id": "termux-full-healthcheck-20260826-0958",
+  "id": "visible-control-test-20260826-1002",
   "action": "EXEC",
   "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"
+    "date"
   ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 180
+  "cwd": "/data/data/com.termux/files/home",
+  "timeout": 10
 }
