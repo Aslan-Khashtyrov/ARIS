@@ -1,11 +1,4 @@
 {
-  "id": "pause-foreman-p2p-8-20260826",
-  "action": "EXEC",
-  "argv": [
-    "pkill",
-    "-f",
-    "aris_foreman_v01.py"
-  ],
-  "cwd": "Arbitrage",
-  "timeout": 30
+  "id": "recover-control-ping-2128-v01",
+  "action": "PING"
 }
