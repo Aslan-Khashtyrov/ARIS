@@ -219,8 +219,8 @@ def self_test():
     payload = {
         "quotes": [
             {"exchange":"test","base":"BTC","quote":"USDT","bid":100,"ask":101,"bid_size":10,"ask_size":10,"taker_fee":0,"updated_at":1000.0},
-            {"exchange":"test","base":"ETH","quote":"BTC","bid":0.051,"ask":0.052,"bid_size":100,"ask_size":100,"taker_fee":0},
-            {"exchange":"test","base":"ETH","quote":"USDT","bid":5.4,"ask":5.5,"bid_size":100,"ask_size":100,"taker_fee":0}
+            {"exchange":"test","base":"ETH","quote":"BTC","bid":0.051,"ask":0.052,"bid_size":100,"ask_size":100,"taker_fee":0,"updated_at":1000.0},
+            {"exchange":"test","base":"ETH","quote":"USDT","bid":5.4,"ask":5.5,"bid_size":100,"ask_size":100,"taker_fee":0,"updated_at":1000.0}
         ],
         "transfers": []
     }
