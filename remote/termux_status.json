@@ -1,7 +1,16 @@
 {
-  "ok": false,
-  "id": "write-p2p-v02-fresh-test-20260827-0139",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-27T01:38:41",
-  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
+  "ok": true,
+  "id": "deploy-p2p-v02-tests-20260827-0140",
+  "action": "EXEC",
+  "time": "2026-08-27T01:40:15",
+  "result": {
+    "argv": [
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-27 01:40:10\n========================================================\n[1] Checking GitHub...\nLOCAL : 633c0468f3\nREMOTE: b2dda901d5\n[2] Update available\n - remote/termux_command.json\n - test_aris_p2p_manual_v02.py\n[3] Backup tag: aris-backup-20260827-014012\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 633c0468f3\nNEW : b2dda901d5\nBACKUP TAG: aris-backup-20260827-014012\n========================================================\n",
+    "stderr": ""
+  }
 }
