@@ -1,5 +1,5 @@
 {
-  "id": "final-hourly-health-20260826-1607",
+  "id": "inspect-binance-after-targeted-query-v01",
   "action": "READ_TEXT",
-  "path": "Arbitrage/journal/operational_report_v01.json"
+  "path": "Arbitrage/journal/cycle_collector_status_v01.json"
 }
