@@ -1,7 +1,10 @@
 {
-  "ok": false,
-  "id": "publish-metrics-v02-result-v01",
+  "ok": true,
+  "id": "publish-metrics-v02-result-v02",
   "action": "WRITE_TEXT",
-  "time": "2026-08-26T20:08:29",
-  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
+  "time": "2026-08-26T20:09:17",
+  "result": {
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/developer_feed_v01.json",
+    "bytes": 765
+  }
 }
