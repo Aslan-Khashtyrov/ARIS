@@ -1,33 +1,27 @@
 {
   "ok": true,
-  "id": "sync-foreman-via-core-v01",
-  "action": "STATUS",
-  "time": "2026-08-26T10:21:01",
+  "id": "deploy-five-exchange-spot-v01",
+  "action": "RESTART_COMPONENTS",
+  "time": "2026-08-26T10:30:06",
   "result": {
-    "main": {
-      "online": true,
-      "pid": 25071,
-      "script": "main.py"
-    },
-    "scanner": {
-      "online": true,
-      "pid": 25084,
-      "script": "multi_scanner_v03.py"
-    },
-    "guardian": {
-      "online": true,
-      "pid": 25098,
-      "script": "guardian_v04.py"
-    },
-    "worker": {
-      "online": true,
-      "pid": 25100,
-      "script": "aris_worker_v03.py"
-    },
-    "autopilot": {
-      "online": true,
-      "pid": 25114,
-      "script": "aris_autopilot_v01.py"
-    }
+    "stopped": [
+      {
+        "name": "worker",
+        "pid": 25100
+      },
+      {
+        "name": "guardian",
+        "pid": 25098
+      },
+      {
+        "name": "scanner",
+        "pid": 25084
+      },
+      {
+        "name": "main",
+        "pid": 25071
+      }
+    ],
+    "note": "autopilot will restart missing components"
   }
 }
