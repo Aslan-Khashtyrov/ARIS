@@ -1,7 +1,5 @@
 {
-  "id": "verify-p2p-stale-guard-v02-20260826-2103",
-  "action": "EXEC",
-  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_p2p_quick_v01.py", "--buy", "80", "--sell", "81", "--capital", "10000", "--quoted-at", "2026-08-26T20:00:00", "--max-age", "120"],
-  "cwd": "Arbitrage",
-  "timeout": 60
+  "id": "verify-live-quote-age-v02-2103",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/journal/operational_report_v01.json"
 }
