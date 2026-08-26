@@ -1,7 +1,11 @@
 {
-  "ok": false,
-  "id": "publish-execution-quality-diff-v01",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-26T11:27:57",
-  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
+  "ok": true,
+  "id": "sync-execution-quality-v01",
+  "action": "PING",
+  "time": "2026-08-26T11:28:49",
+  "result": {
+    "pong": true,
+    "version": "0.1",
+    "home": "/data/data/com.termux/files/home"
+  }
 }
