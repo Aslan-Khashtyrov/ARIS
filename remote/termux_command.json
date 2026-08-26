@@ -1,4 +1,10 @@
 {
-  "id": "healthcheck-20260827-0103",
-  "action": "PING"
+  "id": "operational-healthcheck-20260827-0104",
+  "action": "EXEC",
+  "argv": [
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 120
 }
