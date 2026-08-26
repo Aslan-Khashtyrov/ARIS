@@ -1,6 +1,7 @@
 {
-  "id": "inspect-project-20260826-2028",
-  "action": "LIST_DIR",
-  "path": "Arbitrage",
-  "limit": 500
+  "id": "visible-channel-test-20260826-2032",
+  "action": "EXEC",
+  "argv": ["date"],
+  "cwd": "Arbitrage",
+  "timeout": 15
 }
