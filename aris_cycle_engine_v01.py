@@ -4,6 +4,7 @@ import argparse
 import json
 import math
 import sys
+import time
 
 ROOT = Path.home() / "Arbitrage"
 JOURNAL = ROOT / "journal"
@@ -17,6 +18,7 @@ PAPER_STAKES = {"USD": 100.0, "USDT": 100.0, "USDC": 100.0, "EUR": 100.0, "RUB":
 MIN_EXECUTABLE = {"USD": 25.0, "USDT": 25.0, "USDC": 25.0, "EUR": 25.0, "RUB": 2500.0, "BTC": 0.00025}
 EXECUTION_BUFFER_PERCENT = 0.05
 MAX_QUOTE_SKEW_SECONDS = 3.0
+MAX_QUOTE_AGE_SECONDS = 5.0
 
 def trade_edges(quotes):
     edges = []
@@ -75,7 +77,8 @@ def transfer_edges(transfers):
         })
     return edges
 
-def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS, min_legs=MIN_CYCLE_LEGS):
+def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS, min_legs=MIN_CYCLE_LEGS, evaluation_time=None):
+    evaluation_time = time.time() if evaluation_time is None else float(evaluation_time)
     adjacency = {}
     for edge in edges:
         adjacency.setdefault(edge["src"], []).append(edge)
@@ -97,6 +100,7 @@ def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS, min_legs=MIN_CYCLE_LE
                     quote_times = [item.get("quote_updated_at", 0) for item in trade_legs if item.get("quote_updated_at", 0) > 0]
                     timestamps_complete = len(quote_times) == len(trade_legs) and bool(trade_legs)
                     quote_skew = (max(quote_times) - min(quote_times)) if timestamps_complete else None
+                    oldest_quote_age = max(0.0, evaluation_time - min(quote_times)) if timestamps_complete else None
                     found.append({
                         "start": start,
                         "legs": len(next_path),
@@ -106,6 +110,9 @@ def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS, min_legs=MIN_CYCLE_LE
                         "quote_skew_seconds": quote_skew,
                         "maximum_quote_skew_seconds": MAX_QUOTE_SKEW_SECONDS,
                         "quote_synchronized": timestamps_complete and quote_skew <= MAX_QUOTE_SKEW_SECONDS,
+                        "oldest_quote_age_seconds": oldest_quote_age,
+                        "maximum_quote_age_seconds": MAX_QUOTE_AGE_SECONDS,
+                        "quotes_fresh": timestamps_complete and oldest_quote_age <= MAX_QUOTE_AGE_SECONDS,
                         "route": next_path,
                     })
                     continue
@@ -189,7 +196,7 @@ def analyze(payload):
         cycle["capacity_verified"] = simulation["capacity_verified"]
         cycle["bottleneck_leg"] = simulation["bottleneck"]
         cycle["minimum_executable_units"] = minimum
-        cycle["executable"] = start_units >= minimum and simulation["capacity_verified"] and cycle["quote_synchronized"]
+        cycle["executable"] = start_units >= minimum and simulation["capacity_verified"] and cycle["quote_synchronized"] and cycle["quotes_fresh"]
     cycles.sort(key=lambda item: item["profit_percent"], reverse=True)
     executable_cycles = [cycle for cycle in cycles if cycle["executable"]]
     opportunities = [cycle for cycle in executable_cycles if cycle["profit_percent"] >= MIN_PROFIT_PERCENT]
@@ -209,12 +216,14 @@ def analyze(payload):
         "minimum_cycle_legs": MIN_CYCLE_LEGS,
         "execution_buffer_percent": EXECUTION_BUFFER_PERCENT,
         "maximum_quote_skew_seconds": MAX_QUOTE_SKEW_SECONDS,
+        "maximum_quote_age_seconds": MAX_QUOTE_AGE_SECONDS,
         "minimum_executable": MIN_EXECUTABLE,
         "warnings": [
             "Trade cycles require at least three legs; same-pair round trips are excluded.",
             "Top-of-book capacity must meet the configured minimum executable amount.",
             "A conservative execution buffer is deducted from raw profit.",
             "All trade-leg quotes must fit the configured timestamp-skew window.",
+            "Every trade-leg quote must also be newer than the configured absolute-age limit.",
             "Order-book depth can change before all legs execute.",
             "Transfer routes are informational and include delay risk.",
             "No orders, payments, transfers or withdrawals are performed."
@@ -222,11 +231,12 @@ def analyze(payload):
     }
 
 def self_test():
+    now = time.time()
     payload = {
         "quotes": [
-            {"exchange":"test","base":"BTC","quote":"USDT","bid":100,"ask":101,"bid_size":10,"ask_size":10,"taker_fee":0,"updated_at":1000.0},
-            {"exchange":"test","base":"ETH","quote":"BTC","bid":0.051,"ask":0.052,"bid_size":100,"ask_size":100,"taker_fee":0,"updated_at":1000.0},
-            {"exchange":"test","base":"ETH","quote":"USDT","bid":5.4,"ask":5.5,"bid_size":100,"ask_size":100,"taker_fee":0,"updated_at":1000.0}
+            {"exchange":"test","base":"BTC","quote":"USDT","bid":100,"ask":101,"bid_size":10,"ask_size":10,"taker_fee":0,"updated_at":now},
+            {"exchange":"test","base":"ETH","quote":"BTC","bid":0.051,"ask":0.052,"bid_size":100,"ask_size":100,"taker_fee":0,"updated_at":now},
+            {"exchange":"test","base":"ETH","quote":"USDT","bid":5.4,"ask":5.5,"bid_size":100,"ask_size":100,"taker_fee":0,"updated_at":now}
         ],
         "transfers": []
     }
@@ -239,6 +249,7 @@ def self_test():
     assert result["best_cycle"]["capacity_verified"] is True
     assert result["best_cycle"]["bottleneck_leg"] is not None
     assert result["best_cycle"]["quote_synchronized"] is True
+    assert result["best_cycle"]["quotes_fresh"] is True
     return {"ok": True, "cycles_checked": result["cycles_checked"], "best_profit_percent": result["best_cycle"]["profit_percent"]}
 
 def main():
