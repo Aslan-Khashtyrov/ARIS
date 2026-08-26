@@ -1,5 +1,5 @@
 {
-  "id": "verify-execution-quality-v01",
+  "id": "check-connectors-before-unified-v01",
   "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_report_v01.json"
+  "path": "Arbitrage/journal/cycle_collector_status_v01.json"
 }
