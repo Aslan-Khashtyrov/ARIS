@@ -1,5 +1,5 @@
 {
-  "id": "restart-for-live-cycle-collector-v01",
-  "action": "RESTART_COMPONENTS",
-  "note": "Reload Worker so the live cycle collector starts."
+  "id": "validate-live-cycle-collector-v01",
+  "action": "HEALTHCHECK",
+  "note": "Validate live pair discovery, quote freshness, executable depth and cycle results."
 }
