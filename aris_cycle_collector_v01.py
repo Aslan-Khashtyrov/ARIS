@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 import threading
 import time
+import urllib.parse
 import urllib.request
 import websocket
 
@@ -30,6 +31,7 @@ FRESH_SECONDS = 15
 SAVE_SECONDS = 5
 SIGNAL_PROFIT_PERCENT = 0.30
 SIGNAL_CONFIRMATIONS = 3
+DISCOVERY_REFRESH_SECONDS = 6 * 60 * 60
 
 lock = threading.Lock()
 quotes = {}
@@ -215,21 +217,35 @@ def kraken_loop():
                     pass
 
 def rest_market_loop(exchange, discover, fetch_tickers, poll_seconds=2):
+    mapping = {}
+    next_discovery = 0.0
     while True:
         try:
-            mapping = discover()
+            current_time = time.time()
+            if not mapping or current_time >= next_discovery:
+                try:
+                    discovered = discover()
+                    if not discovered:
+                        raise RuntimeError(f"no supported {exchange} products")
+                    mapping = discovered
+                    next_discovery = current_time + DISCOVERY_REFRESH_SECONDS
+                except Exception:
+                    if not mapping:
+                        raise
+                    next_discovery = current_time + 60
+            updates = 0
+            for item in fetch_tickers(mapping):
+                symbol = item.get("symbol")
+                if symbol not in mapping:
+                    continue
+                base, quote = mapping[symbol]
+                update(exchange, symbol, base, quote, item.get("bid"), item.get("ask"), item.get("bid_size"), item.get("ask_size"))
+                updates += 1
+            if not updates:
+                raise RuntimeError(f"no usable {exchange} tickers")
             with lock:
                 health[exchange].update({"connected": True, "pairs": len(mapping), "error": None})
-            if not mapping:
-                raise RuntimeError(f"no supported {exchange} products")
-            while True:
-                for item in fetch_tickers():
-                    symbol = item.get("symbol")
-                    if symbol not in mapping:
-                        continue
-                    base, quote = mapping[symbol]
-                    update(exchange, symbol, base, quote, item.get("bid"), item.get("ask"), item.get("bid_size"), item.get("ask_size"))
-                time.sleep(poll_seconds)
+            time.sleep(poll_seconds)
         except Exception as exc:
             with lock:
                 health[exchange].update({"connected": False, "error": f"{type(exc).__name__}: {exc}"})
@@ -246,8 +262,9 @@ def discover_binance():
     return result
 
 
-def fetch_binance_tickers():
-    payload = request_json(BINANCE_TICKERS_URL)
+def fetch_binance_tickers(mapping):
+    query = urllib.parse.urlencode({"symbols": json.dumps(sorted(mapping), separators=(",", ":"))})
+    payload = request_json(f"{BINANCE_TICKERS_URL}?{query}")
     return [{"symbol": item.get("symbol"), "bid": item.get("bidPrice"), "ask": item.get("askPrice"), "bid_size": item.get("bidQty"), "ask_size": item.get("askQty")} for item in payload]
 
 
@@ -261,7 +278,7 @@ def discover_bybit():
     return result
 
 
-def fetch_bybit_tickers():
+def fetch_bybit_tickers(mapping):
     payload = request_json(BYBIT_TICKERS_URL)
     return [{"symbol": item.get("symbol"), "bid": item.get("bid1Price"), "ask": item.get("ask1Price"), "bid_size": item.get("bid1Size"), "ask_size": item.get("ask1Size")} for item in payload.get("result", {}).get("list", [])]
 
@@ -276,7 +293,7 @@ def discover_okx():
     return result
 
 
-def fetch_okx_tickers():
+def fetch_okx_tickers(mapping):
     payload = request_json(OKX_TICKERS_URL)
     return [{"symbol": item.get("instId"), "bid": item.get("bidPx"), "ask": item.get("askPx"), "bid_size": item.get("bidSz"), "ask_size": item.get("askSz")} for item in payload.get("data", [])]
 
