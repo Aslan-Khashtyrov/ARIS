@@ -13,6 +13,8 @@ ANCHORS = ("USDT", "USDC", "USD", "EUR", "RUB", "BTC")
 MAX_LEGS = 4
 MIN_PROFIT_PERCENT = 0.10
 PAPER_STAKES = {"USD": 100.0, "USDT": 100.0, "USDC": 100.0, "EUR": 100.0, "RUB": 10000.0, "BTC": 0.001}
+MIN_EXECUTABLE = {"USD": 25.0, "USDT": 25.0, "USDC": 25.0, "EUR": 25.0, "RUB": 2500.0, "BTC": 0.00025}
+EXECUTION_BUFFER_PERCENT = 0.05
 
 def trade_edges(quotes):
     edges = []
@@ -114,12 +116,21 @@ def analyze(payload):
     for cycle in cycles:
         start_asset = cycle["start"].split(":", 1)[1]
         requested = PAPER_STAKES.get(start_asset, 1.0)
+        minimum = MIN_EXECUTABLE.get(start_asset, requested)
         start_units = max(0.0, min(requested, cycle["capacity_start_units"]))
+        raw_profit = cycle["profit_percent"]
+        conservative_profit = raw_profit - EXECUTION_BUFFER_PERCENT
+        cycle["raw_profit_percent"] = raw_profit
+        cycle["execution_buffer_percent"] = EXECUTION_BUFFER_PERCENT
+        cycle["profit_percent"] = conservative_profit
         cycle["paper_start_units"] = start_units
-        cycle["paper_end_units"] = start_units * (1 + cycle["profit_percent"] / 100)
+        cycle["paper_end_units"] = start_units * (1 + conservative_profit / 100)
         cycle["paper_profit_units"] = cycle["paper_end_units"] - start_units
         cycle["paper_asset"] = start_asset
-    opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT and c["paper_start_units"] > 0]
+        cycle["minimum_executable_units"] = minimum
+        cycle["executable"] = start_units >= minimum
+    cycles.sort(key=lambda item: item["profit_percent"], reverse=True)
+    opportunities = [c for c in cycles if c["profit_percent"] >= MIN_PROFIT_PERCENT and c["executable"]]
     return {
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -131,7 +142,11 @@ def analyze(payload):
         "opportunities": opportunities[:50],
         "best_cycle": cycles[0] if cycles else None,
         "minimum_profit_percent": MIN_PROFIT_PERCENT,
+        "execution_buffer_percent": EXECUTION_BUFFER_PERCENT,
+        "minimum_executable": MIN_EXECUTABLE,
         "warnings": [
+            "Top-of-book capacity must meet the configured minimum executable amount.",
+            "A conservative execution buffer is deducted from raw profit.",
             "Order-book depth can change before all legs execute.",
             "Transfer routes are informational and include delay risk.",
             "No orders, payments, transfers or withdrawals are performed."
