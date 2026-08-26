@@ -1,17 +1,10 @@
 {
   "ok": true,
-  "id": "verify-processes-quote-age-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T21:03:29",
+  "id": "publish-quote-age-result-v01",
+  "action": "WRITE_TEXT",
+  "time": "2026-08-26T21:04:16",
   "result": {
-    "argv": [
-      "pgrep",
-      "-af",
-      "main.py|multi_scanner_v03.py|guardian_v04.py|aris_worker_v03.py|aris_autopilot_v01.py|aris_termux_control_v01.py|aris_foreman_v01.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "7552 python /data/data/com.termux/files/usr/bin/python main.py\n7571 python /data/data/com.termux/files/usr/bin/python multi_scanner_v03.py\n7586 python /data/data/com.termux/files/usr/bin/python guardian_v04.py\n7652 python /data/data/com.termux/files/usr/bin/python aris_autopilot_v01.py\n7677 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\n22196 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py --daemon\n24306 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_worker_v03.py\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/developer_feed_v01.json",
+    "bytes": 959
   }
 }
