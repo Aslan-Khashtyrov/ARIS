@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "diagnose-permission-git-20260826-2038",
-  "action": "EXEC",
-  "time": "2026-08-26T20:37:25",
+  "id": "deploy-healthcheck-diagnostics-20260826-2040",
+  "action": "PING",
+  "time": "2026-08-26T20:38:34",
   "result": {
-    "argv": [
-      "git",
-      "status",
-      "--porcelain"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "?? aris_watch_control_v01.sh\n",
-    "stderr": ""
+    "pong": true,
+    "version": "0.1",
+    "home": "/data/data/com.termux/files/home"
   }
 }
