@@ -1,4 +1,6 @@
 {
-  "id": "session-link-ping-20260826-2026",
-  "action": "PING"
+  "id": "inspect-project-20260826-2028",
+  "action": "LIST_DIR",
+  "path": "Arbitrage",
+  "limit": 500
 }
