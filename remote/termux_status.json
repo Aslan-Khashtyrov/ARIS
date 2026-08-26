@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "start-foreman-daemon-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T10:22:01",
+  "id": "verify-foreman-continuous-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T10:22:47",
   "result": {
-    "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py",
-      "--daemon"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "foreman starting pid=13413\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/foreman_status_v01.json",
+    "size": 1584,
+    "content": "{\n  \"ok\": true,\n  \"time\": \"2026-08-26T10:22:41\",\n  \"version\": \"0.1\",\n  \"mode\": \"CONTINUOUS_SAFE_OPERATIONS\",\n  \"cycle\": 5,\n  \"interval_seconds\": 10,\n  \"processes\": {\n    \"main\": {\n      \"online\": true,\n      \"pid\": 25071,\n      \"script\": \"main.py\"\n    },\n    \"scanner\": {\n      \"online\": true,\n      \"pid\": 25084,\n      \"script\": \"multi_scanner_v03.py\"\n    },\n    \"guardian\": {\n      \"online\": true,\n      \"pid\": 25098,\n      \"script\": \"guardian_v04.py\"\n    },\n    \"worker\": {\n      \"online\": true,\n      \"pid\": 25100,\n      \"script\": \"aris_worker_v03.py\"\n    },\n    \"autopilot\": {\n      \"online\": true,\n      \"pid\": 25114,\n      \"script\": \"aris_autopilot_v01.py\"\n    },\n    \"remote_agent\": {\n      \"online\": true,\n      \"pid\": 25116,\n      \"script\": \"aris_remote_agent_v02.py\"\n    },\n    \"termux_control\": {\n      \"online\": true,\n      \"pid\": 25142,\n      \"script\": \"aris_termux_control_v01.py\"\n    }\n  },\n  \"runtime\": {\n    \"session_stats\": {\n      \"fresh\": true,\n      \"age_seconds\": 5.6,\n      \"maximum_age\": 180\n    },\n    \"spot_history\": {\n      \"fresh\": true,\n      \"age_seconds\": 19.7,\n      \"maximum_age\": 180\n    },\n    \"cycle_quotes\": {\n      \"fresh\": true,\n      \"age_seconds\": 1.8,\n      \"maximum_age\": 30\n    },\n    \"cycle_report\": {\n      \"fresh\": true,\n      \"age_seconds\": 1.8,\n      \"maximum_age\": 30\n    }\n  },\n  \"disk\": {\n    \"total_mb\": 228296.0,\n    \"free_mb\": 144142.4,\n    \"free_percent\": 63.14\n  },\n  \"problems\": [],\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
   }
 }
