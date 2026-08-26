@@ -1,11 +1,5 @@
 {
-  "id": "restart-worker-quote-age-v01",
-  "action": "EXEC",
-  "cwd": "Arbitrage",
-  "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
-  ],
-  "timeout": 30
+  "id": "verify-live-quote-age-v01",
+  "action": "READ_TEXT",
+  "path": "Arbitrage/journal/operational_report_v01.json"
 }
