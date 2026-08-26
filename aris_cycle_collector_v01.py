@@ -19,6 +19,7 @@ CB_PRODUCTS_URL = "https://api.exchange.coinbase.com/products"
 KRAKEN_PAIRS_URL = "https://api.kraken.com/0/public/AssetPairs"
 BINANCE_INFO_URL = "https://data-api.binance.vision/api/v3/exchangeInfo"
 BINANCE_TICKERS_URL = "https://data-api.binance.vision/api/v3/ticker/bookTicker"
+BINANCE_WS = "wss://data-stream.binance.vision:443/stream?streams="
 BYBIT_INFO_URL = "https://api.bybit.com/v5/market/instruments-info?category=spot"
 BYBIT_TICKERS_URL = "https://api.bybit.com/v5/market/tickers?category=spot"
 OKX_INFO_URL = "https://www.okx.com/api/v5/public/instruments?instType=SPOT"
@@ -268,6 +269,59 @@ def fetch_binance_tickers(mapping):
     return [{"symbol": item.get("symbol"), "bid": item.get("bidPrice"), "ask": item.get("askPrice"), "bid_size": item.get("bidQty"), "ask_size": item.get("askQty")} for item in payload]
 
 
+def binance_loop():
+    candidates = {
+        f"{base}{quote}": (base, quote)
+        for base in UNIVERSE
+        for quote in UNIVERSE
+        if base != quote
+    }
+    streams = "/".join(f"{symbol.lower()}@bookTicker" for symbol in sorted(candidates))
+    url = BINANCE_WS + streams
+    while True:
+        ws = None
+        active = set()
+        try:
+            ws = websocket.create_connection(url, timeout=20)
+            while True:
+                try:
+                    raw = ws.recv()
+                except websocket.WebSocketTimeoutException:
+                    ws.ping("keepalive")
+                    continue
+                message = json.loads(raw)
+                item = message.get("data", message)
+                symbol = str(item.get("s", "")).upper()
+                if symbol not in candidates:
+                    continue
+                base, quote = candidates[symbol]
+                update(
+                    "binance", symbol, base, quote,
+                    item.get("b"), item.get("a"), item.get("B"), item.get("A"),
+                )
+                active.add(symbol)
+                with lock:
+                    health["binance"].update({
+                        "connected": True,
+                        "pairs": len(active),
+                        "error": None,
+                    })
+        except Exception as exc:
+            with lock:
+                health["binance"].update({
+                    "connected": False,
+                    "pairs": len(active),
+                    "error": f"{type(exc).__name__}: {exc}",
+                })
+            time.sleep(5)
+        finally:
+            if ws:
+                try:
+                    ws.close()
+                except Exception:
+                    pass
+
+
 def discover_bybit():
     payload = request_json(BYBIT_INFO_URL)
     result = {}
@@ -377,7 +431,7 @@ def run_forever():
     threads = [
         threading.Thread(target=coinbase_loop, daemon=True, name="cycle-coinbase"),
         threading.Thread(target=kraken_loop, daemon=True, name="cycle-kraken"),
-        threading.Thread(target=rest_market_loop, args=("binance", discover_binance, fetch_binance_tickers), daemon=True, name="cycle-binance"),
+        threading.Thread(target=binance_loop, daemon=True, name="cycle-binance"),
         threading.Thread(target=rest_market_loop, args=("bybit", discover_bybit, fetch_bybit_tickers), daemon=True, name="cycle-bybit"),
         threading.Thread(target=rest_market_loop, args=("okx", discover_okx, fetch_okx_tickers), daemon=True, name="cycle-okx"),
         threading.Thread(target=snapshot_loop, daemon=True, name="cycle-snapshot"),
