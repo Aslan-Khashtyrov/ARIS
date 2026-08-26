@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "restart-worker-cycle-metrics-v01",
-  "action": "EXEC",
-  "time": "2026-08-26T11:48:53",
+  "id": "verify-cycle-metrics-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T14:58:48",
   "result": {
-    "argv": [
-      "pkill",
-      "-f",
-      "aris_worker_v03.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_metrics_summary_v01.json",
+    "size": 547,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T14:58:09\",\n  \"mode\": \"MONITORING_ONLY\",\n  \"real_trading\": false,\n  \"samples\": 180,\n  \"window\": {\n    \"first\": \"2026-08-26T11:49:07\",\n    \"last\": \"2026-08-26T14:58:06\"\n  },\n  \"best_raw_percent\": -0.19991264784851026,\n  \"best_net_percent\": -0.24991264784851025,\n  \"median_net_percent\": -0.2499127214785512,\n  \"p95_net_percent\": -0.24991266217728675,\n  \"positive_raw_samples\": 0,\n  \"positive_net_samples\": 0,\n  \"positive_net_rate_percent\": 0.0,\n  \"signal_threshold_percent\": 0.3,\n  \"threshold_hits\": 0\n}\n"
   }
 }
