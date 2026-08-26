@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "id": "read-five-exchange-collector-status-v01",
+  "id": "recheck-five-exchange-collector-v02",
   "action": "READ_TEXT",
-  "time": "2026-08-26T10:31:24",
+  "time": "2026-08-26T10:32:55",
   "result": {
     "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
-    "size": 751,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T10:31:23\",\n  \"live_quotes\": 39,\n  \"cycles_checked\": 440,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.20002646002258428,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 813,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": false,\n      \"pairs\": 27,\n      \"updates\": 0,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": false,\n      \"pairs\": 0,\n      \"updates\": 0,\n      \"error\": null\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 21,\n      \"updates\": 84,\n      \"error\": null\n    },\n    \"okx\": {\n      \"connected\": false,\n      \"pairs\": 0,\n      \"updates\": 0,\n      \"error\": null\n    }\n  },\n  \"real_trading\": false\n}\n"
+    "size": 762,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T10:32:53\",\n  \"live_quotes\": 114,\n  \"cycles_checked\": 1813,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.19991264758404403,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 4077,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": true,\n      \"pairs\": 27,\n      \"updates\": 21887,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": true,\n      \"pairs\": 25,\n      \"updates\": 250,\n      \"error\": null\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 21,\n      \"updates\": 546,\n      \"error\": null\n    },\n    \"okx\": {\n      \"connected\": true,\n      \"pairs\": 22,\n      \"updates\": 418,\n      \"error\": null\n    }\n  },\n  \"real_trading\": false\n}\n"
   }
 }
