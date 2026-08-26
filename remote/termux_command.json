@@ -1,5 +1,6 @@
 {
-  "id": "inspect-best-cycle-legs-v01",
-  "action": "READ_TEXT",
-  "path": "Arbitrage/journal/cycle_report_v01.json"
+  "id": "publish-true-cycle-plan-v01",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/journal/developer_feed_v01.json",
+  "content": "{\n  \"time\": \"2026-08-26T18:03:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"true-multileg-cycles-v01\",\n  \"mode\": \"public monitoring and paper only\",\n  \"files\": [\n    \"aris_cycle_engine_v01.py\"\n  ],\n  \"changes\": [\n    \"Require at least three legs for a trade cycle\",\n    \"Exclude same-pair buy-then-sell baselines from opportunity ranking\",\n    \"Keep fee, capacity and quote-synchronization checks unchanged\",\n    \"Report the configured minimum cycle length\"\n  ]\n}\n"
 }
