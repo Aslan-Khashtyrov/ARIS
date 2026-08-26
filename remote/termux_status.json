@@ -1,7 +1,11 @@
 {
-  "ok": false,
-  "id": "publish-cycle-persistence-diff-v01",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-26T10:43:08",
-  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
+  "ok": true,
+  "id": "verify-persistent-cycle-signals-v01",
+  "action": "READ_TEXT",
+  "time": "2026-08-26T10:44:40",
+  "result": {
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
+    "size": 937,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-26T10:44:37\",\n  \"live_quotes\": 89,\n  \"cycles_checked\": 1364,\n  \"raw_opportunities\": 0,\n  \"actionable_candidates\": 0,\n  \"candidate_streak\": 0,\n  \"required_confirmations\": 3,\n  \"signal_profit_percent\": 0.3,\n  \"confirmed_signal_ready\": false,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.20002637083091912,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 19,\n      \"updates\": 1003,\n      \"error\": null\n    },\n    \"kraken\": {\n      \"connected\": true,\n      \"pairs\": 27,\n      \"updates\": 5535,\n      \"error\": null\n    },\n    \"binance\": {\n      \"connected\": false,\n      \"pairs\": 0,\n      \"updates\": 0,\n      \"error\": null\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 21,\n      \"updates\": 189,\n      \"error\": null\n    },\n    \"okx\": {\n      \"connected\": true,\n      \"pairs\": 22,\n      \"updates\": 132,\n      \"error\": null\n    }\n  },\n  \"real_trading\": false\n}\n"
+  }
 }
