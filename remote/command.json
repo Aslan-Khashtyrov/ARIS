@@ -1,5 +1,5 @@
 {
-  "id": "sync-foreman-via-core-v01",
-  "action": "STATUS",
-  "note": "Fast-forward Foreman files through core remote agent."
+  "id": "deploy-five-exchange-spot-v01",
+  "action": "RESTART_COMPONENTS",
+  "note": "Deploy public Binance Bybit OKX collectors; monitoring only."
 }
