@@ -1,11 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-p2p-manual-v01-20260826-2053",
-  "action": "PING",
-  "time": "2026-08-26T20:48:30",
+  "id": "verify-p2p-manual-v01-20260826-2054",
+  "action": "EXEC",
+  "time": "2026-08-26T20:49:18",
   "result": {
-    "pong": true,
-    "version": "0.1",
-    "home": "/data/data/com.termux/files/home"
+    "argv": [
+      "python3",
+      "/data/data/com.termux/files/home/Arbitrage/aris_p2p_manual_v01.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"version\": \"0.1\",\n  \"generated_at\": \"2026-08-26T20:49:18\",\n  \"mode\": \"MANUAL_INPUT_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"input_file\": \"/data/data/com.termux/files/home/Arbitrage/data/p2p_manual_quotes_v01.json\",\n  \"buy_ads\": 1,\n  \"sell_ads\": 1,\n  \"routes_checked\": 1,\n  \"compatible_routes\": 1,\n  \"actionable_routes\": 1,\n  \"best_route\": {\n    \"buy_ad\": \"buy-example-1\",\n    \"sell_ad\": \"sell-example-1\",\n    \"buy_platform\": \"manual\",\n    \"sell_platform\": \"manual\",\n    \"payment_methods\": [\n      \"BANK_A\"\n    ],\n    \"amount_usdt\": 125.0,\n    \"buy_cost_rub\": 10000.0,\n    \"sell_proceeds_rub\": 10125.0,\n    \"net_profit_rub\": 125.0,\n    \"net_profit_percent\": 1.25,\n    \"meets_threshold\": true,\n    \"manual_confirmation_required\": true\n  },\n  \"routes\": [\n    {\n      \"buy_ad\": \"buy-example-1\",\n      \"sell_ad\": \"sell-example-1\",\n      \"buy_platform\": \"manual\",\n      \"sell_platform\": \"manual\",\n      \"payment_methods\": [\n        \"BANK_A\"\n      ],\n      \"amount_usdt\": 125.0,\n      \"buy_cost_rub\": 10000.0,\n      \"sell_proceeds_rub\": 10125.0,\n      \"net_profit_rub\": 125.0,\n      \"net_profit_percent\": 1.25,\n      \"meets_threshold\": true,\n      \"manual_confirmation_required\": true\n    }\n  ],\n  \"warnings\": [\n    \"Manual quotes can become stale before confirmation.\",\n    \"Bank, platform, tax, account-freeze and counterparty risks require human review.\",\n    \"No orders, messages, payments, transfers, deposits or withdrawals are performed.\"\n  ]\n}\n",
+    "stderr": ""
   }
 }
