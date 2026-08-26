@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.3"
+VERSION = "0.4"
 HOME = Path.home().resolve()
 ROOT = (HOME / "Arbitrage").resolve()
 STATE = ROOT / "guardian_state"
@@ -163,7 +163,8 @@ def validate_exec(argv: object) -> list[str]:
     if program in {"python", "python3"}:
         if len(argv) < 2 or argv[1].startswith("-"):
             raise PermissionError("python requires a script path; -c and stdin are blocked")
-        safe_path(argv[1], must_exist=True)
+        argv = list(argv)
+        argv[1] = str(safe_path(argv[1], must_exist=True))
     if program in {"pip", "pip3", "pkg", "apt", "apt-get"} and any(v in {"remove", "uninstall", "purge"} for v in argv[1:]):
         raise PermissionError("PACKAGE_REMOVAL_BLOCKED")
     if program == "git" and any(v in {"credential", "credential-store"} for v in argv[1:]):
@@ -177,8 +178,15 @@ def exec_argv(command: dict) -> dict:
     if not cwd.is_dir():
         raise NotADirectoryError(str(cwd))
     timeout = max(1, min(int(command.get("timeout", 60)), 300))
-    safe_env_keys = ("PATH", "PREFIX", "TMPDIR", "LD_PRELOAD", "LD_LIBRARY_PATH", "SHELL", "TERM", "COLORTERM")
+    safe_env_keys = (
+        "PATH", "PREFIX", "TMPDIR", "LD_PRELOAD", "SHELL", "TERM", "COLORTERM",
+        "ANDROID_DATA", "ANDROID_ROOT", "ANDROID_RUNTIME_ROOT", "BOOTCLASSPATH",
+        "DEX2OATBOOTCLASSPATH",
+    )
     safe_env = {key: os.environ[key] for key in safe_env_keys if os.environ.get(key)}
+    for key, value in os.environ.items():
+        if key.startswith(("TERMUX_", "TERMUX__", "ANDROID__")):
+            safe_env[key] = value
     safe_env.update({"HOME": str(HOME), "LANG": os.environ.get("LANG", "C.UTF-8")})
     proc = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=safe_env)
     return {"argv": argv, "cwd": str(cwd), "returncode": proc.returncode, "stdout": redact(proc.stdout), "stderr": redact(proc.stderr)}
