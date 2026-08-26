@@ -1,7 +1,11 @@
 {
-  "ok": false,
-  "id": "publish-paper-ledger-diff-v01",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-26T11:02:39",
-  "error": "PermissionError: FINANCIAL_ACTION_BLOCKED"
+  "ok": true,
+  "id": "sync-paper-ledger-v01",
+  "action": "PING",
+  "time": "2026-08-26T11:04:10",
+  "result": {
+    "pong": true,
+    "version": "0.1",
+    "home": "/data/data/com.termux/files/home"
+  }
 }
