@@ -1,6 +1,6 @@
 {
-  "id": "publish-collector-fix-plan-v01",
+  "id": "publish-collector-fix-plan-v02",
   "action": "WRITE_TEXT",
   "path": "Arbitrage/journal/developer_feed_v01.json",
-  "content": "{\n  \"time\": \"2026-08-26T15:07:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"fix-rest-collector-resilience-v01\",\n  \"safety\": {\n    \"real_trading\": false,\n    \"api_secrets\": false,\n    \"orders\": false\n  },\n  \"files\": [\n    \"aris_cycle_collector_v01.py\"\n  ],\n  \"changes\": [\n    \"Reuse the last valid product mapping after transient REST failures\",\n    \"Refresh discovery periodically instead of after every timeout\",\n    \"Request Binance bookTicker only for the supported symbol list\",\n    \"Keep monitoring and paper-only behavior unchanged\"\n  ]\n}\n"
+  "content": "{\n  \"time\": \"2026-08-26T15:08:00+03:00\",\n  \"event\": \"planned_change\",\n  \"id\": \"fix-rest-collector-resilience-v01\",\n  \"mode\": \"public monitoring and paper only\",\n  \"files\": [\n    \"aris_cycle_collector_v01.py\"\n  ],\n  \"changes\": [\n    \"Reuse the last valid product mapping after transient REST failures\",\n    \"Refresh discovery periodically instead of after every timeout\",\n    \"Request Binance bookTicker only for the supported symbol list\",\n    \"Do not add order placement or financial actions\"\n  ]\n}\n"
 }
