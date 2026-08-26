@@ -1,6 +1,6 @@
 {
-  "id": "create-transparent-developer-feed-v01",
+  "id": "publish-cycle-persistence-diff-v01",
   "action": "WRITE_TEXT",
   "path": "Arbitrage/journal/developer_feed_v01.json",
-  "content": "{\n  \"id\": \"transparent-mode-ready-v01\",\n  \"time\": \"2026-08-26T10:36:00+03:00\",\n  \"phase\": \"READY\",\n  \"file\": \"aris_watch_control_v01.sh\",\n  \"goal\": \"Показывать полный код/diff до применения, затем команды, проверки и результаты.\",\n  \"rules\": [\n    \"Перед изменением публикуется файл и полный diff/код.\",\n    \"После публикации показывается команда применения.\",\n    \"Затем показываются stdout, stderr и результат проверки.\",\n    \"Секреты, API-ключи и финансовые операции не отображаются и не выполняются.\"\n  ],\n  \"next\": \"Точная модель комиссий и устойчивости Spot-сигналов.\"\n}\n"
+  "content": "{\n  \"id\": \"dev-cycle-signal-persistence-v01\",\n  \"time\": \"2026-08-26T07:42:33.340Z\",\n  \"phase\": \"PREPARE_DIFF\",\n  \"file\": \"aris_cycle_collector_v01.py\",\n  \"goal\": \"Не считать краткий ценовой скачок рабочим арбитражным сигналом.\",\n  \"diff\": [\n    \"+ SIGNAL_PROFIT_PERCENT = 0.30\",\n    \"+ SIGNAL_CONFIRMATIONS = 3\",\n    \"+ хранить сигнатуру лучшего маршрута и число последовательных подтверждений\",\n    \"+ записывать opportunity только после трёх подтверждений\",\n    \"+ публиковать raw_opportunities, candidate_streak и confirmed_signal_ready\",\n    \"- немедленная запись любого сигнала >= 0.10% в журнал\"\n  ],\n  \"safety\": {\n    \"real_trading\": false,\n    \"orders\": false,\n    \"payments\": false,\n    \"withdrawals\": false,\n    \"api_secrets\": false\n  }\n}\n"
 }
