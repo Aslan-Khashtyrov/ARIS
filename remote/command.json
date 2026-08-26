@@ -1,5 +1,5 @@
 {
-  "id": "deploy-five-exchange-spot-v01",
+  "id": "deploy-persistent-cycle-signals-v01",
   "action": "RESTART_COMPONENTS",
-  "note": "Deploy public Binance Bybit OKX collectors; monitoring only."
+  "note": "Deploy 0.30 percent and three-snapshot signal confirmation."
 }
