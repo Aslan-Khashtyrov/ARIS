@@ -1,7 +1,7 @@
 {
-  "id": "detailed-healthcheck-20260826-2041",
+  "id": "live-actionable-report-20260826-2044",
   "action": "EXEC",
-  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],
+  "argv": ["python3", "/data/data/com.termux/files/home/Arbitrage/aris_unified_report_v01.py"],
   "cwd": "Arbitrage",
-  "timeout": 120
+  "timeout": 90
 }
