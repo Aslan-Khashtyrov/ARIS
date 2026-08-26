@@ -1,32 +1,32 @@
 {
   "ok": true,
-  "id": "sync-termux-control-v01",
+  "id": "sync-foreman-via-core-v01",
   "action": "STATUS",
-  "time": "2026-08-26T09:38:53",
+  "time": "2026-08-26T10:21:01",
   "result": {
     "main": {
       "online": true,
-      "pid": 5479,
+      "pid": 25071,
       "script": "main.py"
     },
     "scanner": {
       "online": true,
-      "pid": 5490,
+      "pid": 25084,
       "script": "multi_scanner_v03.py"
     },
     "guardian": {
       "online": true,
-      "pid": 5504,
+      "pid": 25098,
       "script": "guardian_v04.py"
     },
     "worker": {
       "online": true,
-      "pid": 5505,
+      "pid": 25100,
       "script": "aris_worker_v03.py"
     },
     "autopilot": {
       "online": true,
-      "pid": 27834,
+      "pid": 25114,
       "script": "aris_autopilot_v01.py"
     }
   }
