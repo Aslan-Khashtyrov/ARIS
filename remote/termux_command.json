@@ -1,11 +1,6 @@
 {
-  "id": "pause-foreman-for-p2p-upgrade-20260826-2123",
-  "action": "EXEC",
-  "argv": [
-    "pkill",
-    "-f",
-    "aris_foreman_v01.py"
-  ],
-  "cwd": "Arbitrage",
-  "timeout": 30
+  "id": "queue-worker-status-2123-v02",
+  "action": "WRITE_TEXT",
+  "path": "Arbitrage/aris_queue/pending/status-v09-2123.json",
+  "content": "{\n  \"task_id\": \"status-v09-2123\",\n  \"action\": \"STATUS\",\n  \"real_trading\": false\n}\n"
 }
