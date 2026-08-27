@@ -1,19 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-okx-id-fix-20260827-1116",
+  "id": "restart-worker-okx-id-fix-20260827-1117",
   "action": "EXEC",
-  "time": "2026-08-27T11:09:39",
+  "time": "2026-08-27T11:10:16",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 5c30fd4..57a6890\nFast-forward\n aris_cycle_collector_v01.py | 2 +-\n remote/termux_command.json  | 9 ++++++---\n 2 files changed, 7 insertions(+), 4 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": ""
   }
 }
