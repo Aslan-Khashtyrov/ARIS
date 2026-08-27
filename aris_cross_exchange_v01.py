@@ -14,12 +14,12 @@ REPORT = JOURNAL / "cross_exchange_report_v01.json"
 HISTORY = JOURNAL / "cross_exchange_history_v01.jsonl"
 POSITIVE_AUDIT = JOURNAL / "cross_exchange_positive_v01.jsonl"
 SUMMARY = JOURNAL / "cross_exchange_metrics_v01.json"
-MAX_QUOTE_AGE_SECONDS = 5.0
+MAX_QUOTE_AGE_SECONDS = 2.0
 MAX_QUOTE_SKEW_SECONDS = 3.0
 MAX_BOOK_UTILIZATION_PERCENT = 80.0
 EXECUTION_BUFFER_PERCENT = 0.05
 PAPER_QUOTE_STAKE = 100.0
-ANALYSIS_INTERVAL_SECONDS = 3
+ANALYSIS_INTERVAL_SECONDS = 1
 
 
 def floor_step(value, step):
@@ -128,6 +128,8 @@ def analyze(payload, evaluation_time=None):
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "mode": "CROSS_EXCHANGE_PAPER_ONLY",
+        "model_version": "cross-executable-v02-fast",
+        "maximum_quote_age_seconds": MAX_QUOTE_AGE_SECONDS,
         "real_trading": False,
         "pairs_compared": len(groups),
         "routes_compared": len(comparisons),
