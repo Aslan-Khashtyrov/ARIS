@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "run-cycle-funding-test-20260827-1408",
+  "id": "restart-worker-funded-filter-20260827-1409",
   "action": "EXEC",
-  "time": "2026-08-27T14:04:19",
+  "time": "2026-08-27T14:04:57",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_cycle_funding_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+    "stderr": ""
   }
 }
