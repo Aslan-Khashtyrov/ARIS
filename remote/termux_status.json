@@ -1,19 +1,7 @@
 {
-  "ok": true,
-  "id": "deploy-arbitrage-v018-20260827-1220",
+  "ok": false,
+  "id": "compile-arbitrage-v018-20260827-1227",
   "action": "EXEC",
-  "time": "2026-08-27T12:26:00",
-  "result": {
-    "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "Updating 767044d..598b5cf\nFast-forward\n arbitrage_v0_1_8.py        | 849 +++++++++++++++++++++++++++++++++++++++++++++\n remote/termux_command.json |   9 +-\n 2 files changed, 855 insertions(+), 3 deletions(-)\n create mode 100644 arbitrage_v0_1_8.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
-  }
+  "time": "2026-08-27T12:27:07",
+  "error": "TimeoutExpired: Command '['python', '/data/data/com.termux/files/home/Arbitrage/arbitrage_v0_1_8.py']' timed out after 8 seconds"
 }
