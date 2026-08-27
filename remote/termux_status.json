@@ -1,19 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-cross-metrics-v03-20260828-0104",
+  "id": "restart-worker-cross-metrics-v03-20260828-0106",
   "action": "EXEC",
-  "time": "2026-08-28T01:01:03",
+  "time": "2026-08-28T01:01:50",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 4bbd7cc..ef5a90d\nFast-forward\n aris_cross_exchange_v01.py | 5 +++++\n remote/termux_command.json | 2 +-\n 2 files changed, 6 insertions(+), 1 deletion(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": ""
   }
 }
