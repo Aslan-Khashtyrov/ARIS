@@ -79,6 +79,40 @@ def atomic_json(path, payload):
     temp.replace(path)
 
 
+def continuity_stats(rows):
+    timestamps = []
+    for row in rows:
+        try:
+            timestamps.append(datetime.fromisoformat(str(row.get("timestamp", ""))))
+        except (TypeError, ValueError):
+            continue
+    gaps = [
+        max(0.0, (current - previous).total_seconds())
+        for previous, current in zip(timestamps, timestamps[1:])
+    ]
+    if len(timestamps) < 2:
+        return {
+            "duration_seconds": 0.0,
+            "expected_samples": len(timestamps),
+            "sample_coverage_percent": 100.0 if timestamps else 0.0,
+            "maximum_gap_seconds": 0.0,
+            "gaps_over_90_seconds": 0,
+            "continuous_at_90_seconds": bool(timestamps),
+        }
+    duration = max(0.0, (timestamps[-1] - timestamps[0]).total_seconds())
+    expected = max(1, int(duration // INTERVAL) + 1)
+    coverage = min(100.0, len(timestamps) / expected * 100.0)
+    maximum_gap = max(gaps, default=0.0)
+    return {
+        "duration_seconds": round(duration, 1),
+        "expected_samples": expected,
+        "sample_coverage_percent": round(coverage, 2),
+        "maximum_gap_seconds": round(maximum_gap, 1),
+        "gaps_over_90_seconds": sum(gap > 90.0 for gap in gaps),
+        "continuous_at_90_seconds": maximum_gap <= 90.0,
+    }
+
+
 def build_summary(rows):
     net = [value for row in rows if (value := as_float(row.get("best_net_percent"))) is not None]
     raw = [value for row in rows if (value := as_float(row.get("best_raw_percent"))) is not None]
@@ -94,6 +128,7 @@ def build_summary(rows):
     positive_raw = sum(value > 0 for value in raw)
     positive_net = sum(value > 0 for value in net)
     threshold_hits = sum(value >= SIGNAL_THRESHOLD for value in net)
+    continuity = continuity_stats(rows)
     return {
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -106,6 +141,7 @@ def build_summary(rows):
             "first": rows[0]["timestamp"] if rows else None,
             "last": rows[-1]["timestamp"] if rows else None,
         },
+        "continuity": continuity,
         "best_raw_percent": max(raw) if raw else None,
         "best_net_percent": max(net) if net else None,
         "best_any_percent": max(any_best) if any_best else None,
