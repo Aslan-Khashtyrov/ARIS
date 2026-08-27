@@ -1,10 +1,5 @@
 {
-  "id": "verify-worker-ledger-v02-20260827-0306",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
-  ],
-  "cwd": "~/Arbitrage",
-  "timeout": 120
+  "id": "read-active-ledger-summary-20260827-0308",
+  "action": "READ_TEXT",
+  "path": "~/Arbitrage/journal/paper_ledger_summary_v01.json"
 }
