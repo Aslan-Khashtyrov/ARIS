@@ -1,9 +1,12 @@
 {
-  "id": "run-bybit-probe-20260827-1341",
+  "id": "deploy-bybit-orderbook-20260827-1343",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_bybit_ws_probe_v01.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
