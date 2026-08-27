@@ -1,12 +1,9 @@
 {
-  "id": "deploy-bybit-probe-20260827-1340",
+  "id": "run-bybit-probe-20260827-1341",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/aris_bybit_ws_probe_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
