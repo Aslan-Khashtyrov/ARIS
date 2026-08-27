@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-metrics-continuity-20260827-1314",
+  "id": "restart-worker-metrics-continuity-20260827-1315",
   "action": "EXEC",
-  "time": "2026-08-27T13:12:55",
+  "time": "2026-08-27T13:13:43",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_cycle_metrics_v02.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+    "stderr": ""
   }
 }
