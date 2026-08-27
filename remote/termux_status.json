@@ -1,18 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-cycle-liquidity-tests-20260827-0804",
+  "id": "test-cycle-liquidity-boundary-20260827-0806",
   "action": "EXEC",
-  "time": "2026-08-27T08:02:50",
+  "time": "2026-08-27T08:03:37",
   "result": {
     "argv": [
-      "git",
-      "merge",
-      "--ff-only",
-      "origin/main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_aris_cycle_liquidity_v01.py",
+      "-v"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 1afcca3..56b7ec9\nFast-forward\n remote/termux_command.json       | 10 ++++++----\n test_aris_cycle_liquidity_v01.py | 36 ++++++++++++++++++++++++++++++++++++\n 2 files changed, 42 insertions(+), 4 deletions(-)\n create mode 100644 test_aris_cycle_liquidity_v01.py\n",
-    "stderr": ""
+    "stdout": "",
+    "stderr": "test_accepts_exactly_eighty_percent (__main__.CycleLiquidityBufferTests.test_accepts_exactly_eighty_percent) ... ok\ntest_rejects_above_eighty_percent (__main__.CycleLiquidityBufferTests.test_rejects_above_eighty_percent) ... ok\ntest_reports_headroom (__main__.CycleLiquidityBufferTests.test_reports_headroom) ... ok\ntest_threshold_is_conservative (__main__.CycleLiquidityBufferTests.test_threshold_is_conservative) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
   }
 }
