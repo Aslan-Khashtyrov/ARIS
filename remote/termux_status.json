@@ -1,19 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-profit-audit-20260827-1012",
+  "id": "test-profit-audit-20260827-1014",
   "action": "EXEC",
-  "time": "2026-08-27T10:02:38",
+  "time": "2026-08-27T10:03:03",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_cycle_engine_v01.py",
+      "--self-test"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating bd7f5da..957d25a\nFast-forward\n aris_cycle_collector_v01.py    | 30 ++++++++++++++++++++++++++++++\n aris_cycle_engine_v01.py       | 22 +++++++++++++++++++++-\n aris_cycle_metrics_v02.py      | 39 ++++++++++++++++++++++++++++++++++++---\n aris_healthcheck.py            | 17 +++++++++++++++++\n aris_operational_report_v01.py |  7 +++++++\n remote/termux_command.json     |  9 ++++++---\n 6 files changed, 117 insertions(+), 7 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "{\n  \"ok\": true,\n  \"cycles_checked\": 2,\n  \"best_profit_percent\": 2.7679741051028275,\n  \"positive_executable_cycles_checked\": 2\n}\n",
+    "stderr": ""
   }
 }
