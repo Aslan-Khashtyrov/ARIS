@@ -1,10 +1,11 @@
 {
-  "id": "test-binance-coverage-fix-20260827-1305",
+  "id": "restart-worker-binance-coverage-20260827-1306",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_collector_metadata_v01.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
