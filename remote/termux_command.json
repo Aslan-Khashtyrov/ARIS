@@ -1,11 +1,12 @@
 {
-  "id": "compile-cycle-collector-20260827-1405",
+  "id": "deploy-cycle-funding-test-20260827-1407",
   "action": "EXEC",
   "argv": [
-    "python",
-    "-m",
-    "py_compile",
-    "aris_cycle_collector_v01.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
