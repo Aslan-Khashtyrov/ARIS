@@ -1,7 +1,7 @@
 {
   "ok": false,
-  "id": "test-funded-paper-wallets-20260827-1403",
+  "id": "test-funded-wallet-filter-20260827-1404",
   "action": "EXEC",
-  "time": "2026-08-27T14:00:33",
+  "time": "2026-08-27T14:01:27",
   "error": "PermissionError: PROTECTED_SECRET_PATH_BLOCKED"
 }
