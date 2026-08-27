@@ -1,5 +1,5 @@
 {
-  "version": "0.4",
+  "version": "0.5",
   "mode": "monitoring_and_paper_only",
   "real_trading": false,
   "spot": {
@@ -7,7 +7,15 @@
       "BTC",
       "ETH",
       "SOL",
-      "XRP"
+      "XRP",
+      "DOGE",
+      "ADA",
+      "AVAX",
+      "DOT",
+      "LINK",
+      "LTC",
+      "BCH",
+      "TRX"
     ],
     "quote": "USD",
     "exchanges": [
@@ -24,7 +32,17 @@
       "binance": 0.001,
       "bybit": 0.001,
       "okx": 0.001
-    }
+    },
+    "quote_assets": [
+      "USD",
+      "USDT",
+      "USDC",
+      "EUR",
+      "GBP",
+      "DAI",
+      "FDUSD"
+    ],
+    "universe_policy": "liquid_spot_assets_only"
   },
   "p2p": {
     "fiat": "RUB",
