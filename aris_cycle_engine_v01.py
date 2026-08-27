@@ -293,6 +293,10 @@ def analyze(payload):
     cycles.sort(key=lambda item: item["profit_percent"], reverse=True)
     executable_cycles = [cycle for cycle in cycles if cycle["executable"]]
     opportunities = [cycle for cycle in executable_cycles if cycle["profit_percent"] >= MIN_PROFIT_PERCENT]
+    positive_theoretical = [cycle for cycle in cycles if cycle["theoretical_raw_profit_percent"] > 0]
+    positive_simulated = [cycle for cycle in cycles if cycle["raw_profit_percent"] > 0]
+    positive_net = [cycle for cycle in cycles if cycle["profit_percent"] > 0]
+    positive_executable = [cycle for cycle in executable_cycles if cycle["profit_percent"] > 0]
     return {
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -305,6 +309,13 @@ def analyze(payload):
         "best_cycle": cycles[0] if cycles else None,
         "best_executable_cycle": executable_cycles[0] if executable_cycles else None,
         "executable_cycles_checked": len(executable_cycles),
+        "positive_theoretical_cycles_checked": len(positive_theoretical),
+        "positive_simulated_cycles_checked": len(positive_simulated),
+        "positive_net_cycles_checked": len(positive_net),
+        "positive_executable_cycles_checked": len(positive_executable),
+        "signal_threshold_cycles_checked": len(opportunities),
+        "best_theoretical_raw_profit_percent": max((item["theoretical_raw_profit_percent"] for item in cycles), default=None),
+        "best_simulated_raw_profit_percent": max((item["raw_profit_percent"] for item in cycles), default=None),
         "minimum_profit_percent": MIN_PROFIT_PERCENT,
         "minimum_cycle_legs": MIN_CYCLE_LEGS,
         "execution_buffer_percent": EXECUTION_BUFFER_PERCENT,
