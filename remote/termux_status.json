@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-step-rounding-20260827-0910",
+  "id": "test-step-rounding-20260827-0912",
   "action": "EXEC",
-  "time": "2026-08-27T09:01:21",
+  "time": "2026-08-27T09:01:46",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_order_minimums_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating f4a5a14..ecb2db0\nFast-forward\n aris_cycle_engine_v01.py   | 105 +++++++++++++++++++++++++++++++++++++--------\n aris_healthcheck.py        |   2 +-\n aris_paper_ledger_v01.py   |   5 ++-\n remote/termux_command.json |   9 ++--\n test_order_minimums_v01.py |  33 +++++++++++++-\n 5 files changed, 129 insertions(+), 25 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nOK\n"
   }
 }
