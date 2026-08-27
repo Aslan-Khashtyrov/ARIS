@@ -1,1 +1,1 @@
-{"id":"restart-worker-cross-confirm-v03-20260828-0006","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"healthcheck-cross-confirm-v03-20260828-0008","action":"EXEC","argv":["python","~/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
