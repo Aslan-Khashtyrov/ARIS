@@ -124,7 +124,7 @@ try:
         and ledger_age <= 45
         and paper_ledger.get("ok") is True
         and paper_ledger.get("real_trading") is False
-        and paper_ledger.get("validation_model") == "executable-paper-v02"
+        and paper_ledger.get("validation_model") == "executable-paper-v03"
     )
     add("paper_ledger_live", ledger_ok, f"age_seconds={ledger_age};model={paper_ledger.get('validation_model')};trades={paper_ledger.get('paper_trades')}")
 except Exception as exc:
