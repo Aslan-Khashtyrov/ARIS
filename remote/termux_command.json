@@ -1,12 +1,10 @@
 {
-  "id": "deploy-exchange-healthcheck-20260827-0404",
+  "id": "verify-exchange-healthcheck-20260827-0406",
   "action": "EXEC",
   "argv": [
-    "git",
-    "merge",
-    "--ff-only",
-    "origin/main"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 60
+  "timeout": 120
 }
