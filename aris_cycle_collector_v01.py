@@ -17,6 +17,7 @@ CYCLE_REPORT = JOURNAL / "cycle_report_v01.json"
 SIGNALS = JOURNAL / "cycle_opportunities_v01.jsonl"
 PROFIT_AUDIT = JOURNAL / "cycle_profit_audit_v01.jsonl"
 BINANCE_PRODUCTS_CACHE = JOURNAL / "binance_products_cache_v01.json"
+BYBIT_PRODUCTS_CACHE = JOURNAL / "bybit_products_cache_v01.json"
 OKX_PRODUCTS_CACHE = JOURNAL / "okx_products_cache_v01.json"
 CB_PRODUCTS_URL = "https://api.exchange.coinbase.com/products"
 KRAKEN_PAIRS_URL = "https://api.kraken.com/0/public/AssetPairs"
@@ -25,6 +26,7 @@ BINANCE_TICKERS_URL = "https://data-api.binance.vision/api/v3/ticker/bookTicker"
 BINANCE_WS = "wss://data-stream.binance.vision:443/stream?streams="
 BYBIT_INFO_URL = "https://api.bybit.com/v5/market/instruments-info?category=spot"
 BYBIT_TICKERS_URL = "https://api.bybit.com/v5/market/tickers?category=spot"
+BYBIT_WS = "wss://stream.bybit.com/v5/public/spot"
 OKX_INFO_URL = "https://www.okx.com/api/v5/public/instruments?instType=SPOT"
 OKX_TICKERS_URL = "https://www.okx.com/api/v5/market/tickers?instType=SPOT"
 OKX_WS = "wss://ws.okx.com:8443/ws/v5/public"
@@ -44,7 +46,7 @@ health = {
     "coinbase": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
     "kraken": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
     "binance": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
-    "bybit": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "rest"},
+    "bybit": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
     "okx": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
 }
 
@@ -382,26 +384,106 @@ def binance_loop():
                     pass
 
 def discover_bybit():
-    payload = request_json(BYBIT_INFO_URL)
-    result = {}
-    for item in payload.get("result", {}).get("list", []):
-        base, quote = norm_asset(item.get("baseCoin")), norm_asset(item.get("quoteCoin"))
-        if base in UNIVERSE and quote in UNIVERSE and item.get("status") == "Trading":
-            lot = item.get("lotSizeFilter", {})
-            result[item["symbol"]] = {
-                "base": base,
-                "quote": quote,
-                "min_base": lot.get("minOrderQty", 0),
-                "min_quote": lot.get("minOrderAmt", 0),
-                "qty_step": lot.get("qtyStep") or lot.get("basePrecision", 0),
-                "filter_source": "BYBIT_PUBLIC_INSTRUMENTS_INFO",
+    try:
+        payload = request_json(BYBIT_INFO_URL)
+        result = {}
+        for item in payload.get("result", {}).get("list", []):
+            base, quote = norm_asset(item.get("baseCoin")), norm_asset(item.get("quoteCoin"))
+            if base in UNIVERSE and quote in UNIVERSE and item.get("status") == "Trading":
+                lot = item.get("lotSizeFilter", {})
+                result[item["symbol"]] = {
+                    "base": base,
+                    "quote": quote,
+                    "min_base": lot.get("minOrderQty", 0),
+                    "min_quote": lot.get("minOrderAmt", 0),
+                    "qty_step": lot.get("qtyStep") or lot.get("basePrecision", 0),
+                    "filter_source": "BYBIT_PUBLIC_INSTRUMENTS_INFO",
+                }
+        if result:
+            write_atomic(BYBIT_PRODUCTS_CACHE, result)
+            return result
+        raise RuntimeError("empty Bybit instruments")
+    except Exception:
+        try:
+            cached = json.loads(BYBIT_PRODUCTS_CACHE.read_text(encoding="utf-8"))
+            if cached:
+                return cached
+        except Exception:
+            pass
+        snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+        recovered = {}
+        for quote in snapshot.get("quotes", []):
+            if str(quote.get("exchange", "")).lower() != "bybit":
+                continue
+            symbol = quote.get("symbol")
+            if not symbol:
+                continue
+            recovered[symbol] = {
+                "base": quote.get("base"),
+                "quote": quote.get("quote"),
+                "min_base": quote.get("min_base", 0),
+                "min_quote": quote.get("min_quote", 0),
+                "qty_step": quote.get("qty_step", 0),
+                "filter_source": "BYBIT_LAST_PUBLIC_SNAPSHOT",
             }
-    return result
-
+        if recovered:
+            write_atomic(BYBIT_PRODUCTS_CACHE, recovered)
+            return recovered
+        raise
 
 def fetch_bybit_tickers(mapping):
     payload = request_json(BYBIT_TICKERS_URL)
     return [{"symbol": item.get("symbol"), "bid": item.get("bid1Price"), "ask": item.get("ask1Price"), "bid_size": item.get("bid1Size"), "ask_size": item.get("ask1Size")} for item in payload.get("result", {}).get("list", [])]
+
+
+def bybit_loop():
+    while True:
+        ws = None
+        try:
+            mapping = discover_bybit()
+            if not mapping:
+                raise RuntimeError("no supported Bybit products")
+            ws = websocket.create_connection(BYBIT_WS, timeout=25, enable_multithread=True)
+            ws.settimeout(20)
+            ws.send(json.dumps({
+                "req_id": "arisbybit01",
+                "op": "subscribe",
+                "args": [f"tickers.{symbol}" for symbol in sorted(mapping)],
+            }))
+            with lock:
+                health["bybit"].update({"connected": True, "pairs": len(mapping), "error": None})
+            while True:
+                try:
+                    raw = ws.recv()
+                except websocket.WebSocketTimeoutException:
+                    ws.send(json.dumps({"op": "ping"}))
+                    continue
+                message = json.loads(raw)
+                if message.get("success") is False:
+                    raise RuntimeError(message.get("ret_msg") or "Bybit subscription error")
+                topic = str(message.get("topic", ""))
+                if not topic.startswith("tickers."):
+                    continue
+                symbol = topic.split(".", 1)[1]
+                if symbol not in mapping:
+                    continue
+                item = message.get("data") or {}
+                base, quote, constraints = product_details(mapping, symbol)
+                update(
+                    "bybit", symbol, base, quote,
+                    item.get("bid1Price"), item.get("ask1Price"),
+                    item.get("bid1Size"), item.get("ask1Size"), constraints,
+                )
+        except Exception as exc:
+            with lock:
+                health["bybit"].update({"connected": False, "error": f"{type(exc).__name__}: {exc}"})
+            time.sleep(5)
+        finally:
+            if ws:
+                try:
+                    ws.close()
+                except Exception:
+                    pass
 
 
 def discover_okx():
@@ -616,7 +698,7 @@ def run_forever():
         threading.Thread(target=coinbase_loop, daemon=True, name="cycle-coinbase"),
         threading.Thread(target=kraken_loop, daemon=True, name="cycle-kraken"),
         threading.Thread(target=binance_loop, daemon=True, name="cycle-binance"),
-        threading.Thread(target=rest_market_loop, args=("bybit", discover_bybit, fetch_bybit_tickers), daemon=True, name="cycle-bybit"),
+        threading.Thread(target=bybit_loop, daemon=True, name="cycle-bybit"),
         threading.Thread(target=okx_loop, daemon=True, name="cycle-okx"),
         threading.Thread(target=snapshot_loop, daemon=True, name="cycle-snapshot"),
     ]
