@@ -1,12 +1,9 @@
 {
-  "id": "deploy-paper-risk-v07-20260827-1422",
+  "id": "test-paper-risk-v07-20260827-1423",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_paper_risk_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
