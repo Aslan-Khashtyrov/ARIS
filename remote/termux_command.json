@@ -1,12 +1,9 @@
 {
-  "id": "deploy-metrics-continuity-20260827-1313",
+  "id": "test-metrics-continuity-20260827-1314",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_cycle_metrics_v02.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
