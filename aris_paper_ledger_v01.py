@@ -80,6 +80,7 @@ def validate_cycle(cycle):
         "executable": cycle.get("executable") is True,
         "capacity_verified": cycle.get("capacity_verified") is True,
         "minimum_order_verified": cycle.get("minimum_order_verified") is True,
+        "quantity_step_verified": cycle.get("quantity_step_verified") is True,
         "quote_synchronized": cycle.get("quote_synchronized") is True,
         "quotes_fresh": cycle.get("quotes_fresh") is True,
         "no_transfer": cycle.get("contains_transfer") is False,
@@ -97,6 +98,8 @@ def validate_cycle(cycle):
         return False, "leg_capacity_buffer"
     if any(leg.get("minimum_order_met") is not True for leg in legs):
         return False, "leg_minimum_order"
+    if any(leg.get("quantity_step_verified") is not True for leg in legs):
+        return False, "leg_quantity_step"
 
     if start_units <= 0 or end_units <= 0:
         return False, "paper_amounts"
@@ -164,7 +167,7 @@ def process_once():
     summary["added_this_cycle"] = added
     summary["rejected_this_cycle"] = sum(rejected.values())
     summary["rejection_reasons"] = dict(sorted(rejected.items()))
-    summary["validation_model"] = "executable-paper-v04"
+    summary["validation_model"] = "executable-paper-v05"
     atomic_json(SUMMARY, summary)
     return summary
 
