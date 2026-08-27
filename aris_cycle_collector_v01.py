@@ -17,6 +17,7 @@ CYCLE_REPORT = JOURNAL / "cycle_report_v01.json"
 SIGNALS = JOURNAL / "cycle_opportunities_v01.jsonl"
 PROFIT_AUDIT = JOURNAL / "cycle_profit_audit_v01.jsonl"
 BINANCE_PRODUCTS_CACHE = JOURNAL / "binance_products_cache_v01.json"
+OKX_PRODUCTS_CACHE = JOURNAL / "okx_products_cache_v01.json"
 CB_PRODUCTS_URL = "https://api.exchange.coinbase.com/products"
 KRAKEN_PAIRS_URL = "https://api.kraken.com/0/public/AssetPairs"
 BINANCE_INFO_URL = "https://data-api.binance.vision/api/v3/exchangeInfo"
@@ -26,6 +27,7 @@ BYBIT_INFO_URL = "https://api.bybit.com/v5/market/instruments-info?category=spot
 BYBIT_TICKERS_URL = "https://api.bybit.com/v5/market/tickers?category=spot"
 OKX_INFO_URL = "https://www.okx.com/api/v5/public/instruments?instType=SPOT"
 OKX_TICKERS_URL = "https://www.okx.com/api/v5/market/tickers?instType=SPOT"
+OKX_WS = "wss://ws.okx.com:8443/ws/v5/public"
 CB_WS = "wss://advanced-trade-ws.coinbase.com"
 KRAKEN_WS = "wss://ws.kraken.com/v2"
 UNIVERSE = {"USD", "USDT", "USDC", "EUR", "BTC", "ETH", "SOL", "XRP"}
@@ -402,25 +404,106 @@ def fetch_bybit_tickers(mapping):
 
 
 def discover_okx():
-    payload = request_json(OKX_INFO_URL)
-    result = {}
-    for item in payload.get("data", []):
-        base, quote = norm_asset(item.get("baseCcy")), norm_asset(item.get("quoteCcy"))
-        if base in UNIVERSE and quote in UNIVERSE and item.get("state") == "live":
-            result[item["instId"]] = {
-                "base": base,
-                "quote": quote,
-                "min_base": item.get("minSz", 0),
-                "min_quote": 0,
-                "qty_step": item.get("lotSz", 0),
-                "filter_source": "OKX_PUBLIC_INSTRUMENTS",
+    try:
+        payload = request_json(OKX_INFO_URL)
+        result = {}
+        for item in payload.get("data", []):
+            base, quote = norm_asset(item.get("baseCcy")), norm_asset(item.get("quoteCcy"))
+            if base in UNIVERSE and quote in UNIVERSE and item.get("state") == "live":
+                result[item["instId"]] = {
+                    "base": base,
+                    "quote": quote,
+                    "min_base": item.get("minSz", 0),
+                    "min_quote": 0,
+                    "qty_step": item.get("lotSz", 0),
+                    "filter_source": "OKX_PUBLIC_INSTRUMENTS",
+                }
+        if result:
+            write_atomic(OKX_PRODUCTS_CACHE, result)
+            return result
+        raise RuntimeError("empty OKX instruments")
+    except Exception:
+        try:
+            cached = json.loads(OKX_PRODUCTS_CACHE.read_text(encoding="utf-8"))
+            if cached:
+                return cached
+        except Exception:
+            pass
+        snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+        recovered = {}
+        for quote in snapshot.get("quotes", []):
+            if str(quote.get("exchange", "")).lower() != "okx":
+                continue
+            symbol = quote.get("symbol")
+            if not symbol:
+                continue
+            recovered[symbol] = {
+                "base": quote.get("base"),
+                "quote": quote.get("quote"),
+                "min_base": quote.get("min_base", 0),
+                "min_quote": quote.get("min_quote", 0),
+                "qty_step": quote.get("qty_step", 0),
+                "filter_source": "OKX_LAST_PUBLIC_SNAPSHOT",
             }
-    return result
+        if recovered:
+            write_atomic(OKX_PRODUCTS_CACHE, recovered)
+            return recovered
+        raise
+
 
 
 def fetch_okx_tickers(mapping):
     payload = request_json(OKX_TICKERS_URL)
     return [{"symbol": item.get("instId"), "bid": item.get("bidPx"), "ask": item.get("askPx"), "bid_size": item.get("bidSz"), "ask_size": item.get("askSz")} for item in payload.get("data", [])]
+
+
+def okx_loop():
+    while True:
+        ws = None
+        try:
+            mapping = discover_okx()
+            if not mapping:
+                raise RuntimeError("no supported OKX products")
+            ws = websocket.create_connection(OKX_WS, timeout=25, enable_multithread=True)
+            ws.settimeout(20)
+            ws.send(json.dumps({
+                "id": "aris-okx-public",
+                "op": "subscribe",
+                "args": [{"channel": "tickers", "instId": symbol} for symbol in sorted(mapping)],
+            }))
+            with lock:
+                health["okx"].update({"connected": True, "pairs": len(mapping), "error": None})
+            while True:
+                try:
+                    raw = ws.recv()
+                except websocket.WebSocketTimeoutException:
+                    ws.ping("keepalive")
+                    continue
+                message = json.loads(raw)
+                if message.get("event") == "error":
+                    raise RuntimeError(message.get("msg") or "OKX subscription error")
+                if message.get("arg", {}).get("channel") != "tickers":
+                    continue
+                for item in message.get("data", []):
+                    symbol = item.get("instId")
+                    if symbol not in mapping:
+                        continue
+                    base, quote, constraints = product_details(mapping, symbol)
+                    update(
+                        "okx", symbol, base, quote,
+                        item.get("bidPx"), item.get("askPx"),
+                        item.get("bidSz"), item.get("askSz"), constraints,
+                    )
+        except Exception as exc:
+            with lock:
+                health["okx"].update({"connected": False, "error": f"{type(exc).__name__}: {exc}"})
+            time.sleep(5)
+        finally:
+            if ws:
+                try:
+                    ws.close()
+                except Exception:
+                    pass
 
 
 def write_atomic(path, payload):
@@ -533,7 +616,7 @@ def run_forever():
         threading.Thread(target=kraken_loop, daemon=True, name="cycle-kraken"),
         threading.Thread(target=binance_loop, daemon=True, name="cycle-binance"),
         threading.Thread(target=rest_market_loop, args=("bybit", discover_bybit, fetch_bybit_tickers), daemon=True, name="cycle-bybit"),
-        threading.Thread(target=rest_market_loop, args=("okx", discover_okx, fetch_okx_tickers), daemon=True, name="cycle-okx"),
+        threading.Thread(target=okx_loop, daemon=True, name="cycle-okx"),
         threading.Thread(target=snapshot_loop, daemon=True, name="cycle-snapshot"),
     ]
     for thread in threads:
