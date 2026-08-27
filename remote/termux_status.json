@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-fee-break-even-v01-20260827-2004",
+  "id": "verify-fee-break-even-v01-20260827-2134",
   "action": "EXEC",
-  "time": "2026-08-27T21:00:40",
+  "time": "2026-08-27T21:47:01",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_cross_exchange_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 74cc039..7370eac\nFast-forward\n aris_cross_exchange_v01.py | 15 +++++++++++++++\n remote/termux_command.json | 11 +----------\n 2 files changed, 16 insertions(+), 10 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-27T21:47:01\",\n  \"mode\": \"CROSS_EXCHANGE_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"pairs_compared\": 0,\n  \"routes_compared\": 0,\n  \"executable_routes\": 0,\n  \"positive_raw_routes\": 0,\n  \"positive_before_buffer_routes\": 0,\n  \"positive_executable_routes\": 0,\n  \"raw_positive_lost_to_fees\": 0,\n  \"net_positive_lost_to_buffer\": 0,\n  \"best_route\": null,\n  \"best_executable_route\": null,\n  \"opportunities\": [],\n  \"assumption\": \"Simultaneous pre-funded inventory on both exchanges; transfers are excluded.\"\n}\n",
+    "stderr": ""
   }
 }
