@@ -101,7 +101,7 @@ try:
     for quote in snapshot.get("quotes", []):
         exchange = str(quote.get("exchange", "")).lower()
         live_counts[exchange] = live_counts.get(exchange, 0) + 1
-    for exchange in ("binance", "bybit", "okx"):
+    for exchange in ("binance", "bybit", "okx", "coinbase", "kraken"):
         state = collector_status.get("exchanges", {}).get(exchange, {})
         connected = state.get("connected") is True
         pairs = int(state.get("pairs", 0) or 0)
