@@ -467,7 +467,7 @@ def okx_loop():
             ws = websocket.create_connection(OKX_WS, timeout=25, enable_multithread=True)
             ws.settimeout(20)
             ws.send(json.dumps({
-                "id": "aris-okx-public",
+                "id": "arisokxpublic",
                 "op": "subscribe",
                 "args": [{"channel": "tickers", "instId": symbol} for symbol in sorted(mapping)],
             }))
