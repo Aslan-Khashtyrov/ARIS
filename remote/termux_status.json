@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-expanded-market-universe-20260827-1440",
+  "id": "test-expanded-market-universe-20260827-1441",
   "action": "EXEC",
-  "time": "2026-08-27T14:52:31",
+  "time": "2026-08-27T14:53:20",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_market_universe_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 90d776c..81d4417\nFast-forward\n aris_config_v01.json        | 24 +++++++++++++++++++++---\n aris_cycle_collector_v01.py |  2 +-\n remote/termux_command.json  |  9 ++++++---\n test_market_universe_v01.py | 21 +++++++++++++++++++++\n 4 files changed, 49 insertions(+), 7 deletions(-)\n create mode 100644 test_market_universe_v01.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
   }
 }
