@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-all-websockets-final-20260827-1348",
+  "id": "deploy-virtual-wallet-20260827-1400",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
