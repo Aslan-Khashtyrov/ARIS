@@ -1,10 +1,11 @@
 {
-  "id": "test-paper-risk-v07-20260827-1423",
+  "id": "restart-worker-paper-risk-v07-20260827-1424",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_paper_risk_v01.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
