@@ -1,1 +1,1 @@
-{"id":"audit-confirmed-cross-route-v03-20260828-0205","action":"EXEC","argv":["tail","-n","12","journal/cross_exchange_positive_v01.jsonl"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"healthcheck-confirmed-cross-profit-20260828-0208","action":"EXEC","argv":["python","~/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
