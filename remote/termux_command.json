@@ -1,9 +1,12 @@
 {
-  "id": "verify-exchange-coverage-20260827-1201",
+  "id": "deploy-arbitrage-v018-20260827-1220",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
