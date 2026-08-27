@@ -76,6 +76,8 @@ def analyze(payload, evaluation_time=None):
                 raw_percent = (sell["bid"] / buy["ask"] - 1.0) * 100.0
                 net_before_buffer = (net_revenue / net_cost - 1.0) * 100.0 if net_cost > 0 else -100.0
                 net_percent = net_before_buffer - EXECUTION_BUFFER_PERCENT
+                combined_taker_fee_percent = (buy["taker_fee"] + sell["taker_fee"]) * 100.0
+                break_even_spread_percent = ((1.0 / max(1e-12, (1.0 - buy["taker_fee"]) * (1.0 - sell["taker_fee"]))) - 1.0) * 100.0
                 minimum_ok = (
                     quantity > 0
                     and quantity + 1e-12 >= float(buy.get("min_base", 0) or 0)
@@ -95,6 +97,10 @@ def analyze(payload, evaluation_time=None):
                     "buy_ask": buy["ask"],
                     "sell_bid": sell["bid"],
                     "raw_spread_percent": raw_percent,
+                    "buy_taker_fee_percent": buy["taker_fee"] * 100.0,
+                    "sell_taker_fee_percent": sell["taker_fee"] * 100.0,
+                    "combined_taker_fee_percent": combined_taker_fee_percent,
+                    "break_even_spread_percent": break_even_spread_percent,
                     "net_before_buffer_percent": net_before_buffer,
                     "execution_buffer_percent": EXECUTION_BUFFER_PERCENT,
                     "net_profit_percent": net_percent,
@@ -113,7 +119,10 @@ def analyze(payload, evaluation_time=None):
     comparisons.sort(key=lambda item: item["net_profit_percent"], reverse=True)
     executable = [item for item in comparisons if item["executable"]]
     positive_raw = [item for item in comparisons if item["raw_spread_percent"] > 0]
+    positive_before_buffer = [item for item in executable if item["net_before_buffer_percent"] > 0]
     positive_net = [item for item in executable if item["net_profit_percent"] > 0]
+    raw_positive_lost_to_fees = [item for item in executable if item["raw_spread_percent"] > 0 and item["net_before_buffer_percent"] <= 0]
+    net_positive_lost_to_buffer = [item for item in executable if item["net_before_buffer_percent"] > 0 and item["net_profit_percent"] <= 0]
     return {
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -123,7 +132,10 @@ def analyze(payload, evaluation_time=None):
         "routes_compared": len(comparisons),
         "executable_routes": len(executable),
         "positive_raw_routes": len(positive_raw),
+        "positive_before_buffer_routes": len(positive_before_buffer),
         "positive_executable_routes": len(positive_net),
+        "raw_positive_lost_to_fees": len(raw_positive_lost_to_fees),
+        "net_positive_lost_to_buffer": len(net_positive_lost_to_buffer),
         "best_route": comparisons[0] if comparisons else None,
         "best_executable_route": executable[0] if executable else None,
         "opportunities": positive_net[:50],
@@ -187,7 +199,10 @@ def process_once():
             "routes_compared": report.get("routes_compared"),
             "executable_routes": report.get("executable_routes"),
             "positive_raw_routes": report.get("positive_raw_routes"),
+            "positive_before_buffer_routes": report.get("positive_before_buffer_routes"),
             "positive_executable_routes": report.get("positive_executable_routes"),
+            "raw_positive_lost_to_fees": report.get("raw_positive_lost_to_fees"),
+            "net_positive_lost_to_buffer": report.get("net_positive_lost_to_buffer"),
             "best_pair": best.get("pair"),
             "best_buy_exchange": best.get("buy_exchange"),
             "best_sell_exchange": best.get("sell_exchange"),
