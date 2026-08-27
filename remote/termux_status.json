@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-expanded-market-universe-20260827-1441",
+  "id": "restart-worker-expanded-universe-20260827-1442",
   "action": "EXEC",
-  "time": "2026-08-27T14:53:20",
+  "time": "2026-08-27T14:54:24",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_market_universe_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+    "stderr": ""
   }
 }
