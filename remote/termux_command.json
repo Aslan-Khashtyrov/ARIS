@@ -1,15 +1,9 @@
 {
-  "id": "compile-order-filters-20260827-0830",
+  "id": "test-order-filters-20260827-0832",
   "action": "EXEC",
   "argv": [
     "python",
-    "-m",
-    "py_compile",
-    "aris_cycle_collector_v01.py",
-    "aris_cycle_engine_v01.py",
-    "aris_paper_ledger_v01.py",
-    "aris_healthcheck.py",
-    "test_order_minimums_v01.py"
+    "~/Arbitrage/test_order_minimums_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
