@@ -1,11 +1,18 @@
 {
   "ok": true,
-  "id": "read-active-ledger-summary-20260827-0308",
-  "action": "READ_TEXT",
-  "time": "2026-08-27T03:04:18",
+  "id": "deploy-exchange-healthcheck-20260827-0404",
+  "action": "EXEC",
+  "time": "2026-08-27T04:02:53",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/paper_ledger_summary_v01.json",
-    "size": 342,
-    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-27T03:04:07\",\n  \"mode\": \"PAPER_ONLY\",\n  \"real_trading\": false,\n  \"paper_trades\": 0,\n  \"profit_by_asset\": {},\n  \"minimum_profit_percent\": 0.3,\n  \"minimum_confirmations\": 3,\n  \"added_this_cycle\": 0,\n  \"rejected_this_cycle\": 0,\n  \"rejection_reasons\": {},\n  \"validation_model\": \"executable-paper-v02\"\n}\n"
+    "argv": [
+      "git",
+      "merge",
+      "--ff-only",
+      "origin/main"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "Updating 01232c0..e6dea5a\nFast-forward\n aris_healthcheck.py        | 39 +++++++++++++++++++++++++++++++++++++++\n remote/termux_command.json | 13 ++++++++++---\n 2 files changed, 49 insertions(+), 3 deletions(-)\n",
+    "stderr": ""
   }
 }
