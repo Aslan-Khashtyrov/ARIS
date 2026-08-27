@@ -1,9 +1,12 @@
 {
-  "id": "verify-bybit-websocket-20260827-1332",
+  "id": "deploy-bybit-ws-batches-20260827-1334",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
