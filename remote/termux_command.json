@@ -1,1 +1,1 @@
-{"id":"healthcheck-cross-cadence-v01-20260827-2212","action":"EXEC","argv":["python","~/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"audit-positive-cross-window-20260827-2301","action":"EXEC","argv":["tail","-n","20","journal/cross_exchange_positive_v01.jsonl"],"cwd":"~/Arbitrage","timeout":30}
