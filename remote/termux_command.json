@@ -1,10 +1,11 @@
 {
-  "id": "test-cross-metrics-v01-20260827-1905",
+  "id": "restart-worker-cross-metrics-20260827-1906",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_cross_exchange_v01.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
