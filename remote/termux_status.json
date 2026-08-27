@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-okx-websocket-20260827-1111",
+  "id": "restart-worker-okx-websocket-20260827-1112",
   "action": "EXEC",
-  "time": "2026-08-27T11:06:57",
+  "time": "2026-08-27T11:07:25",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_collector_metadata_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.003s\n\nOK\n"
+    "stderr": ""
   }
 }
