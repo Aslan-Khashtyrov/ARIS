@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-okx-websocket-20260827-1110",
+  "id": "test-okx-websocket-20260827-1111",
   "action": "EXEC",
-  "time": "2026-08-27T11:06:31",
+  "time": "2026-08-27T11:06:57",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_collector_metadata_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 30cd35a..0878c48\nFast-forward\n aris_cycle_collector_v01.py    | 121 ++++++++++++++++++++++++++++++++++-------\n aris_healthcheck.py            |   5 +-\n remote/termux_command.json     |   9 ++-\n test_collector_metadata_v01.py |  26 +++++++++\n 4 files changed, 137 insertions(+), 24 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.003s\n\nOK\n"
   }
 }
