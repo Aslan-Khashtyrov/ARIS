@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-before-step-rounding-20260827-0858",
+  "id": "deploy-step-rounding-20260827-0910",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
