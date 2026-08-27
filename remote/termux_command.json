@@ -1,10 +1,11 @@
 {
-  "id": "test-order-filters-20260827-0832",
+  "id": "restart-worker-order-filters-20260827-0834",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_order_minimums_v01.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
