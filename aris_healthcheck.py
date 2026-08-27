@@ -135,7 +135,7 @@ try:
         and paper_ledger.get("real_trading") is False
         and wallet.get("enabled") is True
         and wallet_funded
-        and paper_ledger.get("validation_model") == "executable-paper-v06-wallet"
+        and paper_ledger.get("validation_model") == "executable-paper-v07-risk"
     )
     add("paper_ledger_live", ledger_ok, f"age_seconds={ledger_age};model={paper_ledger.get('validation_model')};trades={paper_ledger.get('paper_trades')};virtual_accounts={len(balances)};equity_usdt={wallet.get('equity_by_asset', {}).get('USDT')}")
 except Exception as exc:
