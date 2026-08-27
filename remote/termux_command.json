@@ -1,12 +1,11 @@
 {
-  "id": "test-funded-paper-wallets-20260827-1403",
+  "id": "test-funded-wallet-filter-20260827-1404",
   "action": "EXEC",
   "argv": [
     "python",
     "-m",
     "unittest",
-    "test_funded_paper_wallets_v01.py",
-    "test_paper_balance_v01.py"
+    "test_funded_paper_wallets_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
