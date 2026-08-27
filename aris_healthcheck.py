@@ -93,6 +93,43 @@ for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.js
     fresh = path.exists() and file_age is not None and file_age <= 180
     add(f"runtime:{name}", fresh, f"age_seconds={file_age}")
 
+exchange_health = {}
+try:
+    collector_status = json.loads((JOURNAL / "cycle_collector_status_v01.json").read_text(encoding="utf-8"))
+    snapshot = json.loads((JOURNAL / "cycle_quotes_v01.json").read_text(encoding="utf-8"))
+    live_counts = {}
+    for quote in snapshot.get("quotes", []):
+        exchange = str(quote.get("exchange", "")).lower()
+        live_counts[exchange] = live_counts.get(exchange, 0) + 1
+    for exchange in ("binance", "bybit", "okx"):
+        state = collector_status.get("exchanges", {}).get(exchange, {})
+        connected = state.get("connected") is True
+        pairs = int(state.get("pairs", 0) or 0)
+        updates = int(state.get("updates", 0) or 0)
+        live_quotes = live_counts.get(exchange, 0)
+        ok = connected and pairs > 0 and updates > 0 and live_quotes > 0 and not state.get("error")
+        detail = f"connected={connected};pairs={pairs};updates={updates};live_quotes={live_quotes};error={state.get('error')}"
+        exchange_health[exchange] = {"ok": ok, "connected": connected, "pairs": pairs, "updates": updates, "live_quotes": live_quotes, "error": state.get("error")}
+        add(f"exchange:{exchange}", ok, detail)
+except Exception as exc:
+    add("exchange:required_spot_sources", False, f"{type(exc).__name__}: {exc}")
+
+paper_ledger = None
+try:
+    ledger_path = JOURNAL / "paper_ledger_summary_v01.json"
+    ledger_age = age(ledger_path)
+    paper_ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+    ledger_ok = (
+        ledger_age is not None
+        and ledger_age <= 45
+        and paper_ledger.get("ok") is True
+        and paper_ledger.get("real_trading") is False
+        and paper_ledger.get("validation_model") == "executable-paper-v02"
+    )
+    add("paper_ledger_live", ledger_ok, f"age_seconds={ledger_age};model={paper_ledger.get('validation_model')};trades={paper_ledger.get('paper_trades')}")
+except Exception as exc:
+    add("paper_ledger_live", False, f"{type(exc).__name__}: {exc}")
+
 try:
     proc = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, text=True, capture_output=True, timeout=10)
     add("git_clean", proc.returncode == 0 and not proc.stdout.strip(), proc.stdout.strip() or "clean")
@@ -153,6 +190,8 @@ report = {
     "analysis": analysis,
     "cycle_engine": cycle_test,
     "cycle_live": cycle_live,
+    "exchange_health": exchange_health,
+    "paper_ledger": paper_ledger,
     "p2p": p2p_status,
     "unified": unified,
 }
