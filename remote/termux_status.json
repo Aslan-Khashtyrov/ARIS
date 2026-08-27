@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-source-recovery-20260827-1032",
+  "id": "test-source-recovery-20260827-1034",
   "action": "EXEC",
-  "time": "2026-08-27T10:10:21",
+  "time": "2026-08-27T10:11:08",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_collector_metadata_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 4958c95..c0b43f3\nFast-forward\n aris_cycle_collector_v01.py    | 67 +++++++++++++++++++++++++++++++-----------\n remote/termux_command.json     | 13 ++++----\n test_collector_metadata_v01.py | 61 ++++++++++++++++++++++++++++++++++++++\n 3 files changed, 118 insertions(+), 23 deletions(-)\n create mode 100644 test_collector_metadata_v01.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nOK\n"
   }
 }
