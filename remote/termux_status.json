@@ -1,18 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-liquidity-tests-20260827-0705",
+  "id": "verify-liquidity-tests-v03-20260827-0707",
   "action": "EXEC",
-  "time": "2026-08-27T07:02:48",
+  "time": "2026-08-27T07:03:34",
   "result": {
     "argv": [
-      "git",
-      "merge",
-      "--ff-only",
-      "origin/main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_aris_paper_ledger_v01.py",
+      "-v"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating fbbfef3..123ced6\nFast-forward\n remote/termux_command.json    | 2 +-\n test_aris_paper_ledger_v01.py | 4 ++--\n 2 files changed, 3 insertions(+), 3 deletions(-)\n",
-    "stderr": ""
+    "stdout": "",
+    "stderr": "test_accepts_consistent_executable_cycle (__main__.PaperLedgerValidationTests.test_accepts_consistent_executable_cycle) ... ok\ntest_rejects_excessive_book_utilization (__main__.PaperLedgerValidationTests.test_rejects_excessive_book_utilization) ... ok\ntest_rejects_insufficient_leg_capacity (__main__.PaperLedgerValidationTests.test_rejects_insufficient_leg_capacity) ... ok\ntest_rejects_profit_mismatch (__main__.PaperLedgerValidationTests.test_rejects_profit_mismatch) ... ok\ntest_rejects_stale_quotes (__main__.PaperLedgerValidationTests.test_rejects_stale_quotes) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.001s\n\nOK\n"
   }
 }
