@@ -86,6 +86,7 @@ def build_once():
             "trades": paper.get("paper_trades", 0),
             "profit_by_asset": paper.get("profit_by_asset", {}),
             "minimum_profit_percent": paper.get("minimum_profit_percent"),
+            "wallet": paper.get("wallet", {}),
         },
         "system": {
             "foreman_cycle": foreman.get("cycle"),
