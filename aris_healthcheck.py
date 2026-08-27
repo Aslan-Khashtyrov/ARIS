@@ -88,7 +88,7 @@ for name, script in processes.items():
     ok, detail = valid_process(name, script)
     add(f"process:{name}", ok, detail)
 
-for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.json", "cycle_collector_status_v01.json", "cycle_report_v01.json", "cross_exchange_report_v01.json"):
+for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.json", "cycle_collector_status_v01.json", "cycle_report_v01.json", "cross_exchange_report_v01.json", "cross_exchange_metrics_v01.json"):
     path = JOURNAL / name
     file_age = age(path)
     fresh = path.exists() and file_age is not None and file_age <= 180
@@ -123,8 +123,10 @@ try:
     cross_path = JOURNAL / "cross_exchange_report_v01.json"
     cross_age = age(cross_path)
     cross_exchange = json.loads(cross_path.read_text(encoding="utf-8"))
-    cross_ok = cross_age is not None and cross_age <= 45 and cross_exchange.get("ok") is True and cross_exchange.get("real_trading") is False
-    add("cross_exchange_live", cross_ok, f"age_seconds={cross_age};routes={cross_exchange.get('routes_compared')};executable={cross_exchange.get('executable_routes')};positive={cross_exchange.get('positive_executable_routes')}")
+    metrics_path = JOURNAL / "cross_exchange_metrics_v01.json"
+    cross_metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+    cross_ok = cross_age is not None and cross_age <= 45 and cross_exchange.get("ok") is True and cross_exchange.get("real_trading") is False and cross_metrics.get("ok") is True and cross_metrics.get("real_trading") is False
+    add("cross_exchange_live", cross_ok, f"age_seconds={cross_age};routes={cross_exchange.get('routes_compared')};executable={cross_exchange.get('executable_routes')};positive={cross_exchange.get('positive_executable_routes')};samples={cross_metrics.get('samples')};best_net={cross_metrics.get('best_net_profit_percent')}")
 except Exception as exc:
     add("cross_exchange_live", False, f"{type(exc).__name__}: {exc}")
 
