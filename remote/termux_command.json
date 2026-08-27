@@ -1,1 +1,1 @@
-{"id":"healthcheck-cross-fast-v02-20260827-2309","action":"EXEC","argv":["python","~/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"deploy-cross-confirm-v03-20260828-0004","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
