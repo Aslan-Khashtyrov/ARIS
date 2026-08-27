@@ -1,10 +1,12 @@
 {
-  "id": "healthcheck-liquidity-v03-20260827-0711",
+  "id": "deploy-cycle-liquidity-tests-20260827-0804",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "merge",
+    "--ff-only",
+    "origin/main"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 60
 }
