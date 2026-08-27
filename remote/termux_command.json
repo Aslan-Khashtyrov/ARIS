@@ -1,11 +1,11 @@
 {
-  "id": "verify-liquidity-tests-v03-20260827-0707",
+  "id": "reload-worker-liquidity-v03-20260827-0709",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_aris_paper_ledger_v01.py",
-    "-v"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
