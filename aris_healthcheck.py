@@ -107,10 +107,12 @@ try:
         pairs = int(state.get("pairs", 0) or 0)
         updates = int(state.get("updates", 0) or 0)
         live_quotes = live_counts.get(exchange, 0)
-        ok = connected and pairs > 0 and updates > 0 and live_quotes > 0 and not state.get("error")
+        quote_coverage_percent = (live_quotes / pairs * 100.0) if pairs > 0 else 0.0
+        coverage_ok = quote_coverage_percent >= 80.0
+        ok = connected and pairs > 0 and updates > 0 and coverage_ok and not state.get("error")
         transport = state.get("transport")
-        detail = f"connected={connected};transport={transport};pairs={pairs};updates={updates};live_quotes={live_quotes};error={state.get('error')}"
-        exchange_health[exchange] = {"ok": ok, "connected": connected, "transport": transport, "pairs": pairs, "updates": updates, "live_quotes": live_quotes, "error": state.get("error")}
+        detail = f"connected={connected};transport={transport};pairs={pairs};updates={updates};live_quotes={live_quotes};coverage={quote_coverage_percent:.1f}%;error={state.get('error')}"
+        exchange_health[exchange] = {"ok": ok, "connected": connected, "transport": transport, "pairs": pairs, "updates": updates, "live_quotes": live_quotes, "quote_coverage_percent": round(quote_coverage_percent, 1), "error": state.get("error")}
         add(f"exchange:{exchange}", ok, detail)
 except Exception as exc:
     add("exchange:required_spot_sources", False, f"{type(exc).__name__}: {exc}")
