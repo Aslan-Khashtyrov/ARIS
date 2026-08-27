@@ -156,7 +156,7 @@ def build_metrics(previous, report):
 
 def write_atomic(path, payload):
     temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    temp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temp.replace(path)
 
 
@@ -185,10 +185,10 @@ def process_once():
             "real_trading": False,
         }
         with HISTORY.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps(history_record, ensure_ascii=False) + "\\n")
+            handle.write(json.dumps(history_record, ensure_ascii=False) + "\n")
         for opportunity in report.get("opportunities", []):
             with POSITIVE_AUDIT.open("a", encoding="utf-8") as handle:
-                handle.write(json.dumps({"detected_at": report.get("generated_at"), "route": opportunity, "real_trading": False}, ensure_ascii=False) + "\\n")
+                handle.write(json.dumps({"detected_at": report.get("generated_at"), "route": opportunity, "real_trading": False}, ensure_ascii=False) + "\n")
         try:
             previous = json.loads(SUMMARY.read_text(encoding="utf-8"))
         except Exception:
