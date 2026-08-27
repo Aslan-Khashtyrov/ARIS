@@ -1,1 +1,1 @@
-{"id":"verify-clean-cross-metrics-v03-20260828-0108","action":"EXEC","argv":["tail","-n","40","journal/cross_exchange_metrics_v01.json"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"inspect-cross-metrics-v03-20260828-0203","action":"EXEC","argv":["tail","-n","40","journal/cross_exchange_metrics_v01.json"],"cwd":"~/Arbitrage","timeout":30}
