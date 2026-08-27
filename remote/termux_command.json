@@ -1,9 +1,9 @@
 {
-  "id": "test-paper-e2e-20260827-1416",
+  "id": "healthcheck-paper-e2e-final-20260827-1417",
   "action": "EXEC",
   "argv": [
     "python",
-    "~/Arbitrage/test_paper_balance_v01.py"
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
