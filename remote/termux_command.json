@@ -1,1 +1,1 @@
-{"id":"deploy-fee-break-even-v01-20260827-2004","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"verify-fee-break-even-v01-20260827-2134","action":"EXEC","argv":["python","~/Arbitrage/aris_cross_exchange_v01.py"],"cwd":"~/Arbitrage","timeout":120}
