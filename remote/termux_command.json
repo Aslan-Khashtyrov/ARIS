@@ -1,5 +1,5 @@
 {
-  "id": "verify-binance-coverage-20260827-1308",
+  "id": "healthcheck-binance-warm-final-20260827-1310",
   "action": "EXEC",
   "argv": [
     "python",
