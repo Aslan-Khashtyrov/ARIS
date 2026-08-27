@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-fresh-20260827-1158",
+  "id": "deploy-exchange-coverage-20260827-1200",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
