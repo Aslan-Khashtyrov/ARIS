@@ -1,10 +1,12 @@
 {
-  "id": "healthcheck-profit-audit-final-20260827-1024",
+  "id": "inspect-worker-profit-audit-20260827-1028",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "tail",
+    "-n",
+    "80",
+    "~/Arbitrage/journal/aris_worker.log"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
