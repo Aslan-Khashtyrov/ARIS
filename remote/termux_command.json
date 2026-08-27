@@ -1,1 +1,1 @@
-{"id":"verify-fee-break-even-v01-20260827-2134","action":"EXEC","argv":["python","~/Arbitrage/aris_cross_exchange_v01.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"healthcheck-zero-cross-input-20260827-2203","action":"EXEC","argv":["python","~/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
