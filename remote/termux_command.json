@@ -1,12 +1,9 @@
 {
-  "id": "deploy-paper-balance-test-20260827-1403",
+  "id": "test-paper-balance-20260827-1404",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_paper_balance_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
