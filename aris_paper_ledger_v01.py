@@ -92,6 +92,8 @@ def validate_cycle(cycle):
         return False, "paper_legs"
     if any(leg.get("within_top_of_book_capacity") is not True for leg in legs):
         return False, "leg_capacity"
+    if any(leg.get("within_capacity_buffer") is not True for leg in legs):
+        return False, "leg_capacity_buffer"
 
     if start_units <= 0 or end_units <= 0:
         return False, "paper_amounts"
@@ -159,7 +161,7 @@ def process_once():
     summary["added_this_cycle"] = added
     summary["rejected_this_cycle"] = sum(rejected.values())
     summary["rejection_reasons"] = dict(sorted(rejected.items()))
-    summary["validation_model"] = "executable-paper-v02"
+    summary["validation_model"] = "executable-paper-v03"
     atomic_json(SUMMARY, summary)
     return summary
 
