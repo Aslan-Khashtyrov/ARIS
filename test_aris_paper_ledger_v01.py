@@ -16,8 +16,8 @@ def valid_cycle():
         "contains_transfer": False,
         "paper_legs": [
             {"within_top_of_book_capacity": True, "within_capacity_buffer": True},
-            {"within_top_of_book_capacity": True},
-            {"within_top_of_book_capacity": True},
+            {"within_top_of_book_capacity": True, "within_capacity_buffer": True},
+            {"within_top_of_book_capacity": True, "within_capacity_buffer": True},
         ],
     }
 
