@@ -1,11 +1,10 @@
 {
-  "id": "reload-worker-liquidity-v03-20260827-0709",
+  "id": "healthcheck-liquidity-v03-20260827-0711",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
