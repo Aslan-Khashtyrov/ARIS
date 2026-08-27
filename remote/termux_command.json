@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-paper-risk-v07-green-20260827-1430",
+  "id": "deploy-expanded-market-universe-20260827-1440",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
