@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-bybit-batches-20260827-1336",
+  "id": "verify-bybit-batches-final-20260827-1338",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
