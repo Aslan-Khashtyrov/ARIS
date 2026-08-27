@@ -19,15 +19,17 @@ def edge(minimum):
         "min_base": 0.0001,
         "min_quote": minimum,
         "qty_step": 0.0001,
+        "order_price": 100.0,
     }
 
 
-def paper_cycle(minimum_order_met=True):
+def paper_cycle(minimum_order_met=True, quantity_step_verified=True):
     start, end = 100.0, 100.4
     leg = {
         "within_top_of_book_capacity": True,
         "within_capacity_buffer": True,
         "minimum_order_met": minimum_order_met,
+        "quantity_step_verified": quantity_step_verified,
     }
     return {
         "profit_percent": (end / start - 1.0) * 100.0,
@@ -36,6 +38,7 @@ def paper_cycle(minimum_order_met=True):
         "executable": True,
         "capacity_verified": True,
         "minimum_order_verified": minimum_order_met,
+        "quantity_step_verified": quantity_step_verified,
         "quote_synchronized": True,
         "quotes_fresh": True,
         "contains_transfer": False,
@@ -54,8 +57,36 @@ class MinimumOrderTests(unittest.TestCase):
         self.assertFalse(result["minimum_order_verified"])
         self.assertFalse(result["legs"][0]["minimum_order_met"])
 
+    def test_quantity_is_rounded_down_to_exchange_step(self):
+        rounded_edge = {
+            "kind": "TRADE",
+            "exchange": "binance",
+            "pair": "BTC/USDT",
+            "src": "binance:BTC",
+            "dst": "binance:USDT",
+            "side": "SELL",
+            "rate": 1.0,
+            "capacity_src": 100.0,
+            "minimum_src": 0.0,
+            "min_base": 0.0,
+            "min_quote": 0.0,
+            "qty_step": 0.1,
+            "order_price": 1.0,
+        }
+        result = simulate_route(1.09, [rounded_edge])
+        leg = result["legs"][0]
+        self.assertAlmostEqual(leg["amount_submitted"], 1.0)
+        self.assertAlmostEqual(leg["unspent_source_units"], 0.09)
+        self.assertAlmostEqual(result["end_units_before_buffer"], 1.0)
+        self.assertTrue(result["quantity_step_verified"])
+
     def test_paper_ledger_accepts_verified_minimums(self):
         self.assertEqual(validate_cycle(paper_cycle()), (True, "validated"))
+
+    def test_paper_ledger_rejects_unverified_step(self):
+        valid, reason = validate_cycle(paper_cycle(quantity_step_verified=False))
+        self.assertFalse(valid)
+        self.assertEqual(reason, "quantity_step_verified")
 
     def test_paper_ledger_rejects_unverified_minimums(self):
         valid, reason = validate_cycle(paper_cycle(False))
