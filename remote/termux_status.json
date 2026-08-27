@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-cross-newline-fix-20260827-1914",
+  "id": "restart-worker-cross-fixed-20260827-1915",
   "action": "EXEC",
-  "time": "2026-08-27T19:05:11",
+  "time": "2026-08-27T19:05:57",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_cross_exchange_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+    "stderr": ""
   }
 }
