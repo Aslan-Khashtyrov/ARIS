@@ -11,6 +11,9 @@ ROOT = Path.home() / "Arbitrage"
 JOURNAL = ROOT / "journal"
 SNAPSHOT = JOURNAL / "cycle_quotes_v01.json"
 REPORT = JOURNAL / "cross_exchange_report_v01.json"
+HISTORY = JOURNAL / "cross_exchange_history_v01.jsonl"
+POSITIVE_AUDIT = JOURNAL / "cross_exchange_positive_v01.jsonl"
+SUMMARY = JOURNAL / "cross_exchange_metrics_v01.json"
 MAX_QUOTE_AGE_SECONDS = 5.0
 MAX_QUOTE_SKEW_SECONDS = 3.0
 MAX_BOOK_UTILIZATION_PERCENT = 80.0
@@ -128,6 +131,35 @@ def analyze(payload, evaluation_time=None):
     }
 
 
+def build_metrics(previous, report):
+    previous = previous if isinstance(previous, dict) else {}
+    sample_best = report.get("best_executable_route") or report.get("best_route") or {}
+    raw = sample_best.get("raw_spread_percent")
+    net = sample_best.get("net_profit_percent")
+    samples = int(previous.get("samples", 0) or 0) + 1
+    return {
+        "ok": True,
+        "generated_at": report.get("generated_at"),
+        "mode": "CROSS_EXCHANGE_PAPER_ONLY",
+        "real_trading": False,
+        "samples": samples,
+        "first_sample_at": previous.get("first_sample_at") or report.get("generated_at"),
+        "last_sample_at": report.get("generated_at"),
+        "best_raw_spread_percent": max(float(previous.get("best_raw_spread_percent", -999)), float(raw if raw is not None else -999)),
+        "best_net_profit_percent": max(float(previous.get("best_net_profit_percent", -999)), float(net if net is not None else -999)),
+        "snapshots_with_positive_raw": int(previous.get("snapshots_with_positive_raw", 0) or 0) + int(report.get("positive_raw_routes", 0) > 0),
+        "snapshots_with_positive_executable": int(previous.get("snapshots_with_positive_executable", 0) or 0) + int(report.get("positive_executable_routes", 0) > 0),
+        "positive_raw_route_observations": int(previous.get("positive_raw_route_observations", 0) or 0) + int(report.get("positive_raw_routes", 0) or 0),
+        "positive_executable_route_observations": int(previous.get("positive_executable_route_observations", 0) or 0) + int(report.get("positive_executable_routes", 0) or 0),
+    }
+
+
+def write_atomic(path, payload):
+    temp = path.with_suffix(path.suffix + ".tmp")
+    temp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    temp.replace(path)
+
+
 def process_once():
     JOURNAL.mkdir(parents=True, exist_ok=True)
     if SNAPSHOT.exists():
@@ -135,9 +167,33 @@ def process_once():
         report = analyze(payload)
     else:
         report = {"ok": True, "status": "WAITING_FOR_QUOTES", "real_trading": False}
-    temp = REPORT.with_suffix(".json.tmp")
-    temp.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    temp.replace(REPORT)
+    write_atomic(REPORT, report)
+    if report.get("routes_compared") is not None:
+        best = report.get("best_executable_route") or report.get("best_route") or {}
+        history_record = {
+            "generated_at": report.get("generated_at"),
+            "pairs_compared": report.get("pairs_compared"),
+            "routes_compared": report.get("routes_compared"),
+            "executable_routes": report.get("executable_routes"),
+            "positive_raw_routes": report.get("positive_raw_routes"),
+            "positive_executable_routes": report.get("positive_executable_routes"),
+            "best_pair": best.get("pair"),
+            "best_buy_exchange": best.get("buy_exchange"),
+            "best_sell_exchange": best.get("sell_exchange"),
+            "best_raw_spread_percent": best.get("raw_spread_percent"),
+            "best_net_profit_percent": best.get("net_profit_percent"),
+            "real_trading": False,
+        }
+        with HISTORY.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(history_record, ensure_ascii=False) + "\\n")
+        for opportunity in report.get("opportunities", []):
+            with POSITIVE_AUDIT.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps({"detected_at": report.get("generated_at"), "route": opportunity, "real_trading": False}, ensure_ascii=False) + "\\n")
+        try:
+            previous = json.loads(SUMMARY.read_text(encoding="utf-8"))
+        except Exception:
+            previous = {}
+        write_atomic(SUMMARY, build_metrics(previous, report))
     return report
 
 
