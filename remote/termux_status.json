@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-paper-risk-v07-20260827-1423",
+  "id": "restart-worker-paper-risk-v07-20260827-1424",
   "action": "EXEC",
-  "time": "2026-08-27T14:18:41",
+  "time": "2026-08-27T14:19:35",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_paper_risk_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n"
+    "stderr": ""
   }
 }
