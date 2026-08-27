@@ -362,7 +362,8 @@ def binance_loop():
                 with lock:
                     health["binance"].update({
                         "connected": True,
-                        "pairs": len(active),
+                        "pairs": len(candidates),
+                        "active_pairs": len(active),
                         "error": None,
                     })
         except Exception as exc:
