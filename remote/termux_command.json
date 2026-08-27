@@ -1,10 +1,11 @@
 {
-  "id": "test-expanded-market-universe-20260827-1441",
+  "id": "restart-worker-expanded-universe-20260827-1442",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_market_universe_v01.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
