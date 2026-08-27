@@ -1,13 +1,10 @@
 {
-  "id": "deploy-arbitrage-v018-20260827-1220",
+  "id": "compile-arbitrage-v018-20260827-1227",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/arbitrage_v0_1_8.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 8
 }
