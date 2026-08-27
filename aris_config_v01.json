@@ -1,5 +1,5 @@
 {
-  "version": "0.2",
+  "version": "0.3",
   "mode": "monitoring_and_paper_only",
   "real_trading": false,
   "spot": {
@@ -55,5 +55,16 @@
     "allow_payments": false,
     "allow_withdrawals": false,
     "allow_api_secrets_in_repo": false
+  },
+  "paper_wallet": {
+    "enabled": true,
+    "real_money": false,
+    "initial_balances": {
+      "binance:USDT": 1000,
+      "bybit:USDT": 1000,
+      "okx:USDT": 1000
+    },
+    "minimum_confirmations": 3,
+    "minimum_profit_percent": 0.3
   }
 }
