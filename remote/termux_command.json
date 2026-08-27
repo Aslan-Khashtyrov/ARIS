@@ -1,12 +1,9 @@
 {
-  "id": "deploy-cross-metrics-v01-20260827-1904",
+  "id": "test-cross-metrics-v01-20260827-1905",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_cross_exchange_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
