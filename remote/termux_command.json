@@ -1,10 +1,11 @@
 {
-  "id": "test-metrics-continuity-20260827-1314",
+  "id": "restart-worker-metrics-continuity-20260827-1315",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_cycle_metrics_v02.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
