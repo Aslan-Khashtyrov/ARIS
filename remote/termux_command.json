@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-funded-filter-20260827-1409",
+  "id": "healthcheck-funded-filter-final-20260827-1410",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
