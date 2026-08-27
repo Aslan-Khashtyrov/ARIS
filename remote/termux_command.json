@@ -1,9 +1,12 @@
 {
-  "id": "verify-bybit-batches-final-20260827-1338",
+  "id": "deploy-bybit-probe-20260827-1340",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
