@@ -358,7 +358,16 @@ def self_test():
     assert result["best_cycle"]["bottleneck_leg"] is not None
     assert result["best_cycle"]["quote_synchronized"] is True
     assert result["best_cycle"]["quotes_fresh"] is True
-    return {"ok": True, "cycles_checked": result["cycles_checked"], "best_profit_percent": result["best_cycle"]["profit_percent"]}
+    assert result["positive_theoretical_cycles_checked"] > 0
+    assert result["positive_simulated_cycles_checked"] > 0
+    assert result["positive_net_cycles_checked"] > 0
+    assert result["positive_executable_cycles_checked"] > 0
+    return {
+        "ok": True,
+        "cycles_checked": result["cycles_checked"],
+        "best_profit_percent": result["best_cycle"]["profit_percent"],
+        "positive_executable_cycles_checked": result["positive_executable_cycles_checked"],
+    }
 
 def main():
     parser = argparse.ArgumentParser()
