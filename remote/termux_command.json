@@ -1,12 +1,9 @@
 {
-  "id": "deploy-source-recovery-20260827-1032",
+  "id": "test-source-recovery-20260827-1034",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_collector_metadata_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
