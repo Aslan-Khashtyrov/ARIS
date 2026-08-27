@@ -15,6 +15,7 @@ SNAPSHOT = JOURNAL / "cycle_quotes_v01.json"
 STATUS = JOURNAL / "cycle_collector_status_v01.json"
 CYCLE_REPORT = JOURNAL / "cycle_report_v01.json"
 SIGNALS = JOURNAL / "cycle_opportunities_v01.jsonl"
+PROFIT_AUDIT = JOURNAL / "cycle_profit_audit_v01.jsonl"
 CB_PRODUCTS_URL = "https://api.exchange.coinbase.com/products"
 KRAKEN_PAIRS_URL = "https://api.kraken.com/0/public/AssetPairs"
 BINANCE_INFO_URL = "https://data-api.binance.vision/api/v3/exchangeInfo"
@@ -400,6 +401,7 @@ def snapshot_loop():
     last_signal_time = 0.0
     candidate_signature = None
     candidate_streak = 0
+    positive_window_active = False
     while True:
         now = time.time()
         with lock:
@@ -415,6 +417,28 @@ def snapshot_loop():
         write_atomic(SNAPSHOT, payload)
         cycle_report = analyze_cycles(payload)
         write_atomic(CYCLE_REPORT, cycle_report)
+        positive_counts = {
+            "theoretical": int(cycle_report.get("positive_theoretical_cycles_checked", 0) or 0),
+            "simulated": int(cycle_report.get("positive_simulated_cycles_checked", 0) or 0),
+            "net": int(cycle_report.get("positive_net_cycles_checked", 0) or 0),
+            "executable": int(cycle_report.get("positive_executable_cycles_checked", 0) or 0),
+            "signal_threshold": int(cycle_report.get("signal_threshold_cycles_checked", 0) or 0),
+        }
+        any_positive = any(positive_counts.values())
+        if any_positive and not positive_window_active:
+            audit_record = {
+                "detected_at": payload["generated_at"],
+                "event": "POSITIVE_WINDOW_STARTED",
+                "counts": positive_counts,
+                "best_theoretical_raw_profit_percent": cycle_report.get("best_theoretical_raw_profit_percent"),
+                "best_simulated_raw_profit_percent": cycle_report.get("best_simulated_raw_profit_percent"),
+                "best_net_profit_percent": (cycle_report.get("best_cycle") or {}).get("profit_percent"),
+                "best_executable_net_profit_percent": (cycle_report.get("best_executable_cycle") or {}).get("profit_percent"),
+                "real_trading": False,
+            }
+            with PROFIT_AUDIT.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(audit_record, ensure_ascii=False) + "\n")
+        positive_window_active = any_positive
         opportunities = cycle_report.get("opportunities", [])
         actionable = [item for item in opportunities if item.get("profit_percent", -999) >= SIGNAL_PROFIT_PERCENT]
         confirmed_signal_ready = False
@@ -449,6 +473,12 @@ def snapshot_loop():
             "live_quotes": len(live),
             "cycles_checked": cycle_report.get("cycles_checked", 0),
             "raw_opportunities": len(opportunities),
+            "positive_theoretical_cycles": positive_counts["theoretical"],
+            "positive_simulated_cycles": positive_counts["simulated"],
+            "positive_net_cycles": positive_counts["net"],
+            "positive_executable_cycles": positive_counts["executable"],
+            "signal_threshold_cycles": positive_counts["signal_threshold"],
+            "positive_window_active": positive_window_active,
             "actionable_candidates": len(actionable),
             "candidate_streak": candidate_streak,
             "required_confirmations": SIGNAL_CONFIRMATIONS,
