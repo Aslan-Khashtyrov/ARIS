@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-paper-balance-20260827-1404",
+  "id": "restart-worker-paper-balance-20260827-1405",
   "action": "EXEC",
-  "time": "2026-08-27T13:36:38",
+  "time": "2026-08-27T13:37:08",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_paper_balance_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+    "stderr": ""
   }
 }
