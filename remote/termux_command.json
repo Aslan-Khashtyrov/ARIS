@@ -1,5 +1,5 @@
 {
-  "id": "verify-paper-balance-live-20260827-1407",
+  "id": "healthcheck-paper-balance-final-20260827-1409",
   "action": "EXEC",
   "argv": [
     "python",
