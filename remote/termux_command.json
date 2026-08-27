@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-binance-coverage-20260827-1306",
+  "id": "verify-binance-coverage-20260827-1308",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
