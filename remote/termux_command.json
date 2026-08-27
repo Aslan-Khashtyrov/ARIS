@@ -1,10 +1,11 @@
 {
-  "id": "test-source-recovery-20260827-1034",
+  "id": "restart-worker-source-recovery-20260827-1036",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_collector_metadata_v01.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
