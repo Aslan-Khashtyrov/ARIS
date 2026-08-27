@@ -1,12 +1,9 @@
 {
-  "id": "deploy-expanded-market-universe-20260827-1440",
+  "id": "test-expanded-market-universe-20260827-1441",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_market_universe_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
