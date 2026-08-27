@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-paper-balance-recheck-20260827-1411",
+  "id": "deploy-paper-e2e-checks-20260827-1415",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
