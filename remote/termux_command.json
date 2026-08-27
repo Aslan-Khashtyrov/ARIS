@@ -1,10 +1,10 @@
 {
-  "id": "verify-paper-ledger-live-20260827-0210",
+  "id": "healthcheck-before-ledger-reload-20260827-0301",
   "action": "EXEC",
   "argv": [
     "python",
-    "~/Arbitrage/aris_paper_ledger_v01.py"
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 60
+  "timeout": 120
 }
