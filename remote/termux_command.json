@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-metrics-continuity-20260827-1315",
+  "id": "verify-metrics-continuity-20260827-1317",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
