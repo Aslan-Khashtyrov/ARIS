@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-expanded-universe-20260827-1446",
+  "id": "deploy-five-exchange-health-20260827-1450",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
