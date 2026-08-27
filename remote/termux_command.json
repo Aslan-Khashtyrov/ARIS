@@ -1,1 +1,1 @@
-{"id":"restart-worker-cross-cadence-v01-20260827-2209","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"healthcheck-cross-cadence-v01-20260827-2212","action":"EXEC","argv":["python","~/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
