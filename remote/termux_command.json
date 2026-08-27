@@ -1,12 +1,10 @@
 {
-  "id": "deploy-profit-audit-20260827-1012",
+  "id": "test-profit-audit-20260827-1014",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/aris_cycle_engine_v01.py",
+    "--self-test"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
