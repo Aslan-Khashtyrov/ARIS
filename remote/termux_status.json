@@ -1,18 +1,19 @@
 {
   "ok": true,
-  "id": "inspect-worker-profit-audit-20260827-1028",
+  "id": "deploy-source-recovery-20260827-1032",
   "action": "EXEC",
-  "time": "2026-08-27T10:08:27",
+  "time": "2026-08-27T10:10:21",
   "result": {
     "argv": [
-      "tail",
-      "-n",
-      "80",
-      "~/Arbitrage/journal/aris_worker.log"
+      "git",
+      "pull",
+      "--ff-only",
+      "origin",
+      "main"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 1,
-    "stdout": "",
-    "stderr": "tail: cannot open '~/Arbitrage/journal/aris_worker.log' for reading: No such file or directory\n"
+    "returncode": 0,
+    "stdout": "Updating 4958c95..c0b43f3\nFast-forward\n aris_cycle_collector_v01.py    | 67 +++++++++++++++++++++++++++++++-----------\n remote/termux_command.json     | 13 ++++----\n test_collector_metadata_v01.py | 61 ++++++++++++++++++++++++++++++++++++++\n 3 files changed, 118 insertions(+), 23 deletions(-)\n create mode 100644 test_collector_metadata_v01.py\n",
+    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
   }
 }
