@@ -1,5 +1,5 @@
 {
-  "version": "0.3",
+  "version": "0.4",
   "mode": "monitoring_and_paper_only",
   "real_trading": false,
   "spot": {
@@ -65,6 +65,11 @@
       "okx:USDT": 1000
     },
     "minimum_confirmations": 3,
-    "minimum_profit_percent": 0.3
+    "minimum_profit_percent": 0.3,
+    "risk_controls": {
+      "maximum_trade_allocation_percent": 25,
+      "maximum_trades_per_wallet_per_day": 20,
+      "maximum_daily_drawdown_percent": 2
+    }
   }
 }
