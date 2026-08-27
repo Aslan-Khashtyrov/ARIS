@@ -1,19 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-bybit-orderbook-20260827-1343",
+  "id": "restart-worker-bybit-orderbook-20260827-1344",
   "action": "EXEC",
-  "time": "2026-08-27T13:28:32",
+  "time": "2026-08-27T13:28:58",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 6ff1f5b..40ed1d1\nFast-forward\n aris_cycle_collector_v01.py | 13 ++++++++-----\n remote/termux_command.json  |  9 ++++++---\n 2 files changed, 14 insertions(+), 8 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": ""
   }
 }
