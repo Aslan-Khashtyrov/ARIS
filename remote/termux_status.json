@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-paper-e2e-checks-20260827-1415",
+  "id": "test-paper-e2e-20260827-1416",
   "action": "EXEC",
-  "time": "2026-08-27T13:45:32",
+  "time": "2026-08-27T13:45:57",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_paper_balance_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 22dd5c9..cc2d937\nFast-forward\n aris_healthcheck.py        | 11 +++++++--\n remote/termux_command.json |  9 ++++---\n test_paper_balance_v01.py  | 59 ++++++++++++++++++++++++++++++++++++++++++++++\n 3 files changed, 74 insertions(+), 5 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n"
   }
 }
