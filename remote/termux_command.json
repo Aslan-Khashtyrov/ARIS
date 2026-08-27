@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-step-rounding-20260827-0914",
+  "id": "healthcheck-step-rounding-live-20260827-0916",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
