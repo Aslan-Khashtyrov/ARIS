@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-before-order-filters-20260827-0815",
+  "id": "deploy-order-filters-20260827-0828",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
