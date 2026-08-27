@@ -1,12 +1,9 @@
 {
-  "id": "deploy-healthcheck-risk-v07-20260827-1429",
+  "id": "healthcheck-paper-risk-v07-green-20260827-1430",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
