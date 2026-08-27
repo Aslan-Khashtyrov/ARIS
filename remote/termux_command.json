@@ -1,10 +1,11 @@
 {
-  "id": "healthcheck-before-ledger-reload-20260827-0301",
+  "id": "reload-worker-ledger-v02-20260827-0304",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
