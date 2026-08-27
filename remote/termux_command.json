@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-expanded-universe-20260827-1442",
+  "id": "healthcheck-expanded-universe-20260827-1446",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
