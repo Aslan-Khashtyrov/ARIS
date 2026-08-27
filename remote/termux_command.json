@@ -1,11 +1,11 @@
 {
-  "id": "test-profit-audit-20260827-1014",
+  "id": "restart-worker-profit-audit-20260827-1016",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_cycle_engine_v01.py",
-    "--self-test"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
