@@ -15,7 +15,7 @@ def valid_cycle():
         "quotes_fresh": True,
         "contains_transfer": False,
         "paper_legs": [
-            {"within_top_of_book_capacity": True},
+            {"within_top_of_book_capacity": True, "within_capacity_buffer": True},
             {"within_top_of_book_capacity": True},
             {"within_top_of_book_capacity": True},
         ],
@@ -35,6 +35,11 @@ class PaperLedgerValidationTests(unittest.TestCase):
         cycle = valid_cycle()
         cycle["quotes_fresh"] = False
         self.assertEqual(validate_cycle(cycle), (False, "quotes_fresh"))
+
+    def test_rejects_excessive_book_utilization(self):
+        cycle = valid_cycle()
+        cycle["paper_legs"][1]["within_capacity_buffer"] = False
+        self.assertEqual(validate_cycle(cycle), (False, "leg_capacity_buffer"))
 
     def test_rejects_insufficient_leg_capacity(self):
         cycle = valid_cycle()
