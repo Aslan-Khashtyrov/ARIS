@@ -1,12 +1,12 @@
 {
-  "id": "deploy-funded-paper-wallets-20260827-1402",
+  "id": "test-funded-paper-wallets-20260827-1403",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "-m",
+    "unittest",
+    "test_funded_paper_wallets_v01.py",
+    "test_paper_balance_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
