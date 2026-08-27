@@ -1,10 +1,9 @@
 {
-  "id": "test-cycle-liquidity-boundary-20260827-0806",
+  "id": "healthcheck-after-cycle-tests-20260827-0808",
   "action": "EXEC",
   "argv": [
     "python",
-    "~/Arbitrage/test_aris_cycle_liquidity_v01.py",
-    "-v"
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
