@@ -1,12 +1,9 @@
 {
-  "id": "deploy-okx-websocket-20260827-1110",
+  "id": "test-okx-websocket-20260827-1111",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_collector_metadata_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
