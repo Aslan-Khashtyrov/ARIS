@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-profit-audit-20260827-1016",
+  "id": "healthcheck-profit-audit-live-20260827-1020",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
