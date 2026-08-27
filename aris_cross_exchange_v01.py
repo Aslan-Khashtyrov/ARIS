@@ -183,6 +183,8 @@ def apply_confirmations(report):
 
 def build_metrics(previous, report):
     previous = previous if isinstance(previous, dict) else {}
+    if previous.get("model_version") != report.get("model_version"):
+        previous = {}
     sample_best = report.get("best_executable_route") or report.get("best_route") or {}
     raw = sample_best.get("raw_spread_percent")
     net = sample_best.get("net_profit_percent")
@@ -191,6 +193,8 @@ def build_metrics(previous, report):
         "ok": True,
         "generated_at": report.get("generated_at"),
         "mode": "CROSS_EXCHANGE_PAPER_ONLY",
+        "model_version": report.get("model_version"),
+        "minimum_confirmations": report.get("minimum_confirmations"),
         "real_trading": False,
         "samples": samples,
         "first_sample_at": previous.get("first_sample_at") or report.get("generated_at"),
@@ -233,6 +237,7 @@ def process_once():
         best = report.get("best_executable_route") or report.get("best_route") or {}
         history_record = {
             "generated_at": report.get("generated_at"),
+            "model_version": report.get("model_version"),
             "pairs_compared": report.get("pairs_compared"),
             "routes_compared": report.get("routes_compared"),
             "executable_routes": report.get("executable_routes"),
