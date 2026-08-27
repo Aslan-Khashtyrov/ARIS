@@ -1,12 +1,9 @@
 {
-  "id": "deploy-cross-newline-fix-20260827-1913",
+  "id": "test-cross-newline-fix-20260827-1914",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_cross_exchange_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
