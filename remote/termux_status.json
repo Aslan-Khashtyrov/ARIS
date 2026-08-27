@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-bybit-websocket-20260827-1329",
+  "id": "restart-worker-bybit-websocket-20260827-1330",
   "action": "EXEC",
-  "time": "2026-08-27T13:21:45",
+  "time": "2026-08-27T13:22:10",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_collector_metadata_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.002s\n\nOK\n"
+    "stderr": ""
   }
 }
