@@ -1,5 +1,12 @@
 {
-  "id": "read-active-ledger-summary-20260827-0308",
-  "action": "READ_TEXT",
-  "path": "~/Arbitrage/journal/paper_ledger_summary_v01.json"
+  "id": "deploy-exchange-healthcheck-20260827-0404",
+  "action": "EXEC",
+  "argv": [
+    "git",
+    "merge",
+    "--ff-only",
+    "origin/main"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 60
 }
