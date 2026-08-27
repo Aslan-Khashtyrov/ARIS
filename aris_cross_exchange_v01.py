@@ -160,8 +160,19 @@ def write_atomic(path, payload):
     temp.replace(path)
 
 
+def repair_legacy_newlines():
+    for path in (HISTORY, POSITIVE_AUDIT, SUMMARY):
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        if "\\\\n" in text:
+            path.write_text(text.replace("\\\\n", "\\n"), encoding="utf-8")
+
+
 def process_once():
     JOURNAL.mkdir(parents=True, exist_ok=True)
+    repair_legacy_newlines()
     if SNAPSHOT.exists():
         payload = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
         report = analyze(payload)
