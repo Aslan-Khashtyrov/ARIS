@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-cross-newline-fix-20260827-1913",
+  "id": "test-cross-newline-fix-20260827-1914",
   "action": "EXEC",
-  "time": "2026-08-27T19:04:24",
+  "time": "2026-08-27T19:05:11",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_cross_exchange_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating a6da1a2..a572d9e\nFast-forward\n aris_cross_exchange_v01.py | 17 ++++++++++++++---\n remote/termux_command.json |  9 ++++++---\n 2 files changed, 20 insertions(+), 6 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
   }
 }
