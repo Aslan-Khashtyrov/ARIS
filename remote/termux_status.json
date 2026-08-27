@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-order-filters-20260827-0832",
+  "id": "restart-worker-order-filters-20260827-0834",
   "action": "EXEC",
-  "time": "2026-08-27T08:24:38",
+  "time": "2026-08-27T08:25:02",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_order_minimums_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+    "stderr": ""
   }
 }
