@@ -1,1 +1,1 @@
-{"id":"deploy-cross-confirm-v03-20260828-0004","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"restart-worker-cross-confirm-v03-20260828-0006","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
