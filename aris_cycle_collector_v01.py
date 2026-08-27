@@ -445,11 +445,13 @@ def bybit_loop():
                 raise RuntimeError("no supported Bybit products")
             ws = websocket.create_connection(BYBIT_WS, timeout=25, enable_multithread=True)
             ws.settimeout(20)
-            ws.send(json.dumps({
-                "req_id": "arisbybit01",
-                "op": "subscribe",
-                "args": [f"tickers.{symbol}" for symbol in sorted(mapping)],
-            }))
+            topics = [f"tickers.{symbol}" for symbol in sorted(mapping)]
+            for batch_index in range(0, len(topics), 10):
+                ws.send(json.dumps({
+                    "req_id": f"arisbybit{batch_index // 10 + 1:02d}",
+                    "op": "subscribe",
+                    "args": topics[batch_index:batch_index + 10],
+                }))
             with lock:
                 health["bybit"].update({"connected": True, "pairs": len(mapping), "error": None})
             while True:
