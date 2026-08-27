@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-bybit-orderbook-20260827-1344",
+  "id": "verify-bybit-orderbook-final-20260827-1346",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
