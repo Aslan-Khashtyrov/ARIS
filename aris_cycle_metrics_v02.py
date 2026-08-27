@@ -11,11 +11,11 @@ from pathlib import Path
 ROOT = Path.home() / "Arbitrage"
 JOURNAL = ROOT / "journal"
 OPERATIONAL = JOURNAL / "operational_report_v01.json"
-HISTORY = JOURNAL / "cycle_metrics_v02.csv"
-SUMMARY = JOURNAL / "cycle_metrics_summary_v02.json"
+HISTORY = JOURNAL / "cycle_metrics_v03.csv"
+SUMMARY = JOURNAL / "cycle_metrics_summary_v03.json"
 INTERVAL = 60
 SIGNAL_THRESHOLD = 0.30
-MODEL_VERSION = "multileg-executable-v01"
+MODEL_VERSION = "multileg-executable-v02"
 FIELDS = [
     "timestamp",
     "model_version",
@@ -27,6 +27,13 @@ FIELDS = [
     "best_net_percent",
     "best_executable",
     "best_any_percent",
+    "best_theoretical_raw_percent",
+    "best_simulated_raw_percent",
+    "positive_theoretical_cycles",
+    "positive_simulated_cycles",
+    "positive_net_cycles",
+    "positive_executable_cycles",
+    "signal_threshold_cycles",
     "actionable_candidates",
 ]
 
@@ -77,6 +84,13 @@ def build_summary(rows):
     raw = [value for row in rows if (value := as_float(row.get("best_raw_percent"))) is not None]
     any_best = [value for row in rows if (value := as_float(row.get("best_any_percent"))) is not None]
     executable_counts = [as_int(row.get("executable_cycles_checked")) for row in rows]
+    positive_theoretical_counts = [as_int(row.get("positive_theoretical_cycles")) for row in rows]
+    positive_simulated_counts = [as_int(row.get("positive_simulated_cycles")) for row in rows]
+    positive_net_counts = [as_int(row.get("positive_net_cycles")) for row in rows]
+    positive_executable_counts = [as_int(row.get("positive_executable_cycles")) for row in rows]
+    signal_threshold_counts = [as_int(row.get("signal_threshold_cycles")) for row in rows]
+    theoretical_best = [value for row in rows if (value := as_float(row.get("best_theoretical_raw_percent"))) is not None]
+    simulated_best = [value for row in rows if (value := as_float(row.get("best_simulated_raw_percent"))) is not None]
     positive_raw = sum(value > 0 for value in raw)
     positive_net = sum(value > 0 for value in net)
     threshold_hits = sum(value >= SIGNAL_THRESHOLD for value in net)
@@ -98,6 +112,18 @@ def build_summary(rows):
         "median_net_percent": percentile(net, 0.50),
         "p95_net_percent": percentile(net, 0.95),
         "latest_executable_cycles_checked": executable_counts[-1] if executable_counts else 0,
+        "best_theoretical_raw_percent": max(theoretical_best) if theoretical_best else None,
+        "best_simulated_raw_percent": max(simulated_best) if simulated_best else None,
+        "snapshots_with_positive_theoretical": sum(value > 0 for value in positive_theoretical_counts),
+        "snapshots_with_positive_simulated": sum(value > 0 for value in positive_simulated_counts),
+        "snapshots_with_positive_net": sum(value > 0 for value in positive_net_counts),
+        "snapshots_with_positive_executable": sum(value > 0 for value in positive_executable_counts),
+        "snapshots_at_signal_threshold": sum(value > 0 for value in signal_threshold_counts),
+        "positive_theoretical_cycle_observations": sum(positive_theoretical_counts),
+        "positive_simulated_cycle_observations": sum(positive_simulated_counts),
+        "positive_net_cycle_observations": sum(positive_net_counts),
+        "positive_executable_cycle_observations": sum(positive_executable_counts),
+        "signal_threshold_cycle_observations": sum(signal_threshold_counts),
         "positive_raw_samples": positive_raw,
         "positive_net_samples": positive_net,
         "positive_net_rate_percent": (positive_net / len(net) * 100) if net else 0,
@@ -126,6 +152,13 @@ def capture_once():
         "best_net_percent": market.get("best_profit_percent"),
         "best_executable": market.get("best_executable"),
         "best_any_percent": market.get("best_any_profit_percent"),
+        "best_theoretical_raw_percent": market.get("best_theoretical_raw_profit_percent"),
+        "best_simulated_raw_percent": market.get("best_simulated_raw_profit_percent"),
+        "positive_theoretical_cycles": market.get("positive_theoretical_cycles", 0),
+        "positive_simulated_cycles": market.get("positive_simulated_cycles", 0),
+        "positive_net_cycles": market.get("positive_net_cycles", 0),
+        "positive_executable_cycles": market.get("positive_executable_cycles", 0),
+        "signal_threshold_cycles": market.get("signal_threshold_cycles", 0),
         "actionable_candidates": market.get("actionable_candidates", 0),
     }
     HISTORY.parent.mkdir(parents=True, exist_ok=True)
