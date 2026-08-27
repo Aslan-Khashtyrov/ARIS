@@ -41,11 +41,11 @@ DISCOVERY_REFRESH_SECONDS = 6 * 60 * 60
 lock = threading.Lock()
 quotes = {}
 health = {
-    "coinbase": {"connected": False, "pairs": 0, "updates": 0, "error": None},
-    "kraken": {"connected": False, "pairs": 0, "updates": 0, "error": None},
-    "binance": {"connected": False, "pairs": 0, "updates": 0, "error": None},
-    "bybit": {"connected": False, "pairs": 0, "updates": 0, "error": None},
-    "okx": {"connected": False, "pairs": 0, "updates": 0, "error": None},
+    "coinbase": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
+    "kraken": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
+    "binance": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
+    "bybit": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "rest"},
+    "okx": {"connected": False, "pairs": 0, "updates": 0, "error": None, "transport": "websocket"},
 }
 
 def load_fee_schedule():
