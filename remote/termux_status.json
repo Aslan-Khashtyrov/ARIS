@@ -1,16 +1,19 @@
 {
   "ok": true,
-  "id": "run-bybit-probe-20260827-1341",
+  "id": "deploy-bybit-orderbook-20260827-1343",
   "action": "EXEC",
-  "time": "2026-08-27T13:27:43",
+  "time": "2026-08-27T13:28:32",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_bybit_ws_probe_v01.py"
+      "git",
+      "pull",
+      "--ff-only",
+      "origin",
+      "main"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "{\"ok\": true, \"messages\": [{\"keys\": [\"conn_id\", \"op\", \"req_id\", \"ret_msg\", \"success\"], \"topic\": null, \"type\": null, \"success\": true, \"ret_msg\": \"subscribe\", \"data_type\": \"NoneType\", \"data\": null}, {\"keys\": [\"cs\", \"data\", \"topic\", \"ts\", \"type\"], \"topic\": \"tickers.BTCUSDT\", \"type\": \"snapshot\", \"success\": null, \"ret_msg\": null, \"data_type\": \"dict\", \"data\": {\"symbol\": \"BTCUSDT\", \"lastPrice\": \"79604.6\", \"highPrice24h\": \"80532.4\", \"lowPrice24h\": \"77625\", \"prevPrice24h\": \"78621.1\", \"volume24h\": \"6142.164535\", \"turnover24h\": \"483908295.6164607\", \"price24hPcnt\": \"0.0125\", \"usdIndexPrice\": \"79596.545271\"}}, {\"keys\": [\"cs\", \"data\", \"topic\", \"ts\", \"type\"], \"topic\": \"tickers.ETHUSDT\", \"type\": \"snapshot\", \"success\": null, \"ret_msg\": null, \"data_type\": \"dict\", \"data\": {\"symbol\": \"ETHUSDT\", \"lastPrice\": \"2504.53\", \"highPrice24h\": \"2566.53\", \"lowPrice24h\": \"2431.84\", \"prevPrice24h\": \"2453.96\", \"volume24h\": \"99516.35681\", \"turnover24h\": \"247807248.5136387\", \"price24hPcnt\": \"0.0206\", \"usdIndexPrice\": \"2504.8194\"}}, {\"keys\": [\"cs\", \"data\", \"topic\", \"ts\", \"type\"], \"topic\": \"tickers.ETHUSDT\", \"type\": \"snapshot\", \"success\": null, \"ret_msg\": null, \"data_type\": \"dict\", \"data\": {\"symbol\": \"ETHUSDT\", \"lastPrice\": \"2504.4\", \"highPrice24h\": \"2566.53\", \"lowPrice24h\": \"2431.84\", \"prevPrice24h\": \"2453.96\", \"volume24h\": \"99516.35725\", \"turnover24h\": \"247807249.6155747\", \"price24hPcnt\": \"0.0206\", \"usdIndexPrice\": \"2504.8194\"}}, {\"keys\": [\"cs\", \"data\", \"topic\", \"ts\", \"type\"], \"topic\": \"tickers.BTCUSDT\", \"type\": \"snapshot\", \"success\": null, \"ret_msg\": null, \"data_type\": \"dict\", \"data\": {\"symbol\": \"BTCUSDT\", \"lastPrice\": \"79604.6\", \"highPrice24h\": \"80532.4\", \"lowPrice24h\": \"77625\", \"prevPrice24h\": \"78621.1\", \"volume24h\": \"6142.264535\", \"turnover24h\": \"483916256.0764607\", \"price24hPcnt\": \"0.0125\", \"usdIndexPrice\": \"79596.545271\"}}, {\"keys\": [\"cs\", \"data\", \"topic\", \"ts\", \"type\"], \"topic\": \"tickers.ETHUSDT\", \"type\": \"snapshot\", \"success\": null, \"ret_msg\": null, \"data_type\": \"dict\", \"data\": {\"symbol\": \"ETHUSDT\", \"lastPrice\": \"2504.94\", \"highPrice24h\": \"2566.53\", \"lowPrice24h\": \"2431.84\", \"prevPrice24h\": \"2453.96\", \"volume24h\": \"99519.82325\", \"turnover24h\": \"247815931.7376147\", \"price24hPcnt\": \"0.0208\", \"usdIndexPrice\": \"2504.8194\"}}]}\n",
-    "stderr": ""
+    "stdout": "Updating 6ff1f5b..40ed1d1\nFast-forward\n aris_cycle_collector_v01.py | 13 ++++++++-----\n remote/termux_command.json  |  9 ++++++---\n 2 files changed, 14 insertions(+), 8 deletions(-)\n",
+    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
   }
 }
