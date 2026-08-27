@@ -1,19 +1,7 @@
 {
-  "ok": true,
-  "id": "deploy-order-filters-20260827-0828",
+  "ok": false,
+  "id": "compile-order-filters-20260827-0830",
   "action": "EXEC",
-  "time": "2026-08-27T08:23:06",
-  "result": {
-    "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "Updating 634205c..efad0c0\nFast-forward\n aris_cycle_collector_v01.py | 71 ++++++++++++++++++++++++++++++++++-----------\n aris_cycle_engine_v01.py    | 31 ++++++++++++++++++--\n aris_healthcheck.py         |  2 +-\n aris_paper_ledger_v01.py    |  5 +++-\n remote/termux_command.json  |  9 ++++--\n test_order_minimums_v01.py  | 67 ++++++++++++++++++++++++++++++++++++++++++\n 6 files changed, 160 insertions(+), 25 deletions(-)\n create mode 100644 test_order_minimums_v01.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
-  }
+  "time": "2026-08-27T08:23:52",
+  "error": "PermissionError: python requires a script path; -c and stdin are blocked"
 }
