@@ -16,6 +16,12 @@ STATE = JOURNAL / "paper_ledger_state_v01.json"
 SUMMARY = JOURNAL / "paper_ledger_summary_v01.json"
 MIN_PROFIT_PERCENT = 0.30
 MIN_CONFIRMATIONS = 3
+VALIDATION_MODEL = "executable-paper-v06-wallet"
+INITIAL_BALANCES = {
+    "binance:USDT": 1000.0,
+    "bybit:USDT": 1000.0,
+    "okx:USDT": 1000.0,
+}
 
 
 def atomic_json(path, payload):
@@ -33,11 +39,21 @@ def fingerprint(signal):
     return hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
 
 
-def load_processed():
+def load_state():
     try:
-        return set(json.loads(STATE.read_text(encoding="utf-8")).get("processed", []))
+        payload = json.loads(STATE.read_text(encoding="utf-8"))
     except Exception:
-        return set()
+        payload = {}
+    processed = set(payload.get("processed", []))
+    stored_balances = payload.get("balances", {})
+    balances = {
+        key: float(stored_balances.get(key, amount))
+        for key, amount in INITIAL_BALANCES.items()
+    }
+    for key, amount in stored_balances.items():
+        if key not in balances:
+            balances[key] = float(amount)
+    return processed, balances
 
 
 def existing_rows():
@@ -52,10 +68,14 @@ def existing_rows():
     return rows
 
 
-def build_summary(rows):
+def build_summary(rows, balances):
     totals = defaultdict(float)
     for row in rows:
         totals[row["asset"]] += float(row["paper_profit_units"])
+    equity_by_asset = defaultdict(float)
+    for wallet, amount in balances.items():
+        asset = wallet.split(":", 1)[1] if ":" in wallet else wallet
+        equity_by_asset[asset] += float(amount)
     return {
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -63,6 +83,13 @@ def build_summary(rows):
         "real_trading": False,
         "paper_trades": len(rows),
         "profit_by_asset": dict(sorted(totals.items())),
+        "wallet": {
+            "enabled": True,
+            "validation_model": VALIDATION_MODEL,
+            "initial_balances": INITIAL_BALANCES,
+            "balances": dict(sorted(balances.items())),
+            "equity_by_asset": dict(sorted(equity_by_asset.items())),
+        },
         "minimum_profit_percent": MIN_PROFIT_PERCENT,
         "minimum_confirmations": MIN_CONFIRMATIONS,
     }
@@ -111,7 +138,7 @@ def validate_cycle(cycle):
 
 def process_once():
     JOURNAL.mkdir(parents=True, exist_ok=True)
-    processed = load_processed()
+    processed, balances = load_state()
     added = 0
     rejected = defaultdict(int)
     if SIGNALS.exists():
@@ -139,15 +166,26 @@ def process_once():
             elif not asset:
                 validation_reason = "asset"
                 valid_cycle = False
+            wallet = str(cycle.get("start") or (cycle.get("route") or [{}])[0].get("src") or "")
+            available = float(balances.get(wallet, 0.0))
+            if valid_cycle and available + 1e-12 < start_units:
+                validation_reason = "insufficient_virtual_balance"
+                valid_cycle = False
             if not valid_cycle:
                 rejected[validation_reason] += 1
                 processed.add(key)
                 continue
+            balance_before = available
+            balance_after = balance_before - start_units + end_units
+            balances[wallet] = balance_after
             record = {
                 "fingerprint": key,
                 "recorded_at": datetime.now().isoformat(timespec="seconds"),
                 "detected_at": signal.get("detected_at"),
                 "asset": asset,
+                "wallet": wallet,
+                "virtual_balance_before": balance_before,
+                "virtual_balance_after": balance_after,
                 "paper_start_units": start_units,
                 "paper_end_units": end_units,
                 "paper_profit_units": end_units - start_units,
@@ -161,13 +199,13 @@ def process_once():
                 handle.write(json.dumps(record, ensure_ascii=False) + "\n")
             processed.add(key)
             added += 1
-    atomic_json(STATE, {"processed": sorted(processed), "updated_at": datetime.now().isoformat(timespec="seconds")})
+    atomic_json(STATE, {"processed": sorted(processed), "balances": dict(sorted(balances.items())), "validation_model": VALIDATION_MODEL, "updated_at": datetime.now().isoformat(timespec="seconds")})
     rows = existing_rows()
-    summary = build_summary(rows)
+    summary = build_summary(rows, balances)
     summary["added_this_cycle"] = added
     summary["rejected_this_cycle"] = sum(rejected.values())
     summary["rejection_reasons"] = dict(sorted(rejected.items()))
-    summary["validation_model"] = "executable-paper-v05"
+    summary["validation_model"] = VALIDATION_MODEL
     atomic_json(SUMMARY, summary)
     return summary
 
