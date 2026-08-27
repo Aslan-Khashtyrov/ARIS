@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-paper-risk-v07-20260827-1422",
+  "id": "test-paper-risk-v07-20260827-1423",
   "action": "EXEC",
-  "time": "2026-08-27T14:18:13",
+  "time": "2026-08-27T14:18:41",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_paper_risk_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating fdf7c06..32123b9\nFast-forward\n aris_config_v01.json       |  9 ++++++--\n aris_paper_ledger_v01.py   | 53 ++++++++++++++++++++++++++++++++++++++++++++--\n remote/termux_command.json |  9 +++++---\n test_paper_risk_v01.py     | 40 ++++++++++++++++++++++++++++++++++\n 4 files changed, 104 insertions(+), 7 deletions(-)\n create mode 100644 test_paper_risk_v01.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n"
   }
 }
