@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-paper-balance-test-20260827-1403",
+  "id": "test-paper-balance-20260827-1404",
   "action": "EXEC",
-  "time": "2026-08-27T13:36:10",
+  "time": "2026-08-27T13:36:38",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_paper_balance_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 19a8ed9..f4175fb\nFast-forward\n remote/termux_command.json                            | 9 ++++++---\n test_paper_wallet_v01.py => test_paper_balance_v01.py | 2 +-\n 2 files changed, 7 insertions(+), 4 deletions(-)\n rename test_paper_wallet_v01.py => test_paper_balance_v01.py (96%)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
   }
 }
