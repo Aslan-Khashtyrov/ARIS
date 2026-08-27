@@ -1,13 +1,11 @@
 {
-  "id": "deploy-okx-id-fix-20260827-1116",
+  "id": "restart-worker-okx-id-fix-20260827-1117",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
