@@ -1,13 +1,11 @@
 {
-  "id": "deploy-bybit-orderbook-20260827-1343",
+  "id": "restart-worker-bybit-orderbook-20260827-1344",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
