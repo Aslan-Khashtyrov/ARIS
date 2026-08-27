@@ -1,10 +1,12 @@
 {
-  "id": "verify-exchange-healthcheck-20260827-0406",
+  "id": "deploy-liquidity-buffer-v03-20260827-0501",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "merge",
+    "--ff-only",
+    "origin/main"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 60
 }
