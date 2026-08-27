@@ -131,6 +131,22 @@ except Exception as exc:
     add("paper_ledger_live", False, f"{type(exc).__name__}: {exc}")
 
 try:
+    metrics_path = JOURNAL / "cycle_metrics_summary_v03.json"
+    metrics_age = age(metrics_path)
+    cycle_metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+    metrics_ok = (
+        metrics_age is not None
+        and metrics_age <= 90
+        and cycle_metrics.get("ok") is True
+        and cycle_metrics.get("real_trading") is False
+        and cycle_metrics.get("model_version") == "multileg-executable-v02"
+    )
+    add("cycle_metrics_live", metrics_ok, f"age_seconds={metrics_age};model={cycle_metrics.get('model_version')};samples={cycle_metrics.get('samples')}")
+except Exception as exc:
+    cycle_metrics = None
+    add("cycle_metrics_live", False, f"{type(exc).__name__}: {exc}")
+
+try:
     proc = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, text=True, capture_output=True, timeout=10)
     add("git_clean", proc.returncode == 0 and not proc.stdout.strip(), proc.stdout.strip() or "clean")
 except Exception as exc:
@@ -192,6 +208,7 @@ report = {
     "cycle_live": cycle_live,
     "exchange_health": exchange_health,
     "paper_ledger": paper_ledger,
+    "cycle_metrics": cycle_metrics,
     "p2p": p2p_status,
     "unified": unified,
 }
