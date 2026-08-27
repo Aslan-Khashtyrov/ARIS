@@ -1,10 +1,1 @@
-{
-  "id": "healthcheck-cross-metrics-green-20260827-1918",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
-  ],
-  "cwd": "~/Arbitrage",
-  "timeout": 120
-}
+{"id":"deploy-fee-break-even-v01-20260827-2004","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
