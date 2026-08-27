@@ -1,12 +1,9 @@
 {
-  "id": "deploy-virtual-wallet-20260827-1400",
+  "id": "test-virtual-wallet-20260827-1401",
   "action": "EXEC",
   "argv": [
-    "git",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "python",
+    "~/Arbitrage/test_paper_wallet_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
