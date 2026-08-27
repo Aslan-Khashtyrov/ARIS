@@ -1,12 +1,13 @@
 {
-  "id": "inspect-worker-profit-audit-20260827-1028",
+  "id": "deploy-source-recovery-20260827-1032",
   "action": "EXEC",
   "argv": [
-    "tail",
-    "-n",
-    "80",
-    "~/Arbitrage/journal/aris_worker.log"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
