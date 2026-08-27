@@ -34,6 +34,7 @@ CB_WS = "wss://advanced-trade-ws.coinbase.com"
 KRAKEN_WS = "wss://ws.kraken.com/v2"
 UNIVERSE = {"USD", "USDT", "USDC", "EUR", "BTC", "ETH", "SOL", "XRP"}
 FEE_SCHEDULE = ROOT / "aris_fee_schedule_v01.json"
+CONFIG = ROOT / "aris_config_v01.json"
 FRESH_SECONDS = 15
 SAVE_SECONDS = 5
 SIGNAL_PROFIT_PERCENT = 0.30
@@ -66,6 +67,28 @@ def load_fee_schedule():
 
 
 FEE_INFO, FEES = load_fee_schedule()
+
+def load_funded_paper_wallets():
+    payload = json.loads(CONFIG.read_text(encoding="utf-8"))
+    wallet = payload.get("paper_wallet", {})
+    if wallet.get("enabled") is not True or wallet.get("real_money") is not False:
+        return set()
+    return {
+        str(name)
+        for name, amount in wallet.get("initial_balances", {}).items()
+        if float(amount or 0) > 0
+    }
+
+
+def cycle_wallet(cycle):
+    return str(cycle.get("start") or (cycle.get("route") or [{}])[0].get("src") or "")
+
+
+def is_paper_funded(cycle, funded_wallets):
+    return cycle_wallet(cycle) in funded_wallets
+
+
+FUNDED_PAPER_WALLETS = load_funded_paper_wallets()
 
 def request_json(url):
     req = urllib.request.Request(url, headers={"User-Agent": "ARIS-monitor/0.1"})
@@ -644,7 +667,9 @@ def snapshot_loop():
                 handle.write(json.dumps(audit_record, ensure_ascii=False) + "\n")
         positive_window_active = any_positive
         opportunities = cycle_report.get("opportunities", [])
-        actionable = [item for item in opportunities if item.get("profit_percent", -999) >= SIGNAL_PROFIT_PERCENT]
+        threshold_candidates = [item for item in opportunities if item.get("profit_percent", -999) >= SIGNAL_PROFIT_PERCENT]
+        actionable = [item for item in threshold_candidates if is_paper_funded(item, FUNDED_PAPER_WALLETS)]
+        unfunded_actionable = [item for item in threshold_candidates if not is_paper_funded(item, FUNDED_PAPER_WALLETS)]
         confirmed_signal_ready = False
         if actionable:
             best = actionable[0]
@@ -684,6 +709,8 @@ def snapshot_loop():
             "signal_threshold_cycles": positive_counts["signal_threshold"],
             "positive_window_active": positive_window_active,
             "actionable_candidates": len(actionable),
+            "unfunded_actionable_candidates": len(unfunded_actionable),
+            "funded_paper_wallets": sorted(FUNDED_PAPER_WALLETS),
             "candidate_streak": candidate_streak,
             "required_confirmations": SIGNAL_CONFIRMATIONS,
             "signal_profit_percent": SIGNAL_PROFIT_PERCENT,
