@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-cross-metrics-final-20260827-1909",
+  "id": "deploy-cross-newline-fix-20260827-1913",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
