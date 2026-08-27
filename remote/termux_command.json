@@ -1,10 +1,11 @@
 {
-  "id": "run-cycle-funding-test-20260827-1408",
+  "id": "restart-worker-funded-filter-20260827-1409",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_cycle_funding_v01.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
