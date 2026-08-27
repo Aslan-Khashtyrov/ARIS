@@ -1,12 +1,11 @@
 {
-  "id": "deploy-liquidity-buffer-v03-20260827-0501",
+  "id": "test-liquidity-buffer-v03-20260827-0503",
   "action": "EXEC",
   "argv": [
-    "git",
-    "merge",
-    "--ff-only",
-    "origin/main"
+    "python",
+    "~/Arbitrage/test_aris_paper_ledger_v01.py",
+    "-v"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 60
+  "timeout": 120
 }
