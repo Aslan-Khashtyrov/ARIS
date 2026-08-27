@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-binance-coverage-fix-20260827-1304",
+  "id": "test-binance-coverage-fix-20260827-1305",
   "action": "EXEC",
-  "time": "2026-08-27T13:02:17",
+  "time": "2026-08-27T13:02:42",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_collector_metadata_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 53a1324..7b74a9d\nFast-forward\n aris_cycle_collector_v01.py | 3 ++-\n remote/termux_command.json  | 9 ++++++---\n 2 files changed, 8 insertions(+), 4 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.004s\n\nOK\n"
   }
 }
