@@ -1,11 +1,10 @@
 {
-  "id": "restart-worker-cross-metrics-20260827-1906",
+  "id": "healthcheck-cross-metrics-final-20260827-1909",
   "action": "EXEC",
   "argv": [
-    "pkill",
-    "-f",
-    "aris_worker_v03.py"
+    "python",
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
