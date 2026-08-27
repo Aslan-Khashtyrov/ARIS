@@ -19,6 +19,7 @@ MAX_QUOTE_SKEW_SECONDS = 3.0
 MAX_BOOK_UTILIZATION_PERCENT = 80.0
 EXECUTION_BUFFER_PERCENT = 0.05
 PAPER_QUOTE_STAKE = 100.0
+ANALYSIS_INTERVAL_SECONDS = 3
 
 
 def floor_step(value, step):
@@ -229,7 +230,7 @@ def run_forever():
             process_once()
         except Exception as exc:
             REPORT.write_text(json.dumps({"ok": False, "error": f"{type(exc).__name__}: {exc}", "real_trading": False}) + "\n", encoding="utf-8")
-        time.sleep(15)
+        time.sleep(ANALYSIS_INTERVAL_SECONDS)
 
 
 if __name__ == "__main__":
