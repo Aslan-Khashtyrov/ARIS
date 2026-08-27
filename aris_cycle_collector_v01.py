@@ -93,11 +93,23 @@ def discover_kraken():
             result.append((f"{base}/{quote}", base, quote))
     return sorted(set(result))
 
-def update(exchange, symbol, base, quote, bid, ask, bid_size=0, ask_size=0):
+def product_details(mapping, symbol):
+    item = mapping[symbol]
+    if isinstance(item, dict):
+        return item["base"], item["quote"], item
+    base, quote = item
+    return base, quote, {}
+
+
+def update(exchange, symbol, base, quote, bid, ask, bid_size=0, ask_size=0, constraints=None):
+    constraints = constraints or {}
     try:
         bid, ask = float(bid), float(ask)
         bid_size = float(bid_size or 0)
         ask_size = float(ask_size or 0)
+        min_base = float(constraints.get("min_base", 0) or 0)
+        min_quote = float(constraints.get("min_quote", 0) or 0)
+        qty_step = float(constraints.get("qty_step", 0) or 0)
     except (TypeError, ValueError):
         return
     if bid <= 0 or ask <= 0 or bid > ask:
@@ -112,6 +124,10 @@ def update(exchange, symbol, base, quote, bid, ask, bid_size=0, ask_size=0):
             "ask": ask,
             "bid_size": max(0, bid_size),
             "ask_size": max(0, ask_size),
+            "min_base": max(0, min_base),
+            "min_quote": max(0, min_quote),
+            "qty_step": max(0, qty_step),
+            "order_filter_source": constraints.get("filter_source"),
             "taker_fee": FEES[exchange],
             "fee_status": FEE_INFO["exchanges"][exchange]["status"],
             "fee_verified_at": FEE_INFO["verified_at"],
@@ -239,8 +255,8 @@ def rest_market_loop(exchange, discover, fetch_tickers, poll_seconds=2):
                 symbol = item.get("symbol")
                 if symbol not in mapping:
                     continue
-                base, quote = mapping[symbol]
-                update(exchange, symbol, base, quote, item.get("bid"), item.get("ask"), item.get("bid_size"), item.get("ask_size"))
+                base, quote, constraints = product_details(mapping, symbol)
+                update(exchange, symbol, base, quote, item.get("bid"), item.get("ask"), item.get("bid_size"), item.get("ask_size"), constraints)
                 updates += 1
             if not updates:
                 raise RuntimeError(f"no usable {exchange} tickers")
@@ -259,7 +275,17 @@ def discover_binance():
     for item in payload.get("symbols", []):
         base, quote = norm_asset(item.get("baseAsset")), norm_asset(item.get("quoteAsset"))
         if base in UNIVERSE and quote in UNIVERSE and item.get("status") == "TRADING" and item.get("isSpotTradingAllowed", True):
-            result[item["symbol"]] = (base, quote)
+            filters = {entry.get("filterType"): entry for entry in item.get("filters", [])}
+            lot = filters.get("LOT_SIZE", {})
+            notional = filters.get("NOTIONAL") or filters.get("MIN_NOTIONAL") or {}
+            result[item["symbol"]] = {
+                "base": base,
+                "quote": quote,
+                "min_base": lot.get("minQty", 0),
+                "min_quote": notional.get("minNotional", 0),
+                "qty_step": lot.get("stepSize", 0),
+                "filter_source": "BINANCE_PUBLIC_EXCHANGE_INFO",
+            }
     return result
 
 
@@ -270,18 +296,15 @@ def fetch_binance_tickers(mapping):
 
 
 def binance_loop():
-    candidates = {
-        f"{base}{quote}": (base, quote)
-        for base in UNIVERSE
-        for quote in UNIVERSE
-        if base != quote
-    }
-    streams = "/".join(f"{symbol.lower()}@bookTicker" for symbol in sorted(candidates))
-    url = BINANCE_WS + streams
     while True:
         ws = None
         active = set()
         try:
+            candidates = discover_binance()
+            if not candidates:
+                raise RuntimeError("no supported Binance products")
+            streams = "/".join(f"{symbol.lower()}@bookTicker" for symbol in sorted(candidates))
+            url = BINANCE_WS + streams
             ws = websocket.create_connection(url, timeout=20)
             while True:
                 try:
@@ -294,10 +317,10 @@ def binance_loop():
                 symbol = str(item.get("s", "")).upper()
                 if symbol not in candidates:
                     continue
-                base, quote = candidates[symbol]
+                base, quote, constraints = product_details(candidates, symbol)
                 update(
                     "binance", symbol, base, quote,
-                    item.get("b"), item.get("a"), item.get("B"), item.get("A"),
+                    item.get("b"), item.get("a"), item.get("B"), item.get("A"), constraints,
                 )
                 active.add(symbol)
                 with lock:
@@ -321,14 +344,21 @@ def binance_loop():
                 except Exception:
                     pass
 
-
 def discover_bybit():
     payload = request_json(BYBIT_INFO_URL)
     result = {}
     for item in payload.get("result", {}).get("list", []):
         base, quote = norm_asset(item.get("baseCoin")), norm_asset(item.get("quoteCoin"))
         if base in UNIVERSE and quote in UNIVERSE and item.get("status") == "Trading":
-            result[item["symbol"]] = (base, quote)
+            lot = item.get("lotSizeFilter", {})
+            result[item["symbol"]] = {
+                "base": base,
+                "quote": quote,
+                "min_base": lot.get("minOrderQty", 0),
+                "min_quote": lot.get("minOrderAmt", 0),
+                "qty_step": lot.get("qtyStep", 0),
+                "filter_source": "BYBIT_PUBLIC_INSTRUMENTS_INFO",
+            }
     return result
 
 
@@ -343,7 +373,14 @@ def discover_okx():
     for item in payload.get("data", []):
         base, quote = norm_asset(item.get("baseCcy")), norm_asset(item.get("quoteCcy"))
         if base in UNIVERSE and quote in UNIVERSE and item.get("state") == "live":
-            result[item["instId"]] = (base, quote)
+            result[item["instId"]] = {
+                "base": base,
+                "quote": quote,
+                "min_base": item.get("minSz", 0),
+                "min_quote": 0,
+                "qty_step": item.get("lotSz", 0),
+                "filter_source": "OKX_PUBLIC_INSTRUMENTS",
+            }
     return result
 
 
