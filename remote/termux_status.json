@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-cross-metrics-v01-20260827-1904",
+  "id": "test-cross-metrics-v01-20260827-1905",
   "action": "EXEC",
-  "time": "2026-08-27T19:00:26",
+  "time": "2026-08-27T19:01:14",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/test_cross_exchange_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 4122dbe..673fb07\nFast-forward\n aris_cross_exchange_v01.py | 62 +++++++++++++++++++++++++++++++++++++++++++---\n aris_healthcheck.py        |  8 +++---\n remote/termux_command.json |  9 ++++---\n test_cross_exchange_v01.py | 21 +++++++++++++++-\n 4 files changed, 90 insertions(+), 10 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
   }
 }
