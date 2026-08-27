@@ -122,15 +122,22 @@ try:
     ledger_path = JOURNAL / "paper_ledger_summary_v01.json"
     ledger_age = age(ledger_path)
     paper_ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+    wallet = paper_ledger.get("wallet", {})
+    balances = wallet.get("balances", {})
+    required_virtual_accounts = {"binance:USDT", "bybit:USDT", "okx:USDT"}
+    wallet_funded = required_virtual_accounts.issubset(balances) and all(
+        float(balances.get(account, -1)) >= 0 for account in required_virtual_accounts
+    )
     ledger_ok = (
         ledger_age is not None
         and ledger_age <= 45
         and paper_ledger.get("ok") is True
         and paper_ledger.get("real_trading") is False
-        and paper_ledger.get("wallet", {}).get("enabled") is True
+        and wallet.get("enabled") is True
+        and wallet_funded
         and paper_ledger.get("validation_model") == "executable-paper-v06-wallet"
     )
-    add("paper_ledger_live", ledger_ok, f"age_seconds={ledger_age};model={paper_ledger.get('validation_model')};trades={paper_ledger.get('paper_trades')}")
+    add("paper_ledger_live", ledger_ok, f"age_seconds={ledger_age};model={paper_ledger.get('validation_model')};trades={paper_ledger.get('paper_trades')};virtual_accounts={len(balances)};equity_usdt={wallet.get('equity_by_asset', {}).get('USDT')}")
 except Exception as exc:
     add("paper_ledger_live", False, f"{type(exc).__name__}: {exc}")
 
