@@ -8,7 +8,7 @@ import sys
 import threading
 import time
 
-VERSION = "0.9"
+VERSION = "1.0"
 CHECK_EVERY = 3
 ROOT = Path.home() / "Arbitrage"
 BASE = ROOT / "aris_queue"
@@ -103,6 +103,16 @@ def execute(task_file):
     shutil.move(str(task_file), str(DONE / task_file.name))
     log(f"DONE | {task_id} | {action}")
 
+def cross_exchange_supervisor():
+    while True:
+        try:
+            from aris_cross_exchange_v01 import run_forever
+            run_forever()
+        except Exception as exc:
+            log(f"CROSS EXCHANGE ERROR | {type(exc).__name__}: {exc}")
+            time.sleep(10)
+
+
 def cycle_metrics_supervisor():
     while True:
         try:
@@ -148,6 +158,7 @@ threading.Thread(target=cycle_collector_supervisor, daemon=True, name="cycle-col
 threading.Thread(target=paper_ledger_supervisor, daemon=True, name="paper-ledger-supervisor").start()
 threading.Thread(target=operational_report_supervisor, daemon=True, name="operational-report-supervisor").start()
 threading.Thread(target=cycle_metrics_supervisor, daemon=True, name="cycle-metrics-supervisor").start()
+threading.Thread(target=cross_exchange_supervisor, daemon=True, name="cross-exchange-supervisor").start()
 try:
     while True:
         for task_file in sorted(PENDING.glob("*.json")):
