@@ -1,17 +1,18 @@
 {
   "ok": true,
-  "id": "restart-worker-cross-metrics-v03-20260828-0106",
+  "id": "verify-clean-cross-metrics-v03-20260828-0108",
   "action": "EXEC",
-  "time": "2026-08-28T01:01:50",
+  "time": "2026-08-28T01:03:21",
   "result": {
     "argv": [
-      "pkill",
-      "-f",
-      "aris_worker_v03.py"
+      "tail",
+      "-n",
+      "40",
+      "journal/cross_exchange_metrics_v01.json"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "",
+    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-28T01:03:21\",\n  \"mode\": \"CROSS_EXCHANGE_PAPER_ONLY\",\n  \"model_version\": \"cross-executable-v03-confirmed\",\n  \"minimum_confirmations\": 3,\n  \"real_trading\": false,\n  \"samples\": 78,\n  \"first_sample_at\": \"2026-08-28T01:01:55\",\n  \"last_sample_at\": \"2026-08-28T01:03:21\",\n  \"best_raw_spread_percent\": 0.04400117336462728,\n  \"best_net_profit_percent\": -0.20598678498092154,\n  \"snapshots_with_positive_raw\": 74,\n  \"snapshots_with_positive_executable\": 0,\n  \"positive_raw_route_observations\": 3676,\n  \"positive_executable_route_observations\": 0\n}\n",
     "stderr": ""
   }
 }
