@@ -13,13 +13,15 @@ SNAPSHOT = JOURNAL / "cycle_quotes_v01.json"
 REPORT = JOURNAL / "cross_exchange_report_v01.json"
 HISTORY = JOURNAL / "cross_exchange_history_v01.jsonl"
 POSITIVE_AUDIT = JOURNAL / "cross_exchange_positive_v01.jsonl"
+CONFIRMATION_STATE = JOURNAL / "cross_exchange_confirmation_v01.json"
 SUMMARY = JOURNAL / "cross_exchange_metrics_v01.json"
-MAX_QUOTE_AGE_SECONDS = 2.0
+MAX_QUOTE_AGE_SECONDS = 5.0
 MAX_QUOTE_SKEW_SECONDS = 3.0
 MAX_BOOK_UTILIZATION_PERCENT = 80.0
 EXECUTION_BUFFER_PERCENT = 0.05
 PAPER_QUOTE_STAKE = 100.0
 ANALYSIS_INTERVAL_SECONDS = 1
+MINIMUM_CONFIRMATIONS = 3
 
 
 def floor_step(value, step):
@@ -128,7 +130,7 @@ def analyze(payload, evaluation_time=None):
         "ok": True,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "mode": "CROSS_EXCHANGE_PAPER_ONLY",
-        "model_version": "cross-executable-v02-fast",
+        "model_version": "cross-executable-v03-confirmed",
         "maximum_quote_age_seconds": MAX_QUOTE_AGE_SECONDS,
         "real_trading": False,
         "pairs_compared": len(groups),
@@ -144,6 +146,39 @@ def analyze(payload, evaluation_time=None):
         "opportunities": positive_net[:50],
         "assumption": "Simultaneous pre-funded inventory on both exchanges; transfers are excluded.",
     }
+
+
+
+def apply_confirmations(report):
+    try:
+        previous = json.loads(CONFIRMATION_STATE.read_text(encoding="utf-8"))
+    except Exception:
+        previous = {}
+    old_counts = previous.get("counts", {}) if isinstance(previous, dict) else {}
+    candidates = list(report.get("opportunities", []))
+    counts = {}
+    confirmed = []
+    for route in candidates:
+        key = "|".join((route["pair"], route["buy_exchange"], route["sell_exchange"]))
+        count = int(old_counts.get(key, 0) or 0) + 1
+        counts[key] = count
+        route["consecutive_confirmations"] = count
+        route["minimum_confirmations"] = MINIMUM_CONFIRMATIONS
+        route["confirmed"] = count >= MINIMUM_CONFIRMATIONS
+        if route["confirmed"]:
+            confirmed.append(route)
+    write_atomic(CONFIRMATION_STATE, {
+        "updated_at": report.get("generated_at"),
+        "minimum_confirmations": MINIMUM_CONFIRMATIONS,
+        "counts": counts,
+        "real_trading": False,
+    })
+    report["candidate_positive_routes"] = len(candidates)
+    report["confirmed_positive_routes"] = len(confirmed)
+    report["positive_executable_routes"] = len(confirmed)
+    report["opportunities"] = confirmed[:50]
+    report["minimum_confirmations"] = MINIMUM_CONFIRMATIONS
+    return report
 
 
 def build_metrics(previous, report):
@@ -190,7 +225,7 @@ def process_once():
     repair_legacy_newlines()
     if SNAPSHOT.exists():
         payload = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
-        report = analyze(payload)
+        report = apply_confirmations(analyze(payload))
     else:
         report = {"ok": True, "status": "WAITING_FOR_QUOTES", "real_trading": False}
     write_atomic(REPORT, report)
