@@ -445,7 +445,7 @@ def bybit_loop():
                 raise RuntimeError("no supported Bybit products")
             ws = websocket.create_connection(BYBIT_WS, timeout=25, enable_multithread=True)
             ws.settimeout(20)
-            topics = [f"tickers.{symbol}" for symbol in sorted(mapping)]
+            topics = [f"orderbook.1.{symbol}" for symbol in sorted(mapping)]
             for batch_index in range(0, len(topics), 10):
                 ws.send(json.dumps({
                     "req_id": f"arisbybit{batch_index // 10 + 1:02d}",
@@ -464,17 +464,20 @@ def bybit_loop():
                 if message.get("success") is False:
                     raise RuntimeError(message.get("ret_msg") or "Bybit subscription error")
                 topic = str(message.get("topic", ""))
-                if not topic.startswith("tickers."):
+                if not topic.startswith("orderbook.1."):
                     continue
-                symbol = topic.split(".", 1)[1]
+                symbol = topic.rsplit(".", 1)[1]
                 if symbol not in mapping:
                     continue
                 item = message.get("data") or {}
+                bids, asks = item.get("b") or [], item.get("a") or []
+                if not bids or not asks:
+                    continue
+                best_bid, best_ask = bids[0], asks[0]
                 base, quote, constraints = product_details(mapping, symbol)
                 update(
                     "bybit", symbol, base, quote,
-                    item.get("bid1Price"), item.get("ask1Price"),
-                    item.get("bid1Size"), item.get("ask1Size"), constraints,
+                    best_bid[0], best_ask[0], best_bid[1], best_ask[1], constraints,
                 )
         except Exception as exc:
             with lock:
