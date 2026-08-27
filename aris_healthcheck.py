@@ -65,6 +65,7 @@ required = (
     "aris_unified_report_v01.py",
     "aris_cycle_engine_v01.py",
     "aris_cycle_collector_v01.py",
+    "aris_cross_exchange_v01.py",
     "aris_config_v01.json",
     "aris_fee_schedule_v01.json",
     "aris_foreman_v01.py",
@@ -87,7 +88,7 @@ for name, script in processes.items():
     ok, detail = valid_process(name, script)
     add(f"process:{name}", ok, detail)
 
-for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.json", "cycle_collector_status_v01.json", "cycle_report_v01.json"):
+for name in ("session_stats.json", "multi_history_v03.csv", "cycle_quotes_v01.json", "cycle_collector_status_v01.json", "cycle_report_v01.json", "cross_exchange_report_v01.json"):
     path = JOURNAL / name
     file_age = age(path)
     fresh = path.exists() and file_age is not None and file_age <= 180
@@ -116,6 +117,16 @@ try:
         add(f"exchange:{exchange}", ok, detail)
 except Exception as exc:
     add("exchange:required_spot_sources", False, f"{type(exc).__name__}: {exc}")
+
+cross_exchange = None
+try:
+    cross_path = JOURNAL / "cross_exchange_report_v01.json"
+    cross_age = age(cross_path)
+    cross_exchange = json.loads(cross_path.read_text(encoding="utf-8"))
+    cross_ok = cross_age is not None and cross_age <= 45 and cross_exchange.get("ok") is True and cross_exchange.get("real_trading") is False
+    add("cross_exchange_live", cross_ok, f"age_seconds={cross_age};routes={cross_exchange.get('routes_compared')};executable={cross_exchange.get('executable_routes')};positive={cross_exchange.get('positive_executable_routes')}")
+except Exception as exc:
+    add("cross_exchange_live", False, f"{type(exc).__name__}: {exc}")
 
 paper_ledger = None
 try:
@@ -218,6 +229,7 @@ report = {
     "cycle_engine": cycle_test,
     "cycle_live": cycle_live,
     "exchange_health": exchange_health,
+    "cross_exchange": cross_exchange,
     "paper_ledger": paper_ledger,
     "cycle_metrics": cycle_metrics,
     "p2p": p2p_status,
