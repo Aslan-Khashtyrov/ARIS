@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-step-rounding-20260827-0912",
+  "id": "restart-worker-step-rounding-20260827-0914",
   "action": "EXEC",
-  "time": "2026-08-27T09:01:46",
+  "time": "2026-08-27T09:02:10",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_order_minimums_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nOK\n"
+    "stderr": ""
   }
 }
