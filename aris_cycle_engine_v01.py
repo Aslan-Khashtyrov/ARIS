@@ -19,6 +19,7 @@ MIN_EXECUTABLE = {"USD": 25.0, "USDT": 25.0, "USDC": 25.0, "EUR": 25.0, "RUB": 2
 EXECUTION_BUFFER_PERCENT = 0.05
 MAX_QUOTE_SKEW_SECONDS = 3.0
 MAX_QUOTE_AGE_SECONDS = 5.0
+MAX_BOOK_UTILIZATION_PERCENT = 80.0
 
 def trade_edges(quotes):
     edges = []
@@ -112,6 +113,7 @@ def find_cycles(edges, anchors=ANCHORS, max_legs=MAX_LEGS, min_legs=MIN_CYCLE_LE
                         "quote_synchronized": timestamps_complete and quote_skew <= MAX_QUOTE_SKEW_SECONDS,
                         "oldest_quote_age_seconds": oldest_quote_age,
                         "maximum_quote_age_seconds": MAX_QUOTE_AGE_SECONDS,
+        "maximum_book_utilization_percent": MAX_BOOK_UTILIZATION_PERCENT,
                         "quotes_fresh": timestamps_complete and oldest_quote_age <= MAX_QUOTE_AGE_SECONDS,
                         "route": next_path,
                     })
@@ -138,6 +140,7 @@ def simulate_route(start_units, route):
         tolerance = max(1e-12, abs(capacity) * 1e-12)
         within_capacity = capacity > 0 and amount <= capacity + tolerance
         utilization = (amount / capacity * 100) if capacity > 0 and math.isfinite(capacity) else None
+        within_capacity_buffer = within_capacity and utilization is not None and utilization <= MAX_BOOK_UTILIZATION_PERCENT
         amount_out = amount * float(edge["rate"])
         leg = {
             "leg": index,
@@ -151,10 +154,12 @@ def simulate_route(start_units, route):
             "capacity_src": capacity,
             "capacity_utilization_percent": utilization,
             "within_top_of_book_capacity": within_capacity,
+            "within_capacity_buffer": within_capacity_buffer,
+            "capacity_headroom_percent": (100.0 - utilization) if utilization is not None else None,
             "quote_updated_at": edge.get("quote_updated_at"),
         }
         legs.append(leg)
-        capacity_verified = capacity_verified and within_capacity
+        capacity_verified = capacity_verified and within_capacity_buffer
         if utilization is not None and utilization > highest_utilization:
             highest_utilization = utilization
             bottleneck = {
@@ -220,7 +225,7 @@ def analyze(payload):
         "minimum_executable": MIN_EXECUTABLE,
         "warnings": [
             "Trade cycles require at least three legs; same-pair round trips are excluded.",
-            "Top-of-book capacity must meet the configured minimum executable amount.",
+            "Each leg may use at most 80% of visible top-of-book capacity.",
             "A conservative execution buffer is deducted from raw profit.",
             "All trade-leg quotes must fit the configured timestamp-skew window.",
             "Every trade-leg quote must also be newer than the configured absolute-age limit.",
