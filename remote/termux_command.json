@@ -1,10 +1,11 @@
 {
-  "id": "test-bybit-websocket-20260827-1329",
+  "id": "restart-worker-bybit-websocket-20260827-1330",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/test_collector_metadata_v01.py"
+    "pkill",
+    "-f",
+    "aris_worker_v03.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 30
 }
