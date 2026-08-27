@@ -1,19 +1,7 @@
 {
-  "ok": true,
-  "id": "deploy-funded-paper-wallets-20260827-1402",
+  "ok": false,
+  "id": "test-funded-paper-wallets-20260827-1403",
   "action": "EXEC",
-  "time": "2026-08-27T13:59:42",
-  "result": {
-    "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "Updating f6eb3ce..b36d190\nFast-forward\n aris_cycle_collector_v01.py      | 29 ++++++++++++++++++++++++++++-\n remote/termux_command.json       |  9 ++++++---\n test_funded_paper_wallets_v01.py | 24 ++++++++++++++++++++++++\n 3 files changed, 58 insertions(+), 4 deletions(-)\n create mode 100644 test_funded_paper_wallets_v01.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
-  }
+  "time": "2026-08-27T14:00:33",
+  "error": "PermissionError: PROTECTED_SECRET_PATH_BLOCKED"
 }
