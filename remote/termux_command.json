@@ -1,9 +1,12 @@
 {
-  "id": "healthcheck-before-profit-audit-20260827-1000",
+  "id": "deploy-profit-audit-20260827-1012",
   "action": "EXEC",
   "argv": [
-    "python",
-    "~/Arbitrage/aris_healthcheck.py"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
