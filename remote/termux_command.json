@@ -1,11 +1,11 @@
 {
-  "id": "test-funded-wallet-filter-20260827-1404",
+  "id": "compile-cycle-collector-20260827-1405",
   "action": "EXEC",
   "argv": [
     "python",
     "-m",
-    "unittest",
-    "test_funded_paper_wallets_v01.py"
+    "py_compile",
+    "aris_cycle_collector_v01.py"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 120
