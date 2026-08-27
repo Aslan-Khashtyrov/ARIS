@@ -1,10 +1,10 @@
 {
-  "id": "compile-arbitrage-v018-20260827-1227",
+  "id": "healthcheck-after-v018-20260827-1228",
   "action": "EXEC",
   "argv": [
     "python",
-    "~/Arbitrage/arbitrage_v0_1_8.py"
+    "~/Arbitrage/aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 8
+  "timeout": 120
 }
