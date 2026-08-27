@@ -14,9 +14,31 @@ SIGNALS = JOURNAL / "cycle_opportunities_v01.jsonl"
 LEDGER = JOURNAL / "paper_ledger_v01.jsonl"
 STATE = JOURNAL / "paper_ledger_state_v01.json"
 SUMMARY = JOURNAL / "paper_ledger_summary_v01.json"
+CONFIG = ROOT / "aris_config_v01.json"
 MIN_PROFIT_PERCENT = 0.30
 MIN_CONFIRMATIONS = 3
-VALIDATION_MODEL = "executable-paper-v06-wallet"
+VALIDATION_MODEL = "executable-paper-v07-risk"
+
+def load_risk_controls():
+    defaults = {
+        "maximum_trade_allocation_percent": 25.0,
+        "maximum_trades_per_wallet_per_day": 20,
+        "maximum_daily_drawdown_percent": 2.0,
+    }
+    try:
+        payload = json.loads(CONFIG.read_text(encoding="utf-8"))
+        configured = payload.get("paper_wallet", {}).get("risk_controls", {})
+        defaults.update(configured)
+    except Exception:
+        pass
+    return {
+        "maximum_trade_allocation_percent": float(defaults["maximum_trade_allocation_percent"]),
+        "maximum_trades_per_wallet_per_day": int(defaults["maximum_trades_per_wallet_per_day"]),
+        "maximum_daily_drawdown_percent": float(defaults["maximum_daily_drawdown_percent"]),
+    }
+
+
+RISK_CONTROLS = load_risk_controls()
 INITIAL_BALANCES = {
     "binance:USDT": 1000.0,
     "bybit:USDT": 1000.0,
@@ -68,6 +90,26 @@ def existing_rows():
     return rows
 
 
+def daily_wallet_stats(rows, wallet, day=None):
+    day = day or datetime.now().date().isoformat()
+    selected = [row for row in rows if row.get("wallet") == wallet and str(row.get("recorded_at", "")).startswith(day)]
+    return len(selected), sum(float(row.get("paper_profit_units", 0) or 0) for row in selected)
+
+
+def risk_rejection(rows, wallet, available, start_units):
+    allocation_limit = available * RISK_CONTROLS["maximum_trade_allocation_percent"] / 100.0
+    if start_units > allocation_limit + 1e-12:
+        return "maximum_trade_allocation"
+    trades_today, profit_today = daily_wallet_stats(rows, wallet)
+    if trades_today >= RISK_CONTROLS["maximum_trades_per_wallet_per_day"]:
+        return "maximum_daily_trades"
+    initial = float(INITIAL_BALANCES.get(wallet, available) or available)
+    drawdown_limit = -initial * RISK_CONTROLS["maximum_daily_drawdown_percent"] / 100.0
+    if profit_today <= drawdown_limit:
+        return "maximum_daily_drawdown"
+    return None
+
+
 def build_summary(rows, balances):
     totals = defaultdict(float)
     for row in rows:
@@ -92,6 +134,7 @@ def build_summary(rows, balances):
         },
         "minimum_profit_percent": MIN_PROFIT_PERCENT,
         "minimum_confirmations": MIN_CONFIRMATIONS,
+        "risk_controls": RISK_CONTROLS,
     }
 
 
@@ -141,6 +184,7 @@ def process_once():
     processed, balances = load_state()
     added = 0
     rejected = defaultdict(int)
+    rows = existing_rows()
     if SIGNALS.exists():
         for line in SIGNALS.read_text(encoding="utf-8", errors="replace").splitlines():
             try:
@@ -171,6 +215,11 @@ def process_once():
             if valid_cycle and available + 1e-12 < start_units:
                 validation_reason = "insufficient_virtual_balance"
                 valid_cycle = False
+            if valid_cycle:
+                risk_reason = risk_rejection(rows, wallet, available, start_units)
+                if risk_reason:
+                    validation_reason = risk_reason
+                    valid_cycle = False
             if not valid_cycle:
                 rejected[validation_reason] += 1
                 processed.add(key)
@@ -198,9 +247,9 @@ def process_once():
             with LEDGER.open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(record, ensure_ascii=False) + "\n")
             processed.add(key)
+            rows.append(record)
             added += 1
     atomic_json(STATE, {"processed": sorted(processed), "balances": dict(sorted(balances.items())), "validation_model": VALIDATION_MODEL, "updated_at": datetime.now().isoformat(timespec="seconds")})
-    rows = existing_rows()
     summary = build_summary(rows, balances)
     summary["added_this_cycle"] = added
     summary["rejected_this_cycle"] = sum(rejected.values())
