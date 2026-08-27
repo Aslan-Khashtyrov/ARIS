@@ -16,6 +16,7 @@ STATUS = JOURNAL / "cycle_collector_status_v01.json"
 CYCLE_REPORT = JOURNAL / "cycle_report_v01.json"
 SIGNALS = JOURNAL / "cycle_opportunities_v01.jsonl"
 PROFIT_AUDIT = JOURNAL / "cycle_profit_audit_v01.jsonl"
+BINANCE_PRODUCTS_CACHE = JOURNAL / "binance_products_cache_v01.json"
 CB_PRODUCTS_URL = "https://api.exchange.coinbase.com/products"
 KRAKEN_PAIRS_URL = "https://api.kraken.com/0/public/AssetPairs"
 BINANCE_INFO_URL = "https://data-api.binance.vision/api/v3/exchangeInfo"
@@ -271,23 +272,55 @@ def rest_market_loop(exchange, discover, fetch_tickers, poll_seconds=2):
 
 
 def discover_binance():
-    payload = request_json(BINANCE_INFO_URL)
-    result = {}
-    for item in payload.get("symbols", []):
-        base, quote = norm_asset(item.get("baseAsset")), norm_asset(item.get("quoteAsset"))
-        if base in UNIVERSE and quote in UNIVERSE and item.get("status") == "TRADING" and item.get("isSpotTradingAllowed", True):
-            filters = {entry.get("filterType"): entry for entry in item.get("filters", [])}
-            lot = filters.get("LOT_SIZE", {})
-            notional = filters.get("NOTIONAL") or filters.get("MIN_NOTIONAL") or {}
-            result[item["symbol"]] = {
-                "base": base,
-                "quote": quote,
-                "min_base": lot.get("minQty", 0),
-                "min_quote": notional.get("minNotional", 0),
-                "qty_step": lot.get("stepSize", 0),
-                "filter_source": "BINANCE_PUBLIC_EXCHANGE_INFO",
+    try:
+        payload = request_json(BINANCE_INFO_URL)
+        result = {}
+        for item in payload.get("symbols", []):
+            base, quote = norm_asset(item.get("baseAsset")), norm_asset(item.get("quoteAsset"))
+            if base in UNIVERSE and quote in UNIVERSE and item.get("status") == "TRADING" and item.get("isSpotTradingAllowed", True):
+                filters = {entry.get("filterType"): entry for entry in item.get("filters", [])}
+                lot = filters.get("LOT_SIZE", {})
+                notional = filters.get("NOTIONAL") or filters.get("MIN_NOTIONAL") or {}
+                result[item["symbol"]] = {
+                    "base": base,
+                    "quote": quote,
+                    "min_base": lot.get("minQty", 0),
+                    "min_quote": notional.get("minNotional", 0),
+                    "qty_step": lot.get("stepSize", 0),
+                    "filter_source": "BINANCE_PUBLIC_EXCHANGE_INFO",
+                }
+        if result:
+            write_atomic(BINANCE_PRODUCTS_CACHE, result)
+            return result
+        raise RuntimeError("empty Binance exchange info")
+    except Exception:
+        try:
+            cached = json.loads(BINANCE_PRODUCTS_CACHE.read_text(encoding="utf-8"))
+            if cached:
+                return cached
+        except Exception:
+            pass
+        snapshot = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+        recovered = {}
+        for quote in snapshot.get("quotes", []):
+            if str(quote.get("exchange", "")).lower() != "binance":
+                continue
+            symbol = quote.get("symbol")
+            if not symbol:
+                continue
+            recovered[symbol] = {
+                "base": quote.get("base"),
+                "quote": quote.get("quote"),
+                "min_base": quote.get("min_base", 0),
+                "min_quote": quote.get("min_quote", 0),
+                "qty_step": quote.get("qty_step", 0),
+                "filter_source": "BINANCE_LAST_PUBLIC_SNAPSHOT",
             }
-    return result
+        if recovered:
+            write_atomic(BINANCE_PRODUCTS_CACHE, recovered)
+            return recovered
+        raise
+
 
 
 def fetch_binance_tickers(mapping):
@@ -357,7 +390,7 @@ def discover_bybit():
                 "quote": quote,
                 "min_base": lot.get("minOrderQty", 0),
                 "min_quote": lot.get("minOrderAmt", 0),
-                "qty_step": lot.get("qtyStep", 0),
+                "qty_step": lot.get("qtyStep") or lot.get("basePrecision", 0),
                 "filter_source": "BYBIT_PUBLIC_INSTRUMENTS_INFO",
             }
     return result
