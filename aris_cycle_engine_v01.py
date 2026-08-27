@@ -50,7 +50,7 @@ def trade_edges(quotes):
             "src": base_node, "dst": quote_node,
             "rate": bid * (1 - fee), "capacity_src": bid_size,
             "minimum_src": sell_minimum_src, "min_base": min_base,
-            "min_quote": min_quote, "qty_step": qty_step,
+            "min_quote": min_quote, "qty_step": qty_step, "order_price": bid,
             "side": "SELL", "fee": fee, "quote_updated_at": quote_updated_at,
         })
         edges.append({
@@ -58,7 +58,7 @@ def trade_edges(quotes):
             "src": quote_node, "dst": base_node,
             "rate": (1 / ask) * (1 - fee), "capacity_src": ask * ask_size,
             "minimum_src": buy_minimum_src, "min_base": min_base,
-            "min_quote": min_quote, "qty_step": qty_step,
+            "min_quote": min_quote, "qty_step": qty_step, "order_price": ask,
             "side": "BUY", "fee": fee, "quote_updated_at": quote_updated_at,
         })
     return edges
@@ -143,49 +143,104 @@ def simulate_route(start_units, route):
     legs = []
     capacity_verified = True
     minimum_order_verified = True
+    quantity_step_verified = True
     bottleneck = None
     highest_utilization = -1.0
+    required_filter_exchanges = {"binance", "bybit", "okx"}
     for index, edge in enumerate(route, start=1):
+        is_trade = edge.get("kind") == "TRADE"
+        side = edge.get("side")
+        exchange = str(edge.get("exchange", "")).lower()
+        price = float(edge.get("order_price", 0) or 0)
+        qty_step = float(edge.get("qty_step", 0) or 0)
+        min_base = float(edge.get("min_base", 0) or 0)
+        min_quote = float(edge.get("min_quote", 0) or 0)
+
+        if is_trade and side == "BUY" and price > 0:
+            available_base = amount / price
+        else:
+            available_base = amount
+        if is_trade and qty_step > 0:
+            step_count = math.floor((available_base + qty_step * 1e-12) / qty_step)
+            order_base = max(0.0, step_count * qty_step)
+        else:
+            order_base = max(0.0, available_base)
+
+        if is_trade and side == "BUY" and price > 0:
+            amount_submitted = order_base * price
+        elif is_trade:
+            amount_submitted = order_base
+        else:
+            amount_submitted = amount
+
         capacity = float(edge.get("capacity_src", 0) or 0)
         tolerance = max(1e-12, abs(capacity) * 1e-12)
-        within_capacity = capacity > 0 and amount <= capacity + tolerance
-        utilization = (amount / capacity * 100) if capacity > 0 and math.isfinite(capacity) else None
+        within_capacity = capacity > 0 and amount_submitted <= capacity + tolerance
+        utilization = (amount_submitted / capacity * 100) if capacity > 0 and math.isfinite(capacity) else None
         within_capacity_buffer = within_capacity and utilization is not None and utilization <= MAX_BOOK_UTILIZATION_PERCENT + 1e-9
-        minimum_src = float(edge.get("minimum_src", 0) or 0)
-        minimum_tolerance = max(1e-12, abs(minimum_src) * 1e-12)
-        minimum_order_met = amount + minimum_tolerance >= minimum_src
-        amount_out = amount * float(edge["rate"])
+
+        order_notional = order_base * price if is_trade and price > 0 else amount_submitted
+        base_tolerance = max(1e-12, abs(min_base) * 1e-12)
+        quote_tolerance = max(1e-12, abs(min_quote) * 1e-12)
+        minimum_order_met = (
+            not is_trade
+            or (
+                order_base > 0
+                and order_base + base_tolerance >= min_base
+                and order_notional + quote_tolerance >= min_quote
+            )
+        )
+        step_known_when_required = exchange not in required_filter_exchanges or qty_step > 0
+        step_aligned = (
+            not is_trade
+            or (
+                step_known_when_required
+                and order_base > 0
+                and (
+                    qty_step <= 0
+                    or abs(order_base / qty_step - round(order_base / qty_step)) <= 1e-8
+                )
+            )
+        )
+        amount_out = amount_submitted * float(edge["rate"])
         leg = {
             "leg": index,
             "exchange": edge.get("exchange"),
             "pair": edge.get("pair"),
-            "side": edge.get("side"),
+            "side": side,
             "src": edge["src"],
             "dst": edge["dst"],
             "amount_in": amount,
+            "amount_submitted": amount_submitted,
+            "unspent_source_units": max(0.0, amount - amount_submitted),
+            "order_base_units": order_base,
+            "order_notional": order_notional,
             "amount_out": amount_out,
             "capacity_src": capacity,
             "capacity_utilization_percent": utilization,
             "within_top_of_book_capacity": within_capacity,
             "within_capacity_buffer": within_capacity_buffer,
             "capacity_headroom_percent": (100.0 - utilization) if utilization is not None else None,
-            "minimum_src": minimum_src,
+            "minimum_src": edge.get("minimum_src"),
             "minimum_order_met": minimum_order_met,
-            "min_base": edge.get("min_base"),
-            "min_quote": edge.get("min_quote"),
-            "qty_step": edge.get("qty_step"),
+            "min_base": min_base,
+            "min_quote": min_quote,
+            "qty_step": qty_step,
+            "quantity_step_verified": step_aligned,
+            "order_price": price,
             "quote_updated_at": edge.get("quote_updated_at"),
         }
         legs.append(leg)
         capacity_verified = capacity_verified and within_capacity_buffer
         minimum_order_verified = minimum_order_verified and minimum_order_met
+        quantity_step_verified = quantity_step_verified and step_aligned
         if utilization is not None and utilization > highest_utilization:
             highest_utilization = utilization
             bottleneck = {
                 "leg": index,
                 "exchange": edge.get("exchange"),
                 "pair": edge.get("pair"),
-                "side": edge.get("side"),
+                "side": side,
                 "capacity_utilization_percent": utilization,
             }
         amount = amount_out
@@ -194,6 +249,7 @@ def simulate_route(start_units, route):
         "end_units_before_buffer": amount,
         "capacity_verified": capacity_verified,
         "minimum_order_verified": minimum_order_verified,
+        "quantity_step_verified": quantity_step_verified,
         "bottleneck": bottleneck,
     }
 
@@ -207,24 +263,33 @@ def analyze(payload):
         minimum = MIN_EXECUTABLE.get(start_asset, requested)
         buffered_capacity = cycle["capacity_start_units"] * (MAX_BOOK_UTILIZATION_PERCENT / 100.0)
         start_units = max(0.0, min(requested, buffered_capacity))
-        raw_profit = cycle["profit_percent"]
-        conservative_profit = raw_profit - EXECUTION_BUFFER_PERCENT
+        theoretical_raw_profit = cycle["profit_percent"]
         simulation = simulate_route(start_units, cycle["route"])
-        cycle["raw_profit_percent"] = raw_profit
+        simulated_raw_profit = (
+            (simulation["end_units_before_buffer"] / start_units - 1.0) * 100.0
+            if start_units > 0 else -100.0
+        )
+        conservative_profit = simulated_raw_profit - EXECUTION_BUFFER_PERCENT
+        cycle["theoretical_raw_profit_percent"] = theoretical_raw_profit
+        cycle["raw_profit_percent"] = simulated_raw_profit
         cycle["execution_buffer_percent"] = EXECUTION_BUFFER_PERCENT
         cycle["profit_percent"] = conservative_profit
         cycle["requested_paper_start_units"] = requested
         cycle["paper_start_units"] = start_units
         cycle["paper_end_before_buffer_units"] = simulation["end_units_before_buffer"]
-        cycle["paper_end_units"] = start_units * (1 + conservative_profit / 100)
+        cycle["paper_end_units"] = max(
+            0.0,
+            simulation["end_units_before_buffer"] - start_units * EXECUTION_BUFFER_PERCENT / 100.0,
+        )
         cycle["paper_profit_units"] = cycle["paper_end_units"] - start_units
         cycle["paper_asset"] = start_asset
         cycle["paper_legs"] = simulation["legs"]
         cycle["capacity_verified"] = simulation["capacity_verified"]
         cycle["minimum_order_verified"] = simulation["minimum_order_verified"]
+        cycle["quantity_step_verified"] = simulation["quantity_step_verified"]
         cycle["bottleneck_leg"] = simulation["bottleneck"]
         cycle["minimum_executable_units"] = minimum
-        cycle["executable"] = start_units >= minimum and simulation["capacity_verified"] and simulation["minimum_order_verified"] and cycle["quote_synchronized"] and cycle["quotes_fresh"]
+        cycle["executable"] = start_units >= minimum and simulation["capacity_verified"] and simulation["minimum_order_verified"] and simulation["quantity_step_verified"] and cycle["quote_synchronized"] and cycle["quotes_fresh"]
     cycles.sort(key=lambda item: item["profit_percent"], reverse=True)
     executable_cycles = [cycle for cycle in cycles if cycle["executable"]]
     opportunities = [cycle for cycle in executable_cycles if cycle["profit_percent"] >= MIN_PROFIT_PERCENT]
@@ -250,6 +315,7 @@ def analyze(payload):
             "Trade cycles require at least three legs; same-pair round trips are excluded.",
             "Each leg may use at most 80% of visible top-of-book capacity.",
             "Public exchange minQty/minNotional filters must pass on every trade leg.",
+            "Trade quantities are rounded down to each exchange quantity step before profit is calculated.",
             "A conservative execution buffer is deducted from raw profit.",
             "All trade-leg quotes must fit the configured timestamp-skew window.",
             "Every trade-leg quote must also be newer than the configured absolute-age limit.",
@@ -277,6 +343,7 @@ def self_test():
     assert result["best_cycle"]["paper_legs"]
     assert result["best_cycle"]["capacity_verified"] is True
     assert result["best_cycle"]["minimum_order_verified"] is True
+    assert result["best_cycle"]["quantity_step_verified"] is True
     assert result["best_cycle"]["bottleneck_leg"] is not None
     assert result["best_cycle"]["quote_synchronized"] is True
     assert result["best_cycle"]["quotes_fresh"] is True
