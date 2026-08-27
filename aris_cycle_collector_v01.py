@@ -32,7 +32,7 @@ OKX_TICKERS_URL = "https://www.okx.com/api/v5/market/tickers?instType=SPOT"
 OKX_WS = "wss://ws.okx.com:8443/ws/v5/public"
 CB_WS = "wss://advanced-trade-ws.coinbase.com"
 KRAKEN_WS = "wss://ws.kraken.com/v2"
-UNIVERSE = {"USD", "USDT", "USDC", "EUR", "BTC", "ETH", "SOL", "XRP"}
+UNIVERSE = {"USD", "USDT", "USDC", "EUR", "GBP", "DAI", "FDUSD", "BTC", "ETH", "SOL", "XRP", "DOGE", "ADA", "AVAX", "DOT", "LINK", "LTC", "BCH", "TRX"}
 FEE_SCHEDULE = ROOT / "aris_fee_schedule_v01.json"
 CONFIG = ROOT / "aris_config_v01.json"
 FRESH_SECONDS = 15
