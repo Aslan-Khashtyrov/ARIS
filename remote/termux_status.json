@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "test-source-recovery-20260827-1034",
+  "id": "restart-worker-source-recovery-20260827-1036",
   "action": "EXEC",
-  "time": "2026-08-27T10:11:08",
+  "time": "2026-08-27T10:11:37",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/test_collector_metadata_v01.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nOK\n"
+    "stderr": ""
   }
 }
