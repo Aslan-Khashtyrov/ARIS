@@ -1,1 +1,1 @@
-{"id":"deploy-cross-fast-v02-20260827-2305","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"restart-worker-cross-fast-v02-20260827-2307","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
