@@ -1,19 +1,7 @@
 {
-  "ok": true,
-  "id": "deploy-virtual-wallet-20260827-1400",
+  "ok": false,
+  "id": "test-virtual-wallet-20260827-1401",
   "action": "EXEC",
-  "time": "2026-08-27T13:34:47",
-  "result": {
-    "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "Updating 3848c5c..73bf497\nFast-forward\n aris_config_v01.json           | 13 +++++++++-\n aris_healthcheck.py            |  3 ++-\n aris_operational_report_v01.py |  1 +\n aris_paper_ledger_v01.py       | 54 +++++++++++++++++++++++++++++++++++-------\n remote/termux_command.json     |  9 ++++---\n test_paper_wallet_v01.py       | 40 +++++++++++++++++++++++++++++++\n 6 files changed, 107 insertions(+), 13 deletions(-)\n create mode 100644 test_paper_wallet_v01.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
-  }
+  "time": "2026-08-27T13:35:18",
+  "error": "PermissionError: PROTECTED_SECRET_PATH_BLOCKED"
 }
