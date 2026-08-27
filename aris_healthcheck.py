@@ -108,8 +108,9 @@ try:
         updates = int(state.get("updates", 0) or 0)
         live_quotes = live_counts.get(exchange, 0)
         ok = connected and pairs > 0 and updates > 0 and live_quotes > 0 and not state.get("error")
-        detail = f"connected={connected};pairs={pairs};updates={updates};live_quotes={live_quotes};error={state.get('error')}"
-        exchange_health[exchange] = {"ok": ok, "connected": connected, "pairs": pairs, "updates": updates, "live_quotes": live_quotes, "error": state.get("error")}
+        transport = state.get("transport")
+        detail = f"connected={connected};transport={transport};pairs={pairs};updates={updates};live_quotes={live_quotes};error={state.get('error')}"
+        exchange_health[exchange] = {"ok": ok, "connected": connected, "transport": transport, "pairs": pairs, "updates": updates, "live_quotes": live_quotes, "error": state.get("error")}
         add(f"exchange:{exchange}", ok, detail)
 except Exception as exc:
     add("exchange:required_spot_sources", False, f"{type(exc).__name__}: {exc}")
