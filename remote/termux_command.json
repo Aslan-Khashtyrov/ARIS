@@ -1,1 +1,1 @@
-{"id":"restart-worker-cross-shadow-v02-20260828-0322","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"inspect-cross-shadow-v02-hour-20260828-0404","action":"EXEC","argv":["tail","-n","60","journal/cross_paper_ledger_summary_v02.json"],"cwd":"~/Arbitrage","timeout":30}
