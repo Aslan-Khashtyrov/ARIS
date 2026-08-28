@@ -1,1 +1,1 @@
-{"id":"deploy-inventory-paper-v01-20260828-0502","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"test-inventory-paper-v01-20260828-0525","action":"EXEC","argv":["python","aris_cross_inventory_ledger_v01.py"],"cwd":"~/Arbitrage","timeout":120}
