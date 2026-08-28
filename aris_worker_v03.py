@@ -8,7 +8,7 @@ import sys
 import threading
 import time
 
-VERSION = "1.3"
+VERSION = "1.4"
 CHECK_EVERY = 3
 ROOT = Path.home() / "Arbitrage"
 BASE = ROOT / "aris_queue"
@@ -190,7 +190,7 @@ threading.Thread(target=operational_report_supervisor, daemon=True, name="operat
 threading.Thread(target=cycle_metrics_supervisor, daemon=True, name="cycle-metrics-supervisor").start()
 threading.Thread(target=cross_exchange_supervisor, daemon=True, name="cross-exchange-supervisor").start()
 threading.Thread(target=cross_paper_ledger_supervisor, daemon=True, name="cross-paper-ledger-supervisor").start()
-threading.Thread(target=cross_inventory_ledger_supervisor, daemon=True, name="cross-inventory-ledger-supervisor").start()
+log("STANDARD INVENTORY MODEL DISABLED | LOW RISK MODEL PRIMARY")
 threading.Thread(target=cross_inventory_low_risk_supervisor, daemon=True, name="cross-inventory-low-risk-supervisor").start()
 try:
     while True:
