@@ -1,1 +1,1 @@
-{"id":"inspect-cross-shadow-v02-hour-20260828-0404","action":"EXEC","argv":["tail","-n","60","journal/cross_paper_ledger_summary_v02.json"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"deploy-shadow-normalized-v02-20260828-0407","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
