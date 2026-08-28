@@ -1,1 +1,1 @@
-{"id":"inspect-worker-binance-start-20260828-2108","action":"EXEC","argv":["tail","-n","50","/data/data/com.termux/files/home/Arbitrage/journal/aris_worker.log"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"recheck-binance-fallback-20260828-2109","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
