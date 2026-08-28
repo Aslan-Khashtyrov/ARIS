@@ -1,18 +1,18 @@
 {
   "ok": true,
-  "id": "audit-low-risk-ledger-20260828-1806",
+  "id": "audit-low-risk-ledger-correct-path-20260828-1807",
   "action": "EXEC",
-  "time": "2026-08-28T18:05:49",
+  "time": "2026-08-28T18:06:58",
   "result": {
     "argv": [
       "tail",
       "-n",
       "8",
-      "/data/data/com.termux/files/home/Arbitrage/cross_inventory_low_risk_ledger_v01.jsonl"
+      "/data/data/com.termux/files/home/Arbitrage/journal/cross_inventory_low_risk_ledger_v01.jsonl"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 1,
-    "stdout": "",
-    "stderr": "tail: cannot open '/data/data/com.termux/files/home/Arbitrage/cross_inventory_low_risk_ledger_v01.jsonl' for reading: No such file or directory\n"
+    "returncode": 0,
+    "stdout": "{\"recorded_at\": \"2026-08-28T17:47:30\", \"detected_at\": \"2026-08-28T17:47:21\", \"model\": \"cross-inventory-low-risk-v01\", \"pair\": \"SOL/USDT\", \"buy_exchange\": \"binance\", \"sell_exchange\": \"bybit\", \"base_quantity\": 0.47029469918086814, \"buy_cost_usdt\": 50.0, \"sell_revenue_usdt\": 50.06918678561341, \"realized_profit_usdt\": 0.06918678561341096, \"net_profit_percent\": 0.13837357122682192, \"consecutive_confirmations\": 3, \"real_trading\": false}\n{\"recorded_at\": \"2026-08-28T17:48:20\", \"detected_at\": \"2026-08-28T17:48:14\", \"model\": \"cross-inventory-low-risk-v01\", \"pair\": \"SOL/USDT\", \"buy_exchange\": \"okx\", \"sell_exchange\": \"bybit\", \"base_quantity\": 0.4701618975903615, \"buy_cost_usdt\": 50.0, \"sell_revenue_usdt\": 50.04565443806476, \"realized_profit_usdt\": 0.04565443806475855, \"net_profit_percent\": 0.0913088761295171, \"consecutive_confirmations\": 3, \"real_trading\": false}\n{\"recorded_at\": \"2026-08-28T17:53:16\", \"detected_at\": \"2026-08-28T17:53:10\", \"model\": \"cross-inventory-low-risk-v01\", \"pair\": \"SOL/USDT\", \"buy_exchange\": \"okx\", \"sell_exchange\": \"binance\", \"base_quantity\": 0.277, \"buy_cost_usdt\": 29.274934934934937, \"sell_revenue_usdt\": 29.35200861, \"realized_profit_usdt\": 0.07707367506506202, \"net_profit_percent\": 0.263275307823441, \"consecutive_confirmations\": 3, \"real_trading\": false}\n{\"recorded_at\": \"2026-08-28T17:57:34\", \"detected_at\": \"2026-08-28T17:57:26\", \"model\": \"cross-inventory-low-risk-v01\", \"pair\": \"SOL/USDT\", \"buy_exchange\": \"bybit\", \"sell_exchange\": \"okx\", \"base_quantity\": 0.47149329809326035, \"buy_cost_usdt\": 50.0, \"sell_revenue_usdt\": 50.050776977534454, \"realized_profit_usdt\": 0.050776977534454204, \"net_profit_percent\": 0.10155395506890842, \"consecutive_confirmations\": 3, \"real_trading\": false}\n{\"recorded_at\": \"2026-08-28T17:58:26\", \"detected_at\": \"2026-08-28T17:58:20\", \"model\": \"cross-inventory-low-risk-v01\", \"pair\": \"SOL/USDT\", \"buy_exchange\": \"bybit\", \"sell_exchange\": \"binance\", \"base_quantity\": 0.47135981881664624, \"buy_cost_usdt\": 50.0, \"sell_revenue_usdt\": 50.08369649900916, \"realized_profit_usdt\": 0.08369649900915732, \"net_profit_percent\": 0.16739299801831464, \"consecutive_confirmations\": 3, \"real_trading\": false}\n{\"recorded_at\": \"2026-08-28T17:58:41\", \"detected_at\": \"2026-08-28T17:58:38\", \"model\": \"cross-inventory-low-risk-v01\", \"pair\": \"SOL/USDT\", \"buy_exchange\": \"bybit\", \"sell_exchange\": \"okx\", \"base_quantity\": 0.47118196396566364, \"buy_cost_usdt\": 50.0, \"sell_revenue_usdt\": 50.064798773700595, \"realized_profit_usdt\": 0.06479877370059484, \"net_profit_percent\": 0.12959754740118967, \"consecutive_confirmations\": 3, \"real_trading\": false}\n{\"recorded_at\": \"2026-08-28T18:03:50\", \"detected_at\": \"2026-08-28T18:03:41\", \"model\": \"cross-inventory-low-risk-v01\", \"pair\": \"SOL/USDT\", \"buy_exchange\": \"binance\", \"sell_exchange\": \"okx\", \"base_quantity\": 0.47149329809326035, \"buy_cost_usdt\": 50.0, \"sell_revenue_usdt\": 50.031936105342645, \"realized_profit_usdt\": 0.031936105342644794, \"net_profit_percent\": 0.06387221068528959, \"consecutive_confirmations\": 3, \"real_trading\": false}\n{\"recorded_at\": \"2026-08-28T18:06:41\", \"detected_at\": \"2026-08-28T18:06:38\", \"model\": \"cross-inventory-low-risk-v01\", \"pair\": \"SOL/USDT\", \"buy_exchange\": \"binance\", \"sell_exchange\": \"okx\", \"base_quantity\": 0.055, \"buy_cost_usdt\": 5.822622622622624, \"sell_revenue_usdt\": 5.8362579000000006, \"realized_profit_usdt\": 0.013635277377376909, \"net_profit_percent\": 0.23417759077155018, \"consecutive_confirmations\": 3, \"real_trading\": false}\n",
+    "stderr": ""
   }
 }
