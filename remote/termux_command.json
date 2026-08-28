@@ -1,1 +1,1 @@
-{"id":"recheck-binance-fallback-20260828-2109","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"verify-routes-after-warmup-20260828-2111","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
