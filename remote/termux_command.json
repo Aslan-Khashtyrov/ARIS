@@ -1,1 +1,1 @@
-{"id":"verify-low-risk-primary-v01-20260828-1716","action":"EXEC","argv":["python","-m","py_compile","/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py","/data/data/com.termux/files/home/Arbitrage/aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":60}
+{"id":"validate-low-risk-primary-v02-20260828-1720","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
