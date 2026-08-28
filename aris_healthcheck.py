@@ -66,6 +66,7 @@ required = (
     "aris_cycle_engine_v01.py",
     "aris_cycle_collector_v01.py",
     "aris_cross_exchange_v01.py",
+    "aris_cross_inventory_ledger_v01.py",
     "aris_config_v01.json",
     "aris_fee_schedule_v01.json",
     "aris_foreman_v01.py",
@@ -154,6 +155,34 @@ try:
 except Exception as exc:
     add("paper_ledger_live", False, f"{type(exc).__name__}: {exc}")
 
+inventory_ledger = None
+try:
+    inventory_path = JOURNAL / "cross_inventory_summary_v01.json"
+    inventory_age = age(inventory_path)
+    inventory_ledger = json.loads(inventory_path.read_text(encoding="utf-8"))
+    inventory_balances = inventory_ledger.get("balances", {})
+    required_inventory_accounts = {
+        f"{exchange}:{asset}"
+        for exchange in ("binance", "bybit", "okx")
+        for asset in ("USDT", "SOL")
+    }
+    inventory_funded = required_inventory_accounts.issubset(inventory_balances) and all(
+        float(inventory_balances.get(account, -1)) >= 0 for account in required_inventory_accounts
+    )
+    inventory_ok = (
+        inventory_age is not None
+        and inventory_age <= 45
+        and inventory_ledger.get("ok") is True
+        and inventory_ledger.get("real_trading") is False
+        and inventory_ledger.get("mode") == "INVENTORY_PAPER_ONLY"
+        and inventory_ledger.get("model") == "cross-inventory-paper-v01"
+        and inventory_funded
+        and abs(float(inventory_ledger.get("initial_equity_usdt", 0)) - 3000.0) < 0.01
+    )
+    add("cross_inventory_ledger_live", inventory_ok, f"age_seconds={inventory_age};model={inventory_ledger.get('model')};trades={inventory_ledger.get('paper_trades')};realized_profit_usdt={inventory_ledger.get('realized_arbitrage_profit_usdt')};accounts={len(inventory_balances)}")
+except Exception as exc:
+    add("cross_inventory_ledger_live", False, f"{type(exc).__name__}: {exc}")
+
 try:
     metrics_path = JOURNAL / "cycle_metrics_summary_v03.json"
     metrics_age = age(metrics_path)
@@ -233,6 +262,7 @@ report = {
     "exchange_health": exchange_health,
     "cross_exchange": cross_exchange,
     "paper_ledger": paper_ledger,
+    "cross_inventory_ledger": inventory_ledger,
     "cycle_metrics": cycle_metrics,
     "p2p": p2p_status,
     "unified": unified,
