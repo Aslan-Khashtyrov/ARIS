@@ -8,7 +8,7 @@ import sys
 import threading
 import time
 
-VERSION = "1.1"
+VERSION = "1.2"
 CHECK_EVERY = 3
 ROOT = Path.home() / "Arbitrage"
 BASE = ROOT / "aris_queue"
@@ -123,6 +123,16 @@ def cross_paper_ledger_supervisor():
             time.sleep(10)
 
 
+def cross_inventory_ledger_supervisor():
+    while True:
+        try:
+            from aris_cross_inventory_ledger_v01 import run_forever
+            run_forever()
+        except Exception as exc:
+            log(f"CROSS INVENTORY LEDGER ERROR | {type(exc).__name__}: {exc}")
+            time.sleep(10)
+
+
 def cycle_metrics_supervisor():
     while True:
         try:
@@ -170,6 +180,7 @@ threading.Thread(target=operational_report_supervisor, daemon=True, name="operat
 threading.Thread(target=cycle_metrics_supervisor, daemon=True, name="cycle-metrics-supervisor").start()
 threading.Thread(target=cross_exchange_supervisor, daemon=True, name="cross-exchange-supervisor").start()
 threading.Thread(target=cross_paper_ledger_supervisor, daemon=True, name="cross-paper-ledger-supervisor").start()
+threading.Thread(target=cross_inventory_ledger_supervisor, daemon=True, name="cross-inventory-ledger-supervisor").start()
 try:
     while True:
         for task_file in sorted(PENDING.glob("*.json")):
