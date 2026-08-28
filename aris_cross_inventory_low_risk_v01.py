@@ -227,21 +227,30 @@ def process_once():
             rows.append(record)
             added += 1
     market = quotes()
+    initial_prices = {k: float(v) for k, v in state.get("initial_prices", {}).items()}
+    last_prices = {k: float(v) for k, v in state.get("last_prices", {}).items()}
+    for ex, quote in market.items():
+        mid = float(quote.get("mid", 0.0) or 0.0)
+        if mid > 0:
+            last_prices[ex] = mid
+    valuation_market = {
+        ex: {"mid": float(last_prices.get(ex) or initial_prices.get(ex) or 0.0)}
+        for ex in EXCHANGES
+    }
     realized = sum(float(row.get("realized_profit_usdt", 0) or 0) for row in rows)
     gross_turnover = sum(float(row.get("buy_cost_usdt", 0) or 0) for row in rows)
     profitable_trades = sum(1 for row in rows if float(row.get("realized_profit_usdt", 0) or 0) > 0)
     average_trade_profit = realized / len(rows) if rows else 0.0
     realized_return_percent = realized / gross_turnover * 100.0 if gross_turnover > 0 else 0.0
-    current_equity = equity(balances, market)
+    current_equity = equity(balances, valuation_market)
     total_mark_to_market_pnl = current_equity - float(state.get("initial_equity_usdt", 3000.0))
     inventory_market_pnl = total_mark_to_market_pnl - realized
     inventory_by_exchange = {}
     rebalance_required = []
-    initial_prices = state.get("initial_prices", {})
     for ex in EXCHANGES:
         quote_balance = float(balances.get(f"{ex}:{QUOTE_ASSET}", 0.0))
         base_balance = float(balances.get(f"{ex}:{BASE_ASSET}", 0.0))
-        mid = float(market.get(ex, {}).get("mid", 0.0))
+        mid = float(valuation_market.get(ex, {}).get("mid", 0.0))
         base_value = base_balance * mid
         exchange_equity = quote_balance + base_value
         base_share = base_value / exchange_equity * 100.0 if exchange_equity > 0 else 0.0
@@ -264,6 +273,7 @@ def process_once():
         "balances": balances,
         "processed": sorted(processed),
         "last_trade_by_route": last_trade,
+        "last_prices": last_prices,
         "updated_at": datetime.now().isoformat(timespec="seconds"),
     })
     atomic_json(STATE, state)
