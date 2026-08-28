@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-binance-rest-fallback-20260828-2103",
+  "id": "restart-worker-binance-fallback-20260828-2105",
   "action": "EXEC",
-  "time": "2026-08-28T21:00:10",
+  "time": "2026-08-28T21:01:42",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+      "pkill",
+      "-f",
+      "python.*aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-28 21:00:04\n========================================================\n[1] Checking GitHub...\nLOCAL : e6970cba3a\nREMOTE: efeaeadf90\n[2] Update available\n - aris_cycle_collector_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260828-210006\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : e6970cba3a\nNEW : efeaeadf90\nBACKUP TAG: aris-backup-20260828-210006\n========================================================\n",
+    "stdout": "",
     "stderr": ""
   }
 }
