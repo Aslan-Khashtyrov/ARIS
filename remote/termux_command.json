@@ -1,1 +1,1 @@
-{"id":"test-inventory-paper-v01b-20260828-0527","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_ledger_v01.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"restart-worker-inventory-v01-20260828-0528","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
