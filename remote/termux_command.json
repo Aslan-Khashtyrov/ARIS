@@ -1,1 +1,1 @@
-{"id":"healthcheck-model-drift-v01-20260828-1303","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"deploy-value-inventory-bands-v01-20260828-1310","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"],"cwd":"~/Arbitrage","timeout":120}
