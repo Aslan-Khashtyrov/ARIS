@@ -1,1 +1,1 @@
-{"id":"healthcheck-confirmed-cross-profit-20260828-0208","action":"EXEC","argv":["python","~/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"deploy-cross-shadow-ledger-v01-20260828-0310","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
