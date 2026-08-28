@@ -24,6 +24,7 @@ MIN_NET_PERCENT = 0.05
 MIN_CONFIRMATIONS = 3
 MAX_QUOTE_STAKE = 100.0
 ROUTE_COOLDOWN_SECONDS = 60
+MIN_INVENTORY_RESERVE_PERCENT = 20.0
 
 def atomic_json(path, payload):
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -174,6 +175,17 @@ def process_once():
                 reason = reason or "insufficient_quote_inventory"
             elif balances.get(sell_wallet, 0.0) + 1e-12 < quantity:
                 reason = reason or "insufficient_base_inventory"
+            initial_prices = state.get("initial_prices", {})
+            minimum_quote_reserve = INITIAL_QUOTE_PER_EXCHANGE * MIN_INVENTORY_RESERVE_PERCENT / 100.0
+            sell_initial_price = float(initial_prices.get(sell_ex, 0) or 0)
+            minimum_base_reserve = (
+                INITIAL_BASE_VALUE_PER_EXCHANGE / sell_initial_price * MIN_INVENTORY_RESERVE_PERCENT / 100.0
+                if sell_initial_price > 0 else 0.0
+            )
+            if reason is None and balances.get(buy_wallet, 0.0) - buy_cost < minimum_quote_reserve:
+                reason = "quote_inventory_reserve"
+            elif reason is None and balances.get(sell_wallet, 0.0) - quantity < minimum_base_reserve:
+                reason = "base_inventory_reserve"
             if reason:
                 rejected[reason] += 1
                 continue
@@ -204,6 +216,37 @@ def process_once():
     market = quotes()
     realized = sum(float(row.get("realized_profit_usdt", 0) or 0) for row in rows)
     current_equity = equity(balances, market)
+    inventory_by_exchange = {}
+    rebalance_required = []
+    initial_prices = state.get("initial_prices", {})
+    for ex in EXCHANGES:
+        quote_balance = float(balances.get(f"{ex}:{QUOTE_ASSET}", 0.0))
+        base_balance = float(balances.get(f"{ex}:{BASE_ASSET}", 0.0))
+        mid = float(market.get(ex, {}).get("mid", 0.0))
+        base_value = base_balance * mid
+        exchange_equity = quote_balance + base_value
+        base_share = base_value / exchange_equity * 100.0 if exchange_equity > 0 else 0.0
+        initial_price = float(initial_prices.get(ex, 0) or 0)
+        minimum_base = (
+            INITIAL_BASE_VALUE_PER_EXCHANGE / initial_price * MIN_INVENTORY_RESERVE_PERCENT / 100.0
+            if initial_price > 0 else 0.0
+        )
+        minimum_quote = INITIAL_QUOTE_PER_EXCHANGE * MIN_INVENTORY_RESERVE_PERCENT / 100.0
+        low_assets = []
+        if quote_balance < minimum_quote:
+            low_assets.append(QUOTE_ASSET)
+        if base_balance < minimum_base:
+            low_assets.append(BASE_ASSET)
+        if low_assets:
+            rebalance_required.append({"exchange": ex, "low_assets": low_assets})
+        inventory_by_exchange[ex] = {
+            "quote_balance_usdt": quote_balance,
+            "base_balance_sol": base_balance,
+            "base_value_usdt": base_value,
+            "mark_to_market_equity_usdt": exchange_equity,
+            "base_share_percent": base_share,
+            "low_assets": low_assets,
+        }
     state.update({
         "balances": balances,
         "processed": sorted(processed),
@@ -228,6 +271,9 @@ def process_once():
         "minimum_confirmations": MIN_CONFIRMATIONS,
         "maximum_quote_stake": MAX_QUOTE_STAKE,
         "route_cooldown_seconds": ROUTE_COOLDOWN_SECONDS,
+        "minimum_inventory_reserve_percent": MIN_INVENTORY_RESERVE_PERCENT,
+        "inventory_by_exchange": inventory_by_exchange,
+        "rebalance_required": rebalance_required,
         "added_this_cycle": added,
         "rejected_this_cycle": sum(rejected.values()),
         "rejection_reasons": dict(sorted(rejected.items())),
