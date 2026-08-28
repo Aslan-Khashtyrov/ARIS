@@ -1,1 +1,1 @@
-{"id":"final-low-risk-primary-v01-20260828-1735","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"healthcheck-compact-20260828-1802","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
