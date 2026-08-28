@@ -67,6 +67,7 @@ required = (
     "aris_cycle_collector_v01.py",
     "aris_cross_exchange_v01.py",
     "aris_cross_inventory_ledger_v01.py",
+    "aris_cross_inventory_low_risk_v01.py",
     "aris_config_v01.json",
     "aris_fee_schedule_v01.json",
     "aris_foreman_v01.py",
@@ -183,6 +184,30 @@ try:
 except Exception as exc:
     add("cross_inventory_ledger_live", False, f"{type(exc).__name__}: {exc}")
 
+low_risk_inventory = None
+try:
+    low_risk_path = JOURNAL / "cross_inventory_low_risk_summary_v01.json"
+    low_risk_age = age(low_risk_path)
+    low_risk_inventory = json.loads(low_risk_path.read_text(encoding="utf-8"))
+    low_risk_balances = low_risk_inventory.get("balances", {})
+    required_low_risk_accounts = {
+        f"{exchange}:{asset}"
+        for exchange in ("binance", "bybit", "okx")
+        for asset in ("USDT", "SOL")
+    }
+    low_risk_ok = (
+        low_risk_age is not None
+        and low_risk_age <= 45
+        and low_risk_inventory.get("ok") is True
+        and low_risk_inventory.get("real_trading") is False
+        and low_risk_inventory.get("model") == "cross-inventory-low-risk-v01"
+        and required_low_risk_accounts.issubset(low_risk_balances)
+        and abs(float(low_risk_inventory.get("initial_equity_usdt", 0)) - 3000.0) < 0.01
+    )
+    add("cross_inventory_low_risk_live", low_risk_ok, f"age_seconds={low_risk_age};trades={low_risk_inventory.get('paper_trades')};realized_profit_usdt={low_risk_inventory.get('realized_arbitrage_profit_usdt')};market_pnl_usdt={low_risk_inventory.get('inventory_market_pnl_usdt')}")
+except Exception as exc:
+    add("cross_inventory_low_risk_live", False, f"{type(exc).__name__}: {exc}")
+
 try:
     metrics_path = JOURNAL / "cycle_metrics_summary_v03.json"
     metrics_age = age(metrics_path)
@@ -263,6 +288,7 @@ report = {
     "cross_exchange": cross_exchange,
     "paper_ledger": paper_ledger,
     "cross_inventory_ledger": inventory_ledger,
+    "cross_inventory_low_risk": low_risk_inventory,
     "cycle_metrics": cycle_metrics,
     "p2p": p2p_status,
     "unified": unified,
