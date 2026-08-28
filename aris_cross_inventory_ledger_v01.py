@@ -175,16 +175,28 @@ def process_once():
                 reason = reason or "insufficient_quote_inventory"
             elif balances.get(sell_wallet, 0.0) + 1e-12 < quantity:
                 reason = reason or "insufficient_base_inventory"
-            initial_prices = state.get("initial_prices", {})
-            minimum_quote_reserve = INITIAL_QUOTE_PER_EXCHANGE * MIN_INVENTORY_RESERVE_PERCENT / 100.0
-            sell_initial_price = float(initial_prices.get(sell_ex, 0) or 0)
-            minimum_base_reserve = (
-                INITIAL_BASE_VALUE_PER_EXCHANGE / sell_initial_price * MIN_INVENTORY_RESERVE_PERCENT / 100.0
-                if sell_initial_price > 0 else 0.0
+            # Keep each exchange funded on both sides by value, not merely by
+            # a percentage of its initial token count. This prevents inventory
+            # drift from concentrating nearly all account equity in SOL or USDT.
+            minimum_share = MIN_INVENTORY_RESERVE_PERCENT
+            maximum_base_share = 100.0 - minimum_share
+            buy_quote_after = balances.get(buy_wallet, 0.0) - buy_cost
+            buy_base_after = balances.get(f"{buy_ex}:{BASE_ASSET}", 0.0) + quantity
+            buy_equity_after = buy_quote_after + buy_base_after * ask
+            buy_base_share_after = (
+                buy_base_after * ask / buy_equity_after * 100.0
+                if buy_equity_after > 0 else 100.0
             )
-            if reason is None and balances.get(buy_wallet, 0.0) - buy_cost < minimum_quote_reserve:
+            sell_base_after = balances.get(sell_wallet, 0.0) - quantity
+            sell_quote_after = balances.get(f"{sell_ex}:{QUOTE_ASSET}", 0.0) + sell_revenue
+            sell_equity_after = sell_quote_after + sell_base_after * bid
+            sell_base_share_after = (
+                sell_base_after * bid / sell_equity_after * 100.0
+                if sell_equity_after > 0 else 0.0
+            )
+            if reason is None and buy_base_share_after > maximum_base_share + 1e-9:
                 reason = "quote_inventory_reserve"
-            elif reason is None and balances.get(sell_wallet, 0.0) - quantity < minimum_base_reserve:
+            elif reason is None and sell_base_share_after < minimum_share - 1e-9:
                 reason = "base_inventory_reserve"
             if reason:
                 rejected[reason] += 1
@@ -232,16 +244,10 @@ def process_once():
         base_value = base_balance * mid
         exchange_equity = quote_balance + base_value
         base_share = base_value / exchange_equity * 100.0 if exchange_equity > 0 else 0.0
-        initial_price = float(initial_prices.get(ex, 0) or 0)
-        minimum_base = (
-            INITIAL_BASE_VALUE_PER_EXCHANGE / initial_price * MIN_INVENTORY_RESERVE_PERCENT / 100.0
-            if initial_price > 0 else 0.0
-        )
-        minimum_quote = INITIAL_QUOTE_PER_EXCHANGE * MIN_INVENTORY_RESERVE_PERCENT / 100.0
         low_assets = []
-        if quote_balance < minimum_quote:
+        if base_share > 100.0 - MIN_INVENTORY_RESERVE_PERCENT + 1e-9:
             low_assets.append(QUOTE_ASSET)
-        if base_balance < minimum_base:
+        if base_share < MIN_INVENTORY_RESERVE_PERCENT - 1e-9:
             low_assets.append(BASE_ASSET)
         if low_assets:
             rebalance_required.append({"exchange": ex, "low_assets": low_assets})
