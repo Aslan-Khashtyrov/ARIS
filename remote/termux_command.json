@@ -1,1 +1,1 @@
-{"id":"verify-value-inventory-bands-v01-20260828-1312","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"restart-worker-inventory-bands-v01-20260828-1315","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
