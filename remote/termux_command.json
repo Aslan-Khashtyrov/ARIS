@@ -1,1 +1,1 @@
-{"id":"audit-balancing-paper-trade-v01-20260828-1604","action":"EXEC","argv":["tail","-n","2","/data/data/com.termux/files/home/Arbitrage/journal/cross_inventory_ledger_v01.jsonl"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"healthcheck-post-balance-v01-20260828-1610","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
