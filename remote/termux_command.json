@@ -1,1 +1,1 @@
-{"id":"restart-worker-low-risk-v01-20260828-0910","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"healthcheck-low-risk-inventory-v01-20260828-0912","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
