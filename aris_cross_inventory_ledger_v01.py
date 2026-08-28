@@ -215,7 +215,13 @@ def process_once():
             added += 1
     market = quotes()
     realized = sum(float(row.get("realized_profit_usdt", 0) or 0) for row in rows)
+    gross_turnover = sum(float(row.get("buy_cost_usdt", 0) or 0) for row in rows)
+    profitable_trades = sum(1 for row in rows if float(row.get("realized_profit_usdt", 0) or 0) > 0)
+    average_trade_profit = realized / len(rows) if rows else 0.0
+    realized_return_percent = realized / gross_turnover * 100.0 if gross_turnover > 0 else 0.0
     current_equity = equity(balances, market)
+    total_mark_to_market_pnl = current_equity - float(state.get("initial_equity_usdt", 3000.0))
+    inventory_market_pnl = total_mark_to_market_pnl - realized
     inventory_by_exchange = {}
     rebalance_required = []
     initial_prices = state.get("initial_prices", {})
@@ -264,6 +270,14 @@ def process_once():
         "initial_equity_usdt": float(state.get("initial_equity_usdt", 3000.0)),
         "mark_to_market_equity_usdt": current_equity,
         "realized_arbitrage_profit_usdt": realized,
+        "gross_arbitrage_turnover_usdt": gross_turnover,
+        "average_trade_profit_usdt": average_trade_profit,
+        "realized_return_on_turnover_percent": realized_return_percent,
+        "profitable_trades": profitable_trades,
+        "trade_win_rate_percent": profitable_trades / len(rows) * 100.0 if rows else 0.0,
+        "total_mark_to_market_pnl_usdt": total_mark_to_market_pnl,
+        "inventory_market_pnl_usdt": inventory_market_pnl,
+        "pnl_explanation": "Total mark-to-market PnL = realized arbitrage PnL + inventory market/valuation PnL.",
         "paper_trades": len(rows),
         "balances": dict(sorted(balances.items())),
         "inventory_assets": [QUOTE_ASSET, BASE_ASSET],
