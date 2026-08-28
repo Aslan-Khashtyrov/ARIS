@@ -1,1 +1,1 @@
-{"id":"inspect-binance-collector-status-v01-20260828-1324","action":"READ_TEXT","path":"~/Arbitrage/journal/cycle_collector_status_v01.json"}
+{"id":"final-healthcheck-inventory-bands-v01-20260828-1326","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
