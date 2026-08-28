@@ -1,1 +1,1 @@
-{"id":"audit-natural-rebalance-trades-v01-20260828-1704","action":"EXEC","argv":["tail","-n","3","/data/data/com.termux/files/home/Arbitrage/journal/cross_inventory_ledger_v01.jsonl","/data/data/com.termux/files/home/Arbitrage/journal/cross_inventory_low_risk_ledger_v01.jsonl"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"verify-natural-rebalance-totals-v01-20260828-1706","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
