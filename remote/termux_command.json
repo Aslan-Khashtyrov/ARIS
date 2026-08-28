@@ -1,1 +1,1 @@
-{"id":"deploy-low-risk-inventory-v01-20260828-0908","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"restart-worker-low-risk-v01-20260828-0910","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
