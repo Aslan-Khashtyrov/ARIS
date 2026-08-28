@@ -1,1 +1,1 @@
-{"id":"compare-inventory-models-v01-20260828-1007","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"inspect-stale-scanner-v01-20260828-1000","action":"EXEC","argv":["tail","-n","80","/data/data/com.termux/files/home/Arbitrage/journal/scanner.out.log"],"cwd":"~/Arbitrage","timeout":30}
