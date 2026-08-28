@@ -1,1 +1,1 @@
-{"id":"restart-worker-shadow-normalized-v02-20260828-0411","action":"EXEC","argv":["pkill","-f","aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"deploy-inventory-paper-v01-20260828-0502","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
