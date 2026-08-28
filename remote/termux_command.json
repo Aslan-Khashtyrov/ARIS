@@ -1,1 +1,1 @@
-{"id":"healthcheck-inventory-band-flow-v02-20260828-1601","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"audit-balancing-paper-trade-v01-20260828-1604","action":"EXEC","argv":["tail","-n","2","/data/data/com.termux/files/home/Arbitrage/journal/cross_inventory_ledger_v01.jsonl"],"cwd":"~/Arbitrage","timeout":30}
