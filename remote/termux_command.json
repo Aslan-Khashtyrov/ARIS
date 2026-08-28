@@ -1,1 +1,1 @@
-{"id":"deploy-healthcheck-optional-sources-v01-20260828-1110","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"verify-healthcheck-source-tiers-v01-20260828-1112","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
