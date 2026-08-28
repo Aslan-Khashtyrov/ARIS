@@ -1,19 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-low-risk-inventory-v01-20260828-0908",
+  "id": "restart-worker-low-risk-v01-20260828-0910",
   "action": "EXEC",
-  "time": "2026-08-28T08:03:24",
+  "time": "2026-08-28T08:04:11",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating c86d07b..32fa533\nFast-forward\n aris_cross_inventory_low_risk_v01.py | 307 +++++++++++++++++++++++++++++++++++\n aris_healthcheck.py                  |  26 +++\n aris_worker_v03.py                   |  13 +-\n remote/termux_command.json           |   2 +-\n 4 files changed, 346 insertions(+), 2 deletions(-)\n create mode 100644 aris_cross_inventory_low_risk_v01.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": ""
   }
 }
