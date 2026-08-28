@@ -1,1 +1,1 @@
-{"id":"inspect-binance-worker-start-v01-20260828-1322","action":"EXEC","argv":["tail","-n","100","/data/data/com.termux/files/home/Arbitrage/journal/worker.out.log"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"inspect-binance-collector-status-v01-20260828-1324","action":"READ_TEXT","path":"~/Arbitrage/journal/cycle_collector_status_v01.json"}
