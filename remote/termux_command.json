@@ -1,1 +1,1 @@
-{"id":"healthcheck-compact-20260828-1802","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"restart-main-binance-broken-pipe-20260828-1804","action":"EXEC","argv":["pkill","-f","python.*main.py"],"cwd":"~/Arbitrage","timeout":30}
