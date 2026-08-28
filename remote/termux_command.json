@@ -1,1 +1,1 @@
-{"id":"verify-worker-warmup-v01-20260828-1320","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"inspect-binance-worker-start-v01-20260828-1322","action":"EXEC","argv":["tail","-n","100","/data/data/com.termux/files/home/Arbitrage/journal/worker.out.log"],"cwd":"~/Arbitrage","timeout":30}
