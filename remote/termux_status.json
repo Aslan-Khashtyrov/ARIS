@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-low-risk-primary-v01-20260828-1730",
+  "id": "restart-worker-low-risk-primary-v02-20260828-1732",
   "action": "EXEC",
-  "time": "2026-08-28T17:25:35",
+  "time": "2026-08-28T17:27:41",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-28 17:25:22\n========================================================\n[1] Checking GitHub...\nLOCAL : 032e82e237\nREMOTE: 0516bebb86\n[2] Update available\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260828-172533\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 032e82e237\nNEW : 0516bebb86\nBACKUP TAG: aris-backup-20260828-172533\n========================================================\n",
+    "stdout": "",
     "stderr": ""
   }
 }
