@@ -1,18 +1,11 @@
 {
   "ok": true,
-  "id": "inspect-binance-worker-start-v01-20260828-1322",
-  "action": "EXEC",
-  "time": "2026-08-28T13:10:36",
+  "id": "inspect-binance-collector-status-v01-20260828-1324",
+  "action": "READ_TEXT",
+  "time": "2026-08-28T13:11:32",
   "result": {
-    "argv": [
-      "tail",
-      "-n",
-      "100",
-      "/data/data/com.termux/files/home/Arbitrage/journal/worker.out.log"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cycle_collector_status_v01.json",
+    "size": 1581,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-28T13:11:28\",\n  \"live_quotes\": 312,\n  \"cycles_checked\": 8531,\n  \"raw_opportunities\": 0,\n  \"positive_theoretical_cycles\": 0,\n  \"positive_simulated_cycles\": 0,\n  \"positive_net_cycles\": 0,\n  \"positive_executable_cycles\": 0,\n  \"signal_threshold_cycles\": 0,\n  \"positive_window_active\": false,\n  \"actionable_candidates\": 0,\n  \"unfunded_actionable_candidates\": 0,\n  \"funded_paper_wallets\": [\n    \"binance:USDT\",\n    \"bybit:USDT\",\n    \"okx:USDT\"\n  ],\n  \"candidate_streak\": 0,\n  \"required_confirmations\": 3,\n  \"signal_profit_percent\": 0.3,\n  \"confirmed_signal_ready\": false,\n  \"signals\": 0,\n  \"best_profit_percent\": -0.338811000000011,\n  \"exchanges\": {\n    \"coinbase\": {\n      \"connected\": true,\n      \"pairs\": 58,\n      \"updates\": 30021,\n      \"error\": null,\n      \"transport\": \"websocket\"\n    },\n    \"kraken\": {\n      \"connected\": true,\n      \"pairs\": 89,\n      \"updates\": 68532,\n      \"error\": null,\n      \"transport\": \"websocket\"\n    },\n    \"binance\": {\n      \"connected\": true,\n      \"pairs\": 75,\n      \"updates\": 30707,\n      \"error\": null,\n      \"transport\": \"websocket\",\n      \"active_pairs\": 75\n    },\n    \"bybit\": {\n      \"connected\": true,\n      \"pairs\": 48,\n      \"updates\": 49215,\n      \"error\": null,\n      \"transport\": \"websocket\"\n    },\n    \"okx\": {\n      \"connected\": true,\n      \"pairs\": 54,\n      \"updates\": 62469,\n      \"error\": null,\n      \"transport\": \"websocket\"\n    }\n  },\n  \"fee_schedule_version\": \"0.1\",\n  \"fee_schedule_verified_at\": \"2026-08-26\",\n  \"fee_model\": \"CONSERVATIVE_TAKER_FEE_MODEL\",\n  \"real_trading\": false\n}\n"
   }
 }
