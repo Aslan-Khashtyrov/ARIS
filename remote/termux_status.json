@@ -1,19 +1,7 @@
 {
-  "ok": true,
-  "id": "deploy-inventory-paper-v01-20260828-0502",
+  "ok": false,
+  "id": "test-inventory-paper-v01-20260828-0525",
   "action": "EXEC",
-  "time": "2026-08-28T04:23:12",
-  "result": {
-    "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "Updating f5c2d07..01e9a38\nFast-forward\n aris_cross_inventory_ledger_v01.py | 247 +++++++++++++++++++++++++++++++++++++\n aris_worker_v03.py                 |  13 +-\n remote/termux_command.json         |   2 +-\n 3 files changed, 260 insertions(+), 2 deletions(-)\n create mode 100644 aris_cross_inventory_ledger_v01.py\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
-  }
+  "time": "2026-08-28T04:23:59",
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: '/data/data/com.termux/files/home/aris_cross_inventory_ledger_v01.py'"
 }
