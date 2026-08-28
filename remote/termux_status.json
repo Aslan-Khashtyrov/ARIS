@@ -1,19 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-cross-shadow-v02-20260828-0318",
+  "id": "test-cross-shadow-v02-20260828-0320",
   "action": "EXEC",
-  "time": "2026-08-28T03:07:02",
+  "time": "2026-08-28T03:08:10",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_cross_paper_ledger_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 5de5a86..de30c83\nFast-forward\n aris_cross_paper_ledger_v01.py | 25 +++++++++++++++++++++----\n remote/termux_command.json     |  2 +-\n 2 files changed, 22 insertions(+), 5 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-28T03:08:10\",\n  \"model\": \"cross-shadow-paper-v02-cooldown\",\n  \"mode\": \"SHADOW_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"wallet_mutated\": false,\n  \"funding_model\": \"PRE_FUNDED_PAIR_INVENTORY_REQUIRED\",\n  \"minimum_net_profit_percent\": 0.05,\n  \"minimum_confirmations\": 3,\n  \"maximum_quote_stake\": 100.0,\n  \"route_cooldown_seconds\": 60,\n  \"paper_trades\": 14,\n  \"paper_profit_by_quote_asset\": {\n    \"BTC\": 1.7088985508700237e-05,\n    \"EUR\": 0.39683668817998685,\n    \"USD\": 0.1347551836800051,\n    \"USDC\": 0.5069363125200009,\n    \"USDT\": 0.842217560729983\n  },\n  \"added_this_cycle\": 14,\n  \"rejected_this_cycle\": 76,\n  \"rejection_reasons\": {\n    \"confirmations\": 9,\n    \"profit_threshold\": 10,\n    \"route_cooldown\": 57\n  }\n}\n",
+    "stderr": ""
   }
 }
