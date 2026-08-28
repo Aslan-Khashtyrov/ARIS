@@ -179,7 +179,7 @@ try:
         and inventory_funded
         and abs(float(inventory_ledger.get("initial_equity_usdt", 0)) - 3000.0) < 0.01
     )
-    add("cross_inventory_ledger_live", inventory_ok, f"age_seconds={inventory_age};model={inventory_ledger.get('model')};trades={inventory_ledger.get('paper_trades')};realized_profit_usdt={inventory_ledger.get('realized_arbitrage_profit_usdt')};accounts={len(inventory_balances)}")
+    add("cross_inventory_ledger_live", inventory_ok, f"age_seconds={inventory_age};model={inventory_ledger.get('model')};trades={inventory_ledger.get('paper_trades')};realized_profit_usdt={inventory_ledger.get('realized_arbitrage_profit_usdt')};accounts={len(inventory_balances)};rebalance_required={len(inventory_ledger.get('rebalance_required', []))}")
 except Exception as exc:
     add("cross_inventory_ledger_live", False, f"{type(exc).__name__}: {exc}")
 
