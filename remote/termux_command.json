@@ -1,1 +1,1 @@
-{"id":"healthcheck-inventory-band-flow-v01-20260828-1505","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"healthcheck-inventory-band-flow-v02-20260828-1601","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
