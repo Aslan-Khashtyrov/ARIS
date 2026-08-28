@@ -1,1 +1,1 @@
-{"id":"deploy-binance-rest-fallback-20260828-2103","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"],"cwd":"~/Arbitrage","timeout":180}
+{"id":"restart-worker-binance-fallback-20260828-2105","action":"EXEC","argv":["pkill","-f","python.*aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
