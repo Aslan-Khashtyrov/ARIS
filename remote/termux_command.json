@@ -1,1 +1,1 @@
-{"id":"deploy-inventory-healthcheck-v01-20260828-0603","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"healthcheck-inventory-required-v01-20260828-0605","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"],"cwd":"~/Arbitrage","timeout":120}
