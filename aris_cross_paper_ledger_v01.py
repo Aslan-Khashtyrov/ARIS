@@ -10,13 +10,14 @@ from pathlib import Path
 ROOT = Path.home() / "Arbitrage"
 JOURNAL = ROOT / "journal"
 SOURCE = JOURNAL / "cross_exchange_positive_v01.jsonl"
-LEDGER = JOURNAL / "cross_paper_ledger_v01.jsonl"
-STATE = JOURNAL / "cross_paper_ledger_state_v01.json"
-SUMMARY = JOURNAL / "cross_paper_ledger_summary_v01.json"
-MODEL = "cross-shadow-paper-v01"
+LEDGER = JOURNAL / "cross_paper_ledger_v02.jsonl"
+STATE = JOURNAL / "cross_paper_ledger_state_v02.json"
+SUMMARY = JOURNAL / "cross_paper_ledger_summary_v02.json"
+MODEL = "cross-shadow-paper-v02-cooldown"
 MIN_NET_PERCENT = 0.05
 MIN_CONFIRMATIONS = 3
 MAX_QUOTE_STAKE = 100.0
+ROUTE_COOLDOWN_SECONDS = 60
 
 def atomic_json(path, payload):
     temp = path.with_suffix(path.suffix + ".tmp")
@@ -51,6 +52,13 @@ def process_once():
     rows = existing_rows()
     added = 0
     rejected = defaultdict(int)
+    last_trade_by_route = {}
+    for row in rows:
+        route_key = "|".join((str(row.get("pair")), str(row.get("buy_exchange")), str(row.get("sell_exchange"))))
+        try:
+            last_trade_by_route[route_key] = max(last_trade_by_route.get(route_key, 0.0), datetime.fromisoformat(str(row.get("detected_at"))).timestamp())
+        except Exception:
+            pass
     if SOURCE.exists():
         for line in SOURCE.read_text(encoding="utf-8", errors="replace").splitlines():
             try:
@@ -70,6 +78,13 @@ def process_once():
                 reason = "execution_quality"
             elif float(route.get("net_profit_percent", -999) or -999) < MIN_NET_PERCENT:
                 reason = "profit_threshold"
+            route_key = "|".join((str(route.get("pair")), str(route.get("buy_exchange")), str(route.get("sell_exchange"))))
+            try:
+                detected_ts = datetime.fromisoformat(str(signal.get("detected_at"))).timestamp()
+            except Exception:
+                detected_ts = 0.0
+            if detected_ts and detected_ts - last_trade_by_route.get(route_key, -1e18) < ROUTE_COOLDOWN_SECONDS:
+                reason = reason or "route_cooldown"
             stake = min(MAX_QUOTE_STAKE, float(route.get("paper_buy_cost", 0) or 0))
             if stake <= 0:
                 reason = reason or "stake"
@@ -99,6 +114,7 @@ def process_once():
             with LEDGER.open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(record, ensure_ascii=False) + "\n")
             rows.append(record)
+            last_trade_by_route[route_key] = detected_ts
             added += 1
     profits = defaultdict(float)
     for row in rows:
@@ -115,6 +131,7 @@ def process_once():
         "minimum_net_profit_percent": MIN_NET_PERCENT,
         "minimum_confirmations": MIN_CONFIRMATIONS,
         "maximum_quote_stake": MAX_QUOTE_STAKE,
+        "route_cooldown_seconds": ROUTE_COOLDOWN_SECONDS,
         "paper_trades": len(rows),
         "paper_profit_by_quote_asset": dict(sorted(profits.items())),
         "added_this_cycle": added,
