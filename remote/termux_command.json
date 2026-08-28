@@ -1,1 +1,1 @@
-{"id":"read-inventory-summary-v01-20260828-0532","action":"EXEC","argv":["cat","journal/cross_inventory_summary_v01.json"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"verify-inventory-state-v01-20260828-0534","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_ledger_v01.py"],"cwd":"~/Arbitrage","timeout":120}
