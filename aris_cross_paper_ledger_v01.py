@@ -117,8 +117,11 @@ def process_once():
             last_trade_by_route[route_key] = detected_ts
             added += 1
     profits = defaultdict(float)
+    net_percents = []
     for row in rows:
         profits[str(row.get("quote_asset", ""))] += float(row.get("paper_profit", 0) or 0)
+        net_percents.append(float(row.get("net_profit_percent", 0) or 0))
+    normalized_profit_usdt = sum(net_percents)
     atomic_json(STATE, {"processed": sorted(processed), "model": MODEL, "updated_at": datetime.now().isoformat(timespec="seconds")})
     summary = {
         "ok": True,
@@ -134,6 +137,10 @@ def process_once():
         "route_cooldown_seconds": ROUTE_COOLDOWN_SECONDS,
         "paper_trades": len(rows),
         "paper_profit_by_quote_asset": dict(sorted(profits.items())),
+        "normalized_stake_usdt_per_trade": 100.0,
+        "normalized_profit_usdt": normalized_profit_usdt,
+        "average_net_profit_percent": (sum(net_percents) / len(net_percents)) if net_percents else 0.0,
+        "best_net_profit_percent": max(net_percents) if net_percents else 0.0,
         "added_this_cycle": added,
         "rejected_this_cycle": sum(rejected.values()),
         "rejection_reasons": dict(sorted(rejected.items())),
