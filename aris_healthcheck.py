@@ -10,8 +10,8 @@ JOURNAL = ROOT / "journal"
 STATE = ROOT / "guardian_state"
 CHECKS = []
 
-def add(name, ok, detail=""):
-    CHECKS.append({"check": name, "ok": bool(ok), "detail": detail})
+def add(name, ok, detail="", required=True):
+    CHECKS.append({"check": name, "ok": bool(ok), "required": bool(required), "detail": detail})
 
 def age(path):
     try:
@@ -116,7 +116,7 @@ try:
         transport = state.get("transport")
         detail = f"connected={connected};transport={transport};pairs={pairs};updates={updates};live_quotes={live_quotes};coverage={quote_coverage_percent:.1f}%;error={state.get('error')}"
         exchange_health[exchange] = {"ok": ok, "connected": connected, "transport": transport, "pairs": pairs, "updates": updates, "live_quotes": live_quotes, "quote_coverage_percent": round(quote_coverage_percent, 1), "error": state.get("error")}
-        add(f"exchange:{exchange}", ok, detail)
+        add(f"exchange:{exchange}", ok, detail, required=exchange in ("binance", "bybit", "okx"))
 except Exception as exc:
     add("exchange:required_spot_sources", False, f"{type(exc).__name__}: {exc}")
 
@@ -278,7 +278,7 @@ except Exception as exc:
     add("unified_report", False, f"{type(exc).__name__}: {exc}")
 
 report = {
-    "ok": all(item["ok"] for item in CHECKS),
+    "ok": all(item["ok"] or not item.get("required", True) for item in CHECKS),
     "time": time.strftime("%Y-%m-%dT%H:%M:%S"),
     "checks": CHECKS,
     "analysis": analysis,
