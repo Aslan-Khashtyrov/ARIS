@@ -1,7 +1,16 @@
 {
-  "ok": false,
-  "id": "test-inventory-paper-v01-20260828-0525",
+  "ok": true,
+  "id": "test-inventory-paper-v01b-20260828-0527",
   "action": "EXEC",
-  "time": "2026-08-28T04:23:59",
-  "error": "FileNotFoundError: [Errno 2] No such file or directory: '/data/data/com.termux/files/home/aris_cross_inventory_ledger_v01.py'"
+  "time": "2026-08-28T04:24:45",
+  "result": {
+    "argv": [
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_ledger_v01.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-28T04:24:45\",\n  \"model\": \"cross-inventory-paper-v01\",\n  \"mode\": \"INVENTORY_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"started_at\": \"2026-08-28T04:24:45\",\n  \"initial_equity_usdt\": 3000.0,\n  \"mark_to_market_equity_usdt\": 2999.9314818186995,\n  \"realized_arbitrage_profit_usdt\": 0,\n  \"paper_trades\": 0,\n  \"balances\": {\n    \"binance:SOL\": 4.568713450292398,\n    \"binance:USDT\": 500.0,\n    \"bybit:SOL\": 4.567461404951128,\n    \"bybit:USDT\": 500.0,\n    \"okx:SOL\": 4.567461404951128,\n    \"okx:USDT\": 500.0\n  },\n  \"inventory_assets\": [\n    \"USDT\",\n    \"SOL\"\n  ],\n  \"minimum_net_profit_percent\": 0.05,\n  \"minimum_confirmations\": 3,\n  \"maximum_quote_stake\": 100.0,\n  \"route_cooldown_seconds\": 60,\n  \"added_this_cycle\": 0,\n  \"rejected_this_cycle\": 0,\n  \"rejection_reasons\": {}\n}\n",
+    "stderr": ""
+  }
 }
