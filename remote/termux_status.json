@@ -1,19 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-inventory-reserve-v01-20260828-0708",
+  "id": "restart-worker-inventory-reserve-v01-20260828-0710",
   "action": "EXEC",
-  "time": "2026-08-28T06:03:59",
+  "time": "2026-08-28T06:04:48",
   "result": {
     "argv": [
-      "git",
-      "pull",
-      "--ff-only",
-      "origin",
-      "main"
+      "pkill",
+      "-f",
+      "aris_worker_v03.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "Updating 3871e9d..963a904\nFast-forward\n aris_cross_inventory_ledger_v01.py | 46 ++++++++++++++++++++++++++++++++++++++\n aris_healthcheck.py                |  2 +-\n remote/termux_command.json         |  2 +-\n 3 files changed, 48 insertions(+), 2 deletions(-)\n",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stdout": "",
+    "stderr": ""
   }
 }
