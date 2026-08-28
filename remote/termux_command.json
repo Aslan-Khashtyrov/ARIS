@@ -1,1 +1,1 @@
-{"id":"restart-main-binance-broken-pipe-20260828-1804","action":"EXEC","argv":["pkill","-f","python.*main.py"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"verify-binance-reconnect-20260828-1805","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
