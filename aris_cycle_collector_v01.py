@@ -360,13 +360,14 @@ def binance_loop():
     while True:
         ws = None
         active = set()
+        candidates = {}
         try:
             candidates = discover_binance()
             if not candidates:
                 raise RuntimeError("no supported Binance products")
             streams = "/".join(f"{symbol.lower()}@bookTicker" for symbol in sorted(candidates))
             url = BINANCE_WS + streams
-            ws = websocket.create_connection(url, timeout=20)
+            ws = websocket.create_connection(url, timeout=20, enable_multithread=True)
             while True:
                 try:
                     raw = ws.recv()
@@ -390,15 +391,45 @@ def binance_loop():
                         "pairs": len(candidates),
                         "active_pairs": len(active),
                         "error": None,
+                        "transport": "websocket",
                     })
         except Exception as exc:
+            fallback_updates = 0
+            fallback_error = None
+            if candidates:
+                try:
+                    for item in fetch_binance_tickers(candidates):
+                        symbol = item.get("symbol")
+                        if symbol not in candidates:
+                            continue
+                        base, quote, constraints = product_details(candidates, symbol)
+                        update(
+                            "binance", symbol, base, quote,
+                            item.get("bid"), item.get("ask"),
+                            item.get("bid_size"), item.get("ask_size"), constraints,
+                        )
+                        fallback_updates += 1
+                except Exception as rest_exc:
+                    fallback_error = f"{type(rest_exc).__name__}: {rest_exc}"
             with lock:
-                health["binance"].update({
-                    "connected": False,
-                    "pairs": len(active),
-                    "error": f"{type(exc).__name__}: {exc}",
-                })
-            time.sleep(5)
+                if fallback_updates:
+                    health["binance"].update({
+                        "connected": True,
+                        "pairs": len(candidates),
+                        "active_pairs": fallback_updates,
+                        "error": f"websocket reconnecting after {type(exc).__name__}",
+                        "transport": "rest_fallback",
+                    })
+                else:
+                    detail = f"{type(exc).__name__}: {exc}"
+                    if fallback_error:
+                        detail += f"; REST fallback failed: {fallback_error}"
+                    health["binance"].update({
+                        "connected": False,
+                        "pairs": len(active),
+                        "error": detail,
+                    })
+            time.sleep(1 if fallback_updates else 5)
         finally:
             if ws:
                 try:
