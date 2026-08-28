@@ -24,7 +24,8 @@ MIN_NET_PERCENT = 0.05
 MIN_CONFIRMATIONS = 3
 MAX_QUOTE_STAKE = 50.0
 ROUTE_COOLDOWN_SECONDS = 60
-MIN_INVENTORY_RESERVE_PERCENT = 25.0
+MIN_BASE_SHARE_PERCENT = 10.0
+MAX_BASE_SHARE_PERCENT = 30.0
 
 def atomic_json(path, payload):
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -178,8 +179,8 @@ def process_once():
             # Keep each exchange funded on both sides by value, not merely by
             # a percentage of its initial token count. This prevents inventory
             # drift from concentrating nearly all account equity in SOL or USDT.
-            minimum_share = MIN_INVENTORY_RESERVE_PERCENT
-            maximum_base_share = 100.0 - minimum_share
+            minimum_share = MIN_BASE_SHARE_PERCENT
+            maximum_base_share = MAX_BASE_SHARE_PERCENT
             buy_quote_after = balances.get(buy_wallet, 0.0) - buy_cost
             buy_base_after = balances.get(f"{buy_ex}:{BASE_ASSET}", 0.0) + quantity
             buy_equity_after = buy_quote_after + buy_base_after * ask
@@ -245,9 +246,9 @@ def process_once():
         exchange_equity = quote_balance + base_value
         base_share = base_value / exchange_equity * 100.0 if exchange_equity > 0 else 0.0
         low_assets = []
-        if base_share > 100.0 - MIN_INVENTORY_RESERVE_PERCENT + 1e-9:
+        if base_share > MAX_BASE_SHARE_PERCENT + 1e-9:
             low_assets.append(QUOTE_ASSET)
-        if base_share < MIN_INVENTORY_RESERVE_PERCENT - 1e-9:
+        if base_share < MIN_BASE_SHARE_PERCENT - 1e-9:
             low_assets.append(BASE_ASSET)
         if low_assets:
             rebalance_required.append({"exchange": ex, "low_assets": low_assets})
@@ -291,7 +292,8 @@ def process_once():
         "minimum_confirmations": MIN_CONFIRMATIONS,
         "maximum_quote_stake": MAX_QUOTE_STAKE,
         "route_cooldown_seconds": ROUTE_COOLDOWN_SECONDS,
-        "minimum_inventory_reserve_percent": MIN_INVENTORY_RESERVE_PERCENT,
+        "minimum_base_share_percent": MIN_BASE_SHARE_PERCENT,
+        "maximum_base_share_percent": MAX_BASE_SHARE_PERCENT,
         "inventory_by_exchange": inventory_by_exchange,
         "rebalance_required": rebalance_required,
         "added_this_cycle": added,
