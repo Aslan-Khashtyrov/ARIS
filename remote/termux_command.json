@@ -1,1 +1,1 @@
-{"id":"deploy-cross-shadow-v02-20260828-0318","action":"EXEC","argv":["git","pull","--ff-only","origin","main"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"test-cross-shadow-v02-20260828-0320","action":"EXEC","argv":["python","~/Arbitrage/aris_cross_paper_ledger_v01.py"],"cwd":"~/Arbitrage","timeout":120}
