@@ -293,5 +293,30 @@ report = {
     "p2p": p2p_status,
     "unified": unified,
 }
+if "--summary" in sys.argv:
+    # Keep remote health responses below the managed Control output limit.
+    # Full local diagnostics still remain available without this flag.
+    compact_cross = None
+    if isinstance(cross_exchange, dict):
+        compact_cross = {
+            key: cross_exchange.get(key)
+            for key in (
+                "ok", "generated_at", "mode", "model_version", "real_trading",
+                "pairs_compared", "routes_compared", "executable_routes",
+                "positive_raw_routes", "positive_before_buffer_routes",
+                "positive_executable_routes", "candidate_positive_routes",
+                "confirmed_positive_routes", "minimum_confirmations",
+            )
+        }
+    report = {
+        "ok": report["ok"],
+        "time": report["time"],
+        "checks": report["checks"],
+        "exchange_health": exchange_health,
+        "cross_exchange": compact_cross,
+        "cross_inventory_ledger": inventory_ledger,
+        "cross_inventory_low_risk": low_risk_inventory,
+    }
+
 print(json.dumps(report, ensure_ascii=False, indent=2))
 sys.exit(0 if report["ok"] else 1)
