@@ -1,1 +1,1 @@
-{"id":"inspect-cross-report-20260829-1105","action":"EXEC","argv":["python","-c","import json; p='runtime/cross_exchange_report_v01.json'; d=json.load(open(p)); print(json.dumps(d,ensure_ascii=False,separators=(',',':')))"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"recheck-routes-20260829-1107","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
