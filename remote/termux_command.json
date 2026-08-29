@@ -1,1 +1,1 @@
-{"id":"deploy-binance-stale-watchdog-20260830-0005","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"restart-worker-binance-watchdog-20260830-0007","action":"EXEC","argv":["pkill","-f","python.*aris_worker_v03.py"],"cwd":"~/Arbitrage","timeout":30}
