@@ -1,1 +1,1 @@
-{"id":"locate-cross-report-20260829-1110","action":"EXEC","argv":["find",".","-name","cross_exchange_report_v01.json","-type","f"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"read-cross-report-20260829-1111","action":"EXEC","argv":["tail","-n","300","journal/cross_exchange_report_v01.json"],"cwd":"~/Arbitrage","timeout":120}
