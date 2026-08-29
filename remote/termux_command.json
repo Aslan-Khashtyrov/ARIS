@@ -1,1 +1,1 @@
-{"id":"healthcheck-binance-stale-recheck-20260829-2304","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"healthcheck-20260829-2358","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
