@@ -1,1 +1,1 @@
-{"id":"read-cross-report-20260829-1111","action":"EXEC","argv":["tail","-n","300","journal/cross_exchange_report_v01.json"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"healthcheck-compact-20260829-1112","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
