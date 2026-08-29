@@ -40,6 +40,7 @@ SAVE_SECONDS = 5
 SIGNAL_PROFIT_PERCENT = 0.30
 SIGNAL_CONFIRMATIONS = 3
 DISCOVERY_REFRESH_SECONDS = 6 * 60 * 60
+BINANCE_STALE_SECONDS = 30
 
 lock = threading.Lock()
 quotes = {}
@@ -368,10 +369,13 @@ def binance_loop():
             streams = "/".join(f"{symbol.lower()}@bookTicker" for symbol in sorted(candidates))
             url = BINANCE_WS + streams
             ws = websocket.create_connection(url, timeout=20, enable_multithread=True)
+            last_market_update = time.monotonic()
             while True:
                 try:
                     raw = ws.recv()
                 except websocket.WebSocketTimeoutException:
+                    if time.monotonic() - last_market_update >= BINANCE_STALE_SECONDS:
+                        raise RuntimeError("Binance market data stale")
                     ws.ping("keepalive")
                     continue
                 message = json.loads(raw)
@@ -384,6 +388,7 @@ def binance_loop():
                     "binance", symbol, base, quote,
                     item.get("b"), item.get("a"), item.get("B"), item.get("A"), constraints,
                 )
+                last_market_update = time.monotonic()
                 active.add(symbol)
                 with lock:
                     health["binance"].update({
