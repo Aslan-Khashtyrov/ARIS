@@ -1,20 +1,18 @@
 {
   "ok": true,
-  "id": "locate-cross-report-20260829-1110",
+  "id": "read-cross-report-20260829-1111",
   "action": "EXEC",
-  "time": "2026-08-29T11:09:07",
+  "time": "2026-08-29T11:10:15",
   "result": {
     "argv": [
-      "find",
-      ".",
-      "-name",
-      "cross_exchange_report_v01.json",
-      "-type",
-      "f"
+      "tail",
+      "-n",
+      "300",
+      "journal/cross_exchange_report_v01.json"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "./journal/cross_exchange_report_v01.json\n",
+    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-29T11:10:14\",\n  \"mode\": \"CROSS_EXCHANGE_PAPER_ONLY\",\n  \"model_version\": \"cross-executable-v03-confirmed\",\n  \"maximum_quote_age_seconds\": 5.0,\n  \"real_trading\": false,\n  \"pairs_compared\": 99,\n  \"routes_compared\": 678,\n  \"executable_routes\": 408,\n  \"positive_raw_routes\": 142,\n  \"positive_before_buffer_routes\": 0,\n  \"positive_executable_routes\": 0,\n  \"raw_positive_lost_to_fees\": 94,\n  \"net_positive_lost_to_buffer\": 0,\n  \"best_route\": {\n    \"pair\": \"LTC/USDT\",\n    \"base\": \"LTC\",\n    \"quote\": \"USDT\",\n    \"buy_exchange\": \"okx\",\n    \"sell_exchange\": \"bybit\",\n    \"buy_ask\": 49.17,\n    \"sell_bid\": 49.22,\n    \"raw_spread_percent\": 0.10168802115109177,\n    \"buy_taker_fee_percent\": 0.1,\n    \"sell_taker_fee_percent\": 0.1,\n    \"combined_taker_fee_percent\": 0.2,\n    \"break_even_spread_percent\": 0.20030040050060816,\n    \"net_before_buffer_percent\": -0.09841525320317679,\n    \"execution_buffer_percent\": 0.05,\n    \"net_profit_percent\": -0.14841525320317678,\n    \"paper_base_quantity\": 1.15137,\n    \"paper_buy_cost\": 56.6128629,\n    \"paper_sell_revenue_after_fee\": 56.6137609686,\n    \"quote_skew_seconds\": 1.5605781078338623,\n    \"oldest_quote_age_seconds\": 3.9146060943603516,\n    \"quotes_fresh\": true,\n    \"quote_synchronized\": true,\n    \"minimum_order_verified\": true,\n    \"executable\": true,\n    \"real_trading\": false\n  },\n  \"best_executable_route\": {\n    \"pair\": \"LTC/USDT\",\n    \"base\": \"LTC\",\n    \"quote\": \"USDT\",\n    \"buy_exchange\": \"okx\",\n    \"sell_exchange\": \"bybit\",\n    \"buy_ask\": 49.17,\n    \"sell_bid\": 49.22,\n    \"raw_spread_percent\": 0.10168802115109177,\n    \"buy_taker_fee_percent\": 0.1,\n    \"sell_taker_fee_percent\": 0.1,\n    \"combined_taker_fee_percent\": 0.2,\n    \"break_even_spread_percent\": 0.20030040050060816,\n    \"net_before_buffer_percent\": -0.09841525320317679,\n    \"execution_buffer_percent\": 0.05,\n    \"net_profit_percent\": -0.14841525320317678,\n    \"paper_base_quantity\": 1.15137,\n    \"paper_buy_cost\": 56.6128629,\n    \"paper_sell_revenue_after_fee\": 56.6137609686,\n    \"quote_skew_seconds\": 1.5605781078338623,\n    \"oldest_quote_age_seconds\": 3.9146060943603516,\n    \"quotes_fresh\": true,\n    \"quote_synchronized\": true,\n    \"minimum_order_verified\": true,\n    \"executable\": true,\n    \"real_trading\": false\n  },\n  \"opportunities\": [],\n  \"assumption\": \"Simultaneous pre-funded inventory on both exchanges; transfers are excluded.\",\n  \"candidate_positive_routes\": 0,\n  \"confirmed_positive_routes\": 0,\n  \"minimum_confirmations\": 3\n}\n",
     "stderr": ""
   }
 }
