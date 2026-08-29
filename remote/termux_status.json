@@ -1,18 +1,20 @@
 {
   "ok": true,
-  "id": "read-cross-report-20260829-1109",
+  "id": "locate-cross-report-20260829-1110",
   "action": "EXEC",
-  "time": "2026-08-29T11:07:39",
+  "time": "2026-08-29T11:09:07",
   "result": {
     "argv": [
-      "tail",
-      "-n",
-      "300",
-      "runtime/cross_exchange_report_v01.json"
+      "find",
+      ".",
+      "-name",
+      "cross_exchange_report_v01.json",
+      "-type",
+      "f"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 1,
-    "stdout": "",
-    "stderr": "tail: cannot open 'runtime/cross_exchange_report_v01.json' for reading: No such file or directory\n"
+    "returncode": 0,
+    "stdout": "./journal/cross_exchange_report_v01.json\n",
+    "stderr": ""
   }
 }
