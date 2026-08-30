@@ -1,10 +1,14 @@
 {
-  "id": "deploy-paper-v020-20260831-0122",
+  "id": "recover-channel-stash-20260831-0134",
   "action": "EXEC",
   "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+    "git",
+    "stash",
+    "push",
+    "--include-untracked",
+    "-m",
+    "aris-remote-recovery-20260831"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 180
+  "timeout": 120
 }
