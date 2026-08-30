@@ -58,7 +58,7 @@ def main() -> int:
     PIDFILE.write_text(str(proc.pid), encoding="utf-8")
     time.sleep(2)
     ok = valid_process(proc.pid)
-    print(json.dumps({"ok": ok, "old_pid": old_pid, "new_pid": proc.pid, "version": "0.3"}))
+    print(json.dumps({"ok": ok, "old_pid": old_pid, "new_pid": proc.pid, "version": "0.4", "real_trading": False}))
     return 0 if ok else 3
 
 
