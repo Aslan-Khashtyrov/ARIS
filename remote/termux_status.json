@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "channel-ping-20260831-0139",
-  "action": "PING",
-  "time": "2026-08-31T01:38:10",
+  "id": "verify-paper-main-20260831-0140",
+  "action": "EXEC",
+  "time": "2026-08-31T01:38:55",
   "result": {
-    "pong": true,
-    "version": "0.5",
-    "home": "/data/data/com.termux/files/home"
+    "argv": [
+      "grep",
+      "^VERSION",
+      "main.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "VERSION = \"0.2.0-paper\"\n",
+    "stderr": ""
   }
 }
