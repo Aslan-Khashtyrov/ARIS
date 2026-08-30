@@ -422,7 +422,7 @@ def binance_loop():
                         "connected": True,
                         "pairs": len(candidates),
                         "active_pairs": fallback_updates,
-                        "error": f"websocket reconnecting after {type(exc).__name__}",
+                        "error": f"websocket reconnecting after {type(exc).__name__}: {str(exc)[:160]}",
                         "transport": "rest_fallback",
                     })
                 else:
