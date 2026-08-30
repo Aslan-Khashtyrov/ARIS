@@ -1,11 +1,10 @@
 {
-  "id": "verify-paper-main-20260831-0140",
+  "id": "healthcheck-after-control-recovery-20260831-0159",
   "action": "EXEC",
   "argv": [
-    "grep",
-    "^VERSION",
-    "main.py"
+    "python",
+    "aris_healthcheck.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 180
 }
