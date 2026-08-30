@@ -1,1 +1,1 @@
-{"id":"healthcheck-20260830-0559","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"inspect-worker-log-20260830-0602","action":"EXEC","argv":["tail","-n","100","/data/data/com.termux/files/home/Arbitrage/journal/aris_worker.log"],"cwd":"~/Arbitrage","timeout":60}
