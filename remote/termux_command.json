@@ -1,1 +1,1 @@
-{"id":"locate-cycle-collector-20260830-1802","action":"EXEC","argv":["pgrep","-af","aris_cycle_collector_v01.py"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"locate-cycle-processes-20260830-1803","action":"EXEC","argv":["pgrep","-af","aris_cycle"],"cwd":"~/Arbitrage","timeout":30}
