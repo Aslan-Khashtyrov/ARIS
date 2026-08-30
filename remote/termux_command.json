@@ -1,14 +1,4 @@
 {
-  "id": "recover-channel-stash-20260831-0134",
-  "action": "EXEC",
-  "argv": [
-    "git",
-    "stash",
-    "push",
-    "--include-untracked",
-    "-m",
-    "aris-remote-recovery-20260831"
-  ],
-  "cwd": "~/Arbitrage",
-  "timeout": 120
+  "id": "channel-ping-20260831-0139",
+  "action": "PING"
 }
