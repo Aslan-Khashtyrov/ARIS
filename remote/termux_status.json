@@ -2,15 +2,15 @@
   "ok": true,
   "id": "activate-watchdog-20260830-0421",
   "action": "EXEC",
-  "time": "2026-08-30T04:20:07",
+  "time": "2026-08-30T04:20:08",
   "result": {
     "argv": [
       "python",
       "/data/data/com.termux/files/home/Arbitrage/aris_restart_autopilot_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 3,
-    "stdout": "{\"ok\": false, \"old_pid\": 7652, \"new_pid\": 23733, \"version\": \"0.3\"}\n",
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"old_pid\": 23733, \"new_pid\": 23777, \"version\": \"0.3\"}\n",
     "stderr": ""
   }
 }
