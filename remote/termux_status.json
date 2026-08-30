@@ -10,7 +10,7 @@
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-30 17:03:08\n========================================================\n[1] Checking GitHub...\nLOCAL : 33a146ee4e\nREMOTE: 33a146ee4e\n[OK] ARIS is up to date\n========================================================\n",
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-30 17:03:05\n========================================================\n[1] Checking GitHub...\nLOCAL : a6e4eac70d\nREMOTE: 33a146ee4e\n[2] Update available\n - aris_cycle_collector_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260830-170307\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : a6e4eac70d\nNEW : 97ef172153\nBACKUP TAG: aris-backup-20260830-170307\n========================================================\n",
     "stderr": ""
   }
 }
