@@ -1,1 +1,1 @@
-{"id":"deploy-watchdog-20260830-0412","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"],"cwd":"~/Arbitrage","timeout":180}
+{"id":"deploy-restart-helper-20260830-0420","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"],"cwd":"~/Arbitrage","timeout":180}
