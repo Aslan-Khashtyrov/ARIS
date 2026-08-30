@@ -1,1 +1,1 @@
-{"id":"restart-main-for-binance-diagnostics-20260830-1704","action":"EXEC","argv":["kill","-TERM","6581"],"cwd":"~/Arbitrage","timeout":30}
+{"id":"healthcheck-after-main-restart-20260830-1705","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
