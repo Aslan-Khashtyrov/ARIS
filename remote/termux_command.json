@@ -1,1 +1,1 @@
-{"id":"hourly-healthcheck-20260830-0700","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
+{"id":"verify-autopilot-v04-20260830-0701","action":"EXEC","argv":["tail","-n","100","/data/data/com.termux/files/home/Arbitrage/journal/autopilot_v01.log"],"cwd":"~/Arbitrage","timeout":120}
