@@ -2,7 +2,7 @@
   "ok": true,
   "id": "deploy-autopilot-coverage-fix-20260830-0608",
   "action": "EXEC",
-  "time": "2026-08-30T06:07:41",
+  "time": "2026-08-30T06:07:44",
   "result": {
     "argv": [
       "python",
@@ -10,7 +10,7 @@
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-30 06:07:39\n========================================================\n[1] Checking GitHub...\nLOCAL : 7a9d03b3ab\nREMOTE: 7a9d03b3ab\n[OK] ARIS is up to date\n========================================================\n",
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-30 06:07:38\n========================================================\n[1] Checking GitHub...\nLOCAL : 5db5b9cb89\nREMOTE: 7a9d03b3ab\n[2] Update available\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260830-060740\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 5db5b9cb89\nNEW : b992e23c4f\nBACKUP TAG: aris-backup-20260830-060740\n========================================================\n",
     "stderr": ""
   }
 }
