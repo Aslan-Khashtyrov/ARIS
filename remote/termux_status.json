@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "id": "deploy-watchdog-20260830-0412",
+  "id": "deploy-restart-helper-20260830-0420",
   "action": "EXEC",
-  "time": "2026-08-30T04:18:27",
+  "time": "2026-08-30T04:19:40",
   "result": {
     "argv": [
       "python",
@@ -10,7 +10,7 @@
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-30 04:18:22\n========================================================\n[1] Checking GitHub...\nLOCAL : 23fdfd5cf6\nREMOTE: 416efe51ba\n[2] Update available\n - aris_autopilot_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260830-041824\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 23fdfd5cf6\nNEW : 416efe51ba\nBACKUP TAG: aris-backup-20260830-041824\n========================================================\n",
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-30 04:19:35\n========================================================\n[1] Checking GitHub...\nLOCAL : 351590bf4d\nREMOTE: 64c3e760b3\n[2] Update available\n - aris_restart_autopilot_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260830-041936\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 351590bf4d\nNEW : 64c3e760b3\nBACKUP TAG: aris-backup-20260830-041936\n========================================================\n",
     "stderr": ""
   }
 }
