@@ -13,7 +13,7 @@ JOURNAL = ROOT / "journal"
 STOP_FLAG = STATE / "intentional_stop"
 LOG = JOURNAL / "autopilot_v01.log"
 CHECK_EVERY = 15
-VERSION = "0.3"
+VERSION = "0.4"
 CONTROL_HEARTBEAT = STATE / "termux_control_heartbeat.json"
 CONTROL_MAX_HEARTBEAT_AGE = 90
 
@@ -40,15 +40,16 @@ MAIN_HEALTH_CHECKS = {
     "runtime:session_stats.json",
     "runtime:multi_history_v03.csv",
 }
+# Coverage can briefly fall below the health threshold when otherwise healthy
+# markets are quiet.  It remains visible in healthcheck, but is not itself a
+# restart trigger.  Runtime freshness catches a stalled worker, while each
+# exchange collector owns reconnect/fallback handling.
 WORKER_HEALTH_CHECKS = {
     "runtime:cycle_quotes_v01.json",
     "runtime:cycle_collector_status_v01.json",
     "runtime:cycle_report_v01.json",
     "runtime:cross_exchange_report_v01.json",
     "runtime:cross_exchange_metrics_v01.json",
-    "exchange:binance",
-    "exchange:bybit",
-    "exchange:okx",
     "cross_exchange_live",
     "paper_ledger_live",
     "cycle_metrics_live",
