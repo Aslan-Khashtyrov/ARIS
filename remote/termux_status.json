@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "locate-cycle-processes-20260830-1803",
-  "action": "EXEC",
-  "time": "2026-08-30T18:04:16",
+  "id": "channel-ping-20260831-0139",
+  "action": "PING",
+  "time": "2026-08-31T01:38:10",
   "result": {
-    "argv": [
-      "pgrep",
-      "-af",
-      "aris_cycle"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 1,
-    "stdout": "",
-    "stderr": ""
+    "pong": true,
+    "version": "0.5",
+    "home": "/data/data/com.termux/files/home"
   }
 }
