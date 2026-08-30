@@ -1,17 +1,7 @@
 {
-  "ok": true,
-  "id": "verify-paper-main-20260831-0140",
+  "ok": false,
+  "id": "healthcheck-after-control-recovery-20260831-0159",
   "action": "EXEC",
-  "time": "2026-08-31T01:38:55",
-  "result": {
-    "argv": [
-      "grep",
-      "^VERSION",
-      "main.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "VERSION = \"0.2.0-paper\"\n",
-    "stderr": ""
-  }
+  "time": "2026-08-31T01:58:09",
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: '/data/data/com.termux/files/home/aris_healthcheck.py'"
 }
