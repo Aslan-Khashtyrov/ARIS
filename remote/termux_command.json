@@ -1,4 +1,11 @@
 {
-  "id": "channel-ping-20260831-0139",
-  "action": "PING"
+  "id": "verify-paper-main-20260831-0140",
+  "action": "EXEC",
+  "argv": [
+    "grep",
+    "^VERSION",
+    "main.py"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 30
 }
