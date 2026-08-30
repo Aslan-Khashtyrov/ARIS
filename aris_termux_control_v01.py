@@ -262,8 +262,8 @@ while True:
         except Exception as exc:
             payload = {"ok": False, "id": command_id, "action": action, "time": now(), "error": f"{type(exc).__name__}: {exc}"}
             audit("denied_or_failed", id=command_id, action=action, detail=payload["error"])
-        LAST_ID.write_text(command_id, encoding="utf-8")
         publish(payload)
+        LAST_ID.write_text(command_id, encoding="utf-8")
         write_heartbeat("published", command_id=command_id, action=action)
         audit("published", id=command_id, action=action)
     except Exception as exc:
