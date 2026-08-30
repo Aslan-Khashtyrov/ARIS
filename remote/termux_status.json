@@ -1,13 +1,13 @@
 {
   "ok": true,
-  "id": "locate-cycle-collector-20260830-1802",
+  "id": "locate-cycle-processes-20260830-1803",
   "action": "EXEC",
-  "time": "2026-08-30T18:01:57",
+  "time": "2026-08-30T18:04:16",
   "result": {
     "argv": [
       "pgrep",
       "-af",
-      "aris_cycle_collector_v01.py"
+      "aris_cycle"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 1,
