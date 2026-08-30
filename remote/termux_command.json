@@ -1,1 +1,1 @@
-{"id":"deploy-binance-error-detail-20260830-1703","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"],"cwd":"~/Arbitrage","timeout":180}
+{"id":"restart-main-for-binance-diagnostics-20260830-1704","action":"EXEC","argv":["kill","-TERM","6581"],"cwd":"~/Arbitrage","timeout":30}
