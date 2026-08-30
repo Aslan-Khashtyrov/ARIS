@@ -1,1 +1,1 @@
-{"id":"inspect-worker-log-20260830-0602","action":"EXEC","argv":["tail","-n","100","/data/data/com.termux/files/home/Arbitrage/journal/aris_worker.log"],"cwd":"~/Arbitrage","timeout":60}
+{"id":"inspect-autopilot-log-20260830-0604","action":"EXEC","argv":["tail","-n","80","/data/data/com.termux/files/home/Arbitrage/journal/autopilot_v01.log"],"cwd":"~/Arbitrage","timeout":60}
