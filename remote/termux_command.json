@@ -1,1 +1,1 @@
-{"id":"restart-autopilot-v04-20260830-0610","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_restart_autopilot_v01.py"],"cwd":"~/Arbitrage","timeout":60}
+{"id":"validate-autopilot-v04-20260830-0611","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py","--summary"],"cwd":"~/Arbitrage","timeout":120}
