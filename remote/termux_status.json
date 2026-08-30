@@ -1,16 +1,16 @@
 {
   "ok": true,
-  "id": "deploy-restart-helper-20260830-0420",
+  "id": "activate-watchdog-20260830-0421",
   "action": "EXEC",
-  "time": "2026-08-30T04:19:40",
+  "time": "2026-08-30T04:20:07",
   "result": {
     "argv": [
       "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+      "/data/data/com.termux/files/home/Arbitrage/aris_restart_autopilot_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-30 04:19:35\n========================================================\n[1] Checking GitHub...\nLOCAL : 351590bf4d\nREMOTE: 64c3e760b3\n[2] Update available\n - aris_restart_autopilot_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260830-041936\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 351590bf4d\nNEW : 64c3e760b3\nBACKUP TAG: aris-backup-20260830-041936\n========================================================\n",
+    "returncode": 3,
+    "stdout": "{\"ok\": false, \"old_pid\": 7652, \"new_pid\": 23733, \"version\": \"0.3\"}\n",
     "stderr": ""
   }
 }
