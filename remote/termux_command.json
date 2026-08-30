@@ -1,1 +1,10 @@
-{"id":"deploy-termux-ack-fix-20260830-2105","action":"EXEC","argv":["python","/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"],"cwd":"~/Arbitrage","timeout":180}
+{
+  "id": "deploy-paper-v020-20260831-0122",
+  "action": "EXEC",
+  "argv": [
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 180
+}
