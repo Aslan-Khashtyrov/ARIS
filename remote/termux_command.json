@@ -1,10 +1,10 @@
 {
-  "id": "healthcheck-after-control-recovery-20260831-0159",
+  "id": "healthcheck-absolute-path-20260831-0200",
   "action": "EXEC",
   "argv": [
     "python",
-    "aris_healthcheck.py"
+    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py"
   ],
-  "cwd": "~/Arbitrage",
+  "cwd": "/data/data/com.termux/files/home/Arbitrage",
   "timeout": 180
 }
