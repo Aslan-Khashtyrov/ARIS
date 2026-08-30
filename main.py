@@ -4,9 +4,11 @@ import os
 import csv
 import threading
 import time
+import urllib.error
+import urllib.request
 import websocket
 
-VERSION = "0.1.7"
+VERSION = "0.2.0-paper"
 
 COINBASE_URL = "wss://advanced-trade-ws.coinbase.com"
 KRAKEN_URL = "wss://ws.kraken.com/v2"
@@ -16,6 +18,28 @@ RECONNECT_DELAY_SECONDS = 3
 MAX_RECONNECT_DELAY_SECONDS = 30
 SOCKET_RECV_TIMEOUT_SECONDS = 15
 SCAN_INTERVAL_SECONDS = 1
+
+# Autonomous paper trading. This block uses public market data only and can
+# never place a real order: there is deliberately no authenticated HTTP code.
+PAPER_ENABLED = True
+PAPER_START_BALANCE_USDT = 1000.0
+PAPER_MAX_TRADE_USDT = 100.0
+PAPER_BALANCE_FRACTION = 0.10
+PAPER_MIN_NET_EDGE_PERCENT = 0.10
+PAPER_SLIPPAGE_RATE_PER_LEG = 0.0003
+PAPER_REBALANCE_BUFFER_RATE = 0.0005
+PAPER_ROUTE_COOLDOWN_SECONDS = 15
+PAPER_MAX_DAILY_LOSS_PERCENT = 2.0
+MULTI_SCAN_INTERVAL_SECONDS = 2
+MULTI_MAX_PRICE_AGE_SECONDS = 6
+
+PAPER_ASSETS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "ADA", "LINK", "LTC")
+PAPER_EXCHANGES = ("Binance", "Bybit", "OKX")
+PAPER_TAKER_FEES = {
+    "Binance": 0.0010,
+    "Bybit": 0.0010,
+    "OKX": 0.0010,
+}
 
 # Estimated/public fee assumptions for monitoring.
 # Replace these with the exact current fees from your own account tiers.
@@ -56,6 +80,8 @@ OPPORTUNITIES_LOG = os.path.join(LOG_DIR, "opportunities.log")
 SESSION_STATS_FILE = os.path.join(LOG_DIR, "session_stats.json")
 MARKET_HISTORY_FILE = os.path.join(LOG_DIR, "market_history.csv")
 EVENTS_LOG = os.path.join(LOG_DIR, "events.log")
+PAPER_STATE_FILE = os.path.join(LOG_DIR, "paper_state.json")
+PAPER_TRADES_FILE = os.path.join(LOG_DIR, "paper_trades.csv")
 
 HISTORY_SAVE_INTERVAL_SECONDS = 60
 STATS_SAVE_INTERVAL_SECONDS = 60
@@ -71,6 +97,21 @@ market = {
 }
 
 lock = threading.Lock()
+
+multi_lock = threading.Lock()
+multi_market = {}
+paper_lock = threading.Lock()
+paper_state = {
+    "starting_balance_usdt": PAPER_START_BALANCE_USDT,
+    "balance_usdt": PAPER_START_BALANCE_USDT,
+    "realized_pnl_usdt": 0.0,
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "day": datetime.utcnow().strftime("%Y-%m-%d"),
+    "day_start_balance_usdt": PAPER_START_BALANCE_USDT,
+    "last_routes": {},
+}
 
 stats_lock = threading.Lock()
 
@@ -834,8 +875,272 @@ def analyze_history():
     print("=" * 72)
     print()
 
+
+def public_json(url):
+    request = urllib.request.Request(
+        url,
+        headers={"User-Agent": "ARIS-paper/0.2"},
+        method="GET",
+    )
+    with urllib.request.urlopen(request, timeout=10) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def fetch_binance_books():
+    data = public_json("https://api.binance.com/api/v3/ticker/bookTicker")
+    wanted = {f"{asset}USDT": asset for asset in PAPER_ASSETS}
+    result = {}
+    for row in data:
+        asset = wanted.get(row.get("symbol"))
+        if asset:
+            result[asset] = (safe_float(row.get("bidPrice")), safe_float(row.get("askPrice")))
+    return result
+
+
+def fetch_bybit_books():
+    data = public_json("https://api.bybit.com/v5/market/tickers?category=spot")
+    rows = data.get("result", {}).get("list", [])
+    wanted = {f"{asset}USDT": asset for asset in PAPER_ASSETS}
+    result = {}
+    for row in rows:
+        asset = wanted.get(row.get("symbol"))
+        if asset:
+            result[asset] = (safe_float(row.get("bid1Price")), safe_float(row.get("ask1Price")))
+    return result
+
+
+def fetch_okx_books():
+    data = public_json("https://www.okx.com/api/v5/market/tickers?instType=SPOT")
+    wanted = {f"{asset}-USDT": asset for asset in PAPER_ASSETS}
+    result = {}
+    for row in data.get("data", []):
+        asset = wanted.get(row.get("instId"))
+        if asset:
+            result[asset] = (safe_float(row.get("bidPx")), safe_float(row.get("askPx")))
+    return result
+
+
+PUBLIC_FETCHERS = {
+    "Binance": fetch_binance_books,
+    "Bybit": fetch_bybit_books,
+    "OKX": fetch_okx_books,
+}
+
+
+def update_multi_books(exchange, books):
+    now = time.time()
+    with multi_lock:
+        for asset, (bid, ask) in books.items():
+            if bid is None or ask is None or bid <= 0 or ask <= 0 or bid > ask:
+                continue
+            multi_market[(exchange, asset)] = {
+                "bid": bid,
+                "ask": ask,
+                "updated": now,
+            }
+
+
+def multi_exchange_monitor(exchange):
+    delay = MULTI_SCAN_INTERVAL_SECONDS
+    while True:
+        try:
+            update_multi_books(exchange, PUBLIC_FETCHERS[exchange]())
+            delay = MULTI_SCAN_INTERVAL_SECONDS
+            time.sleep(MULTI_SCAN_INTERVAL_SECONDS)
+        except Exception as error:
+            log_event(exchange, "PUBLIC_DATA_ERROR", type(error).__name__)
+            time.sleep(delay)
+            delay = min(delay * 2, MAX_RECONNECT_DELAY_SECONDS)
+
+
+def get_multi_snapshot():
+    now = time.time()
+    with multi_lock:
+        return {
+            key: value.copy()
+            for key, value in multi_market.items()
+            if now - value["updated"] <= MULTI_MAX_PRICE_AGE_SECONDS
+        }
+
+
+def load_paper_state():
+    if not os.path.exists(PAPER_STATE_FILE):
+        return
+    try:
+        with open(PAPER_STATE_FILE, "r", encoding="utf-8") as file:
+            saved = json.load(file)
+        with paper_lock:
+            for key in paper_state:
+                if key in saved:
+                    paper_state[key] = saved[key]
+    except (OSError, ValueError, TypeError):
+        log_event("PAPER", "STATE_LOAD_FAILED")
+
+
+def save_paper_state_locked():
+    tmp_path = PAPER_STATE_FILE + ".tmp"
+    payload = dict(paper_state)
+    payload["saved_at"] = datetime.now().isoformat(timespec="seconds")
+    payload["version"] = VERSION
+    with open(tmp_path, "w", encoding="utf-8") as file:
+        json.dump(payload, file, ensure_ascii=False, indent=2, sort_keys=True)
+    os.replace(tmp_path, PAPER_STATE_FILE)
+
+
+def reset_paper_day_locked():
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    if paper_state["day"] != today:
+        paper_state["day"] = today
+        paper_state["day_start_balance_usdt"] = paper_state["balance_usdt"]
+        paper_state["last_routes"] = {}
+
+
+def calculate_paper_opportunity(asset, buy_exchange, sell_exchange, ask, bid):
+    buy_fee = PAPER_TAKER_FEES[buy_exchange]
+    sell_fee = PAPER_TAKER_FEES[sell_exchange]
+    effective_buy = ask * (1 + PAPER_SLIPPAGE_RATE_PER_LEG)
+    effective_sell = bid * (1 - PAPER_SLIPPAGE_RATE_PER_LEG)
+    multiplier = (
+        (effective_sell * (1 - sell_fee))
+        / (effective_buy * (1 + buy_fee))
+    ) - PAPER_REBALANCE_BUFFER_RATE
+    return {
+        "asset": asset,
+        "buy_exchange": buy_exchange,
+        "sell_exchange": sell_exchange,
+        "ask": ask,
+        "bid": bid,
+        "net_edge_percent": (multiplier - 1) * 100,
+        "final_multiplier": multiplier,
+    }
+
+
+def find_best_paper_opportunity(snapshot):
+    best = None
+    for asset in PAPER_ASSETS:
+        available = {
+            exchange: snapshot[(exchange, asset)]
+            for exchange in PAPER_EXCHANGES
+            if (exchange, asset) in snapshot
+        }
+        for buy_exchange, buy_book in available.items():
+            for sell_exchange, sell_book in available.items():
+                if buy_exchange == sell_exchange:
+                    continue
+                item = calculate_paper_opportunity(
+                    asset,
+                    buy_exchange,
+                    sell_exchange,
+                    buy_book["ask"],
+                    sell_book["bid"],
+                )
+                if best is None or item["net_edge_percent"] > best["net_edge_percent"]:
+                    best = item
+    return best
+
+
+def append_paper_trade(timestamp, opportunity, capital, final_value, profit, balance):
+    exists = os.path.exists(PAPER_TRADES_FILE)
+    with open(PAPER_TRADES_FILE, "a", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        if not exists:
+            writer.writerow([
+                "timestamp", "asset", "quote", "buy_exchange", "sell_exchange",
+                "buy_ask", "sell_bid", "net_edge_percent", "capital_usdt",
+                "final_usdt", "profit_usdt", "balance_usdt",
+            ])
+        writer.writerow([
+            timestamp,
+            opportunity["asset"],
+            "USDT",
+            opportunity["buy_exchange"],
+            opportunity["sell_exchange"],
+            f"{opportunity['ask']:.10f}",
+            f"{opportunity['bid']:.10f}",
+            f"{opportunity['net_edge_percent']:.6f}",
+            f"{capital:.6f}",
+            f"{final_value:.6f}",
+            f"{profit:.6f}",
+            f"{balance:.6f}",
+        ])
+
+
+def maybe_execute_paper_trade(opportunity):
+    if not PAPER_ENABLED or opportunity is None:
+        return None
+    if opportunity["net_edge_percent"] < PAPER_MIN_NET_EDGE_PERCENT:
+        return None
+
+    now = time.time()
+    route_key = (
+        f"{opportunity['asset']}:"
+        f"{opportunity['buy_exchange']}>{opportunity['sell_exchange']}"
+    )
+    with paper_lock:
+        reset_paper_day_locked()
+        balance = float(paper_state["balance_usdt"])
+        day_start = float(paper_state["day_start_balance_usdt"])
+        loss_floor = day_start * (1 - PAPER_MAX_DAILY_LOSS_PERCENT / 100)
+        if balance <= loss_floor:
+            return None
+        last_time = float(paper_state["last_routes"].get(route_key, 0))
+        if now - last_time < PAPER_ROUTE_COOLDOWN_SECONDS:
+            return None
+
+        capital = min(PAPER_MAX_TRADE_USDT, balance * PAPER_BALANCE_FRACTION)
+        if capital <= 0:
+            return None
+        final_value = capital * opportunity["final_multiplier"]
+        profit = final_value - capital
+        paper_state["balance_usdt"] = balance + profit
+        paper_state["realized_pnl_usdt"] += profit
+        paper_state["trades"] += 1
+        if profit >= 0:
+            paper_state["wins"] += 1
+        else:
+            paper_state["losses"] += 1
+        paper_state["last_routes"][route_key] = now
+        save_paper_state_locked()
+        new_balance = paper_state["balance_usdt"]
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    append_paper_trade(
+        timestamp, opportunity, capital, final_value, profit, new_balance
+    )
+    log_event(
+        "PAPER",
+        "VIRTUAL_TRADE",
+        f"{route_key} pnl={profit:+.6f} balance={new_balance:.6f}",
+    )
+    return {
+        "capital": capital,
+        "profit": profit,
+        "balance": new_balance,
+    }
+
+
+def paper_trading_loop():
+    while True:
+        snapshot = get_multi_snapshot()
+        opportunity = find_best_paper_opportunity(snapshot)
+        result = maybe_execute_paper_trade(opportunity)
+        if opportunity is not None:
+            status = (
+                f"[PAPER] {opportunity['asset']}/USDT | "
+                f"{opportunity['buy_exchange']} -> {opportunity['sell_exchange']} | "
+                f"net {opportunity['net_edge_percent']:+.4f}%"
+            )
+            if result:
+                status += (
+                    f" | TRADE pnl {result['profit']:+.4f} USDT | "
+                    f"balance {result['balance']:.4f} USDT"
+                )
+            print(status)
+        time.sleep(MULTI_SCAN_INTERVAL_SECONDS)
+
 def main():
     ensure_log_directory()
+    load_paper_state()
     analyze_history()
 
     threading.Thread(
@@ -848,13 +1153,28 @@ def main():
         daemon=True,
     ).start()
 
+    for exchange in PAPER_EXCHANGES:
+        threading.Thread(
+            target=multi_exchange_monitor,
+            args=(exchange,),
+            daemon=True,
+        ).start()
+
+    threading.Thread(
+        target=paper_trading_loop,
+        daemon=True,
+    ).start()
+
     print("=" * 72)
     print(f"                         ARBITRAGE v{VERSION}")
     print("                     COINBASE <-> KRAKEN")
     print("=" * 72)
     print("MONITORING ONLY")
     print("REAL TRADING: DISABLED")
-    print("VIRTUAL TRADING: DISABLED")
+    print("VIRTUAL TRADING: ENABLED (AUTONOMOUS PAPER ONLY)")
+    print("PUBLIC DATA: Binance / Bybit / OKX")
+    print("PAPER PAIRS: " + ", ".join(f"{asset}/USDT" for asset in PAPER_ASSETS))
+    print("REAL ORDER CODE / API KEYS / DEPOSITS / WITHDRAWALS: NOT IMPLEMENTED")
     print("TEST CAPITAL: CALCULATION ONLY")
     print()
     print("FEE ASSUMPTIONS:")
