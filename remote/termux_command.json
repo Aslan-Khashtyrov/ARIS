@@ -1,7 +1,7 @@
 {
-  "id": "inspect-usdt-paired-20260831-1100",
+  "id": "deploy-healthcheck-usdt-fix-20260831-1102",
   "action": "EXEC",
-  "argv": ["tail", "-n", "20", "/data/data/com.termux/files/home/Arbitrage/journal/usdt_paired_paper_screen_v01.log"],
+  "argv": ["git", "pull", "--ff-only"],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
