@@ -1,18 +1,21 @@
 {
   "ok": true,
-  "id": "reset-to-threshold-main-20260831-0919",
+  "id": "verify-threshold-010-20260831-0921",
   "action": "EXEC",
-  "time": "2026-08-31T09:18:51",
+  "time": "2026-08-31T09:20:07",
   "result": {
     "argv": [
-      "git",
-      "reset",
-      "--hard",
-      "origin/main"
+      "grep",
+      "-n",
+      "MIN_PROFIT_PERCENT\\|MIN_NET_PERCENT\\|minimum_profit_percent",
+      "aris_paper_ledger_v01.py",
+      "aris_cross_paper_ledger_v01.py",
+      "aris_cross_inventory_low_risk_v01.py",
+      "aris_config_v01.json"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "HEAD is now at ccacf98 Sync Termux to unified 0.10 percent threshold\n",
+    "stdout": "aris_paper_ledger_v01.py:18:MIN_PROFIT_PERCENT = 0.10\naris_paper_ledger_v01.py:135:        \"minimum_profit_percent\": MIN_PROFIT_PERCENT,\naris_paper_ledger_v01.py:207:            elif profit_percent < MIN_PROFIT_PERCENT:\naris_cross_paper_ledger_v01.py:17:MIN_NET_PERCENT = 0.10\naris_cross_paper_ledger_v01.py:79:            elif float(route.get(\"net_profit_percent\", -999) or -999) < MIN_NET_PERCENT:\naris_cross_paper_ledger_v01.py:134:        \"minimum_net_profit_percent\": MIN_NET_PERCENT,\naris_cross_inventory_low_risk_v01.py:26:MIN_NET_PERCENT = 0.10\naris_cross_inventory_low_risk_v01.py:209:            if net_percent < MIN_NET_PERCENT:\naris_cross_inventory_low_risk_v01.py:337:        \"minimum_net_profit_percent\": MIN_NET_PERCENT,\naris_config_v01.json:86:    \"minimum_profit_percent\": 0.1,\n",
     "stderr": ""
   }
 }
