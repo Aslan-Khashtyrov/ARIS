@@ -2,7 +2,7 @@
   "ok": true,
   "id": "start-usdt-paired-v01-absolute-20260831-1015",
   "action": "EXEC",
-  "time": "2026-08-31T10:14:53",
+  "time": "2026-08-31T10:14:56",
   "result": {
     "argv": [
       "python",
@@ -11,7 +11,7 @@
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "paired paper daemon starting pid=9126\n",
+    "stdout": "paired paper daemon already running pid=9126\n",
     "stderr": ""
   }
 }
