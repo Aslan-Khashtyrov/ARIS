@@ -1,5 +1,11 @@
 {
-  "id": "read-risk-trim-summary-20260831-0811",
-  "action": "READ_TEXT",
-  "path": "~/Arbitrage/journal/cross_inventory_low_risk_summary_v01.json"
+  "id": "locate-low-risk-process-20260831-0812",
+  "action": "EXEC",
+  "argv": [
+    "pgrep",
+    "-af",
+    "aris_cross_inventory_low_risk_v01.py"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 30
 }
