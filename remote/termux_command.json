@@ -1,10 +1,5 @@
 {
-  "id": "deploy-inventory-risk-trim-20260831-0810",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
-  ],
-  "cwd": "~/Arbitrage",
-  "timeout": 180
+  "id": "read-risk-trim-summary-20260831-0811",
+  "action": "READ_TEXT",
+  "path": "~/Arbitrage/journal/cross_inventory_low_risk_summary_v01.json"
 }
