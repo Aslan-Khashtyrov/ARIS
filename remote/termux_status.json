@@ -1,16 +1,19 @@
 {
   "ok": true,
-  "id": "check-aris-processes-20260831-1020",
+  "id": "deploy-usdt-paired-v01-20260831-1028",
   "action": "EXEC",
-  "time": "2026-08-31T10:04:46",
+  "time": "2026-08-31T10:06:50",
   "result": {
     "argv": [
-      "ps",
-      "-ef"
+      "git",
+      "pull",
+      "--ff-only",
+      "origin",
+      "main"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "UID        PID  PPID  C STIME TTY          TIME CMD\nu0_a400   1987 29497  0  1970 pts/1    00:00:00 /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/usr/bin/bash -l\nu0_a400   4455 24961  0  1970 ?        00:00:00 ps /data/data/com.termux/files/usr/bin/ps -ef\nu0_a400   7571     1  2  1970 pts/7    02:47:32 python /data/data/com.termux/files/usr/bin/python multi_scanner_v03.py\nu0_a400   7586     1  0  1970 pts/7    00:00:39 python /data/data/com.termux/files/usr/bin/python guardian_v04.py\nu0_a400  10438 29497  0  1970 pts/4    00:00:00 /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/usr/bin/bash -l\nu0_a400  12771     1 87  1970 ?        1-00:44:29 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_worker_v03.py\nu0_a400  14974 29497  0  1970 pts/5    00:00:00 /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/usr/bin/bash -l\nu0_a400  18341     1  0  1970 ?        00:00:22 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_autopilot_v01.py\nu0_a400  20501 29497  0  1970 pts/3    00:00:00 /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/usr/bin/bash -l\nu0_a400  21121 29497  0  1970 pts/6    00:00:00 /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/usr/bin/bash -l\nu0_a400  24205     1  3  1970 ?        00:00:52 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py --daemon\nu0_a400  24841 14974  0  1970 pts/5    00:00:00 /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/usr/bin/bash -l\nu0_a400  24884 24841  0  1970 pts/5    00:00:04 python /data/data/com.termux/files/usr/bin/python aris_termux_control_v01.py\nu0_a400  24961 18341  0  1970 ?        00:00:04 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_termux_control_v01.py\nu0_a400  25014 29497  0  1970 pts/7    00:00:00 /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/usr/bin/bash -l\nu0_a400  25018     1  0  1970 ?        00:02:40 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_foreman_v01.py --daemon\nu0_a400  29565 29497  0  1970 pts/0    00:00:00 /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/usr/bin/bash -l\nu0_a400  32059 18341  2  1970 ?        00:01:35 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/main.py\n",
-    "stderr": ""
+    "returncode": 128,
+    "stdout": "",
+    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\nfatal: Cannot fast-forward to multiple branches.\n"
   }
 }
