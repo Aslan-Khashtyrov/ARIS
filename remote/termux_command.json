@@ -1,11 +1,10 @@
 {
-  "id": "diagnose-no-profit-20260831-0820",
+  "id": "deploy-paper-threshold-010-20260831-0920",
   "action": "EXEC",
   "argv": [
     "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py",
-    "--summary"
+    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 180
 }
