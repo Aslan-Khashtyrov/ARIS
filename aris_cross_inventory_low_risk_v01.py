@@ -20,12 +20,15 @@ BASE_ASSET = "SOL"
 QUOTE_ASSET = "USDT"
 INITIAL_QUOTE_PER_EXCHANGE = 800.0
 INITIAL_BASE_VALUE_PER_EXCHANGE = 200.0
-MIN_NET_PERCENT = 0.05
+MIN_NET_PERCENT = 0.10
 MIN_CONFIRMATIONS = 3
-MAX_QUOTE_STAKE = 50.0
+MAX_QUOTE_STAKE = 25.0
 ROUTE_COOLDOWN_SECONDS = 60
-MIN_BASE_SHARE_PERCENT = 10.0
-MAX_BASE_SHARE_PERCENT = 30.0
+MIN_BASE_SHARE_PERCENT = 5.0
+MAX_BASE_SHARE_PERCENT = 15.0
+TARGET_BASE_SHARE_PERCENT = 10.0
+RISK_TRIM_FEE_RATE = 0.0010
+RISK_TRIM_SLIPPAGE_RATE = 0.0003
 
 def atomic_json(path, payload):
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -121,6 +124,36 @@ def process_once():
     started_ts = parse_time(state.get("started_at"))
     added = 0
     rejected = defaultdict(int)
+
+    # Reduce directional SOL exposure before accepting new arbitrage signals.
+    # This is a paper-only sale at the live bid with fee and slippage included.
+    market = quotes()
+    risk_trimmed_sol = 0.0
+    risk_trim_cost_usdt = 0.0
+    for ex in EXCHANGES:
+        quote_key = f"{ex}:{QUOTE_ASSET}"
+        base_key = f"{ex}:{BASE_ASSET}"
+        quote_balance = float(balances.get(quote_key, 0.0))
+        base_balance = float(balances.get(base_key, 0.0))
+        book = market.get(ex, {})
+        bid = float(book.get("bid", 0.0) or 0.0)
+        mid = float(book.get("mid", 0.0) or 0.0)
+        if bid <= 0 or mid <= 0 or base_balance <= 0:
+            continue
+        exchange_equity = quote_balance + base_balance * mid
+        base_share = base_balance * mid / exchange_equity * 100.0 if exchange_equity > 0 else 0.0
+        if base_share <= MAX_BASE_SHARE_PERCENT:
+            continue
+        target_base_value = exchange_equity * TARGET_BASE_SHARE_PERCENT / 100.0
+        excess_base_value = max(0.0, base_balance * mid - target_base_value)
+        sell_quantity = min(base_balance, excess_base_value / mid)
+        gross_revenue = sell_quantity * bid
+        net_revenue = gross_revenue * (1.0 - RISK_TRIM_SLIPPAGE_RATE) * (1.0 - RISK_TRIM_FEE_RATE)
+        balances[base_key] = base_balance - sell_quantity
+        balances[quote_key] = quote_balance + net_revenue
+        risk_trimmed_sol += sell_quantity
+        risk_trim_cost_usdt += gross_revenue - net_revenue
+
     rows = existing_rows()
     if SOURCE.exists():
         for line in SOURCE.read_text(encoding="utf-8", errors="replace").splitlines():
@@ -304,6 +337,9 @@ def process_once():
         "route_cooldown_seconds": ROUTE_COOLDOWN_SECONDS,
         "minimum_base_share_percent": MIN_BASE_SHARE_PERCENT,
         "maximum_base_share_percent": MAX_BASE_SHARE_PERCENT,
+        "target_base_share_percent": TARGET_BASE_SHARE_PERCENT,
+        "risk_trimmed_sol_this_cycle": risk_trimmed_sol,
+        "risk_trim_cost_usdt_this_cycle": risk_trim_cost_usdt,
         "inventory_by_exchange": inventory_by_exchange,
         "rebalance_required": rebalance_required,
         "added_this_cycle": added,
