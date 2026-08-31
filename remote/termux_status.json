@@ -9,8 +9,8 @@
       "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-31 09:17:27\n========================================================\n[1] Checking GitHub...\nLOCAL : 3f49fdc719\nREMOTE: 8254a3b00a\n[2] Update available\n - aris_config_v01.json\n - aris_cross_paper_ledger_v01.py\n - aris_paper_ledger_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260831-091731\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 3f49fdc719\nNEW : 8254a3b00a\nBACKUP TAG: aris-backup-20260831-091731\n========================================================\n",
+    "returncode": 1,
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-31 09:17:31\n========================================================\n[1] Checking GitHub...\nLOCAL : b1a872fd0e\nREMOTE: 8254a3b00a\n[ERROR] Remote branch is not a fast-forward update. Manual review required.\n",
     "stderr": ""
   }
 }
