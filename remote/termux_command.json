@@ -1,15 +1,11 @@
 {
-  "id": "verify-threshold-010-20260831-0921",
+  "id": "show-aris-trading-profit-20260831-0930",
   "action": "EXEC",
   "argv": [
-    "grep",
-    "-n",
-    "MIN_PROFIT_PERCENT\\|MIN_NET_PERCENT\\|minimum_profit_percent",
-    "aris_paper_ledger_v01.py",
-    "aris_cross_paper_ledger_v01.py",
-    "aris_cross_inventory_low_risk_v01.py",
-    "aris_config_v01.json"
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py",
+    "--summary"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
