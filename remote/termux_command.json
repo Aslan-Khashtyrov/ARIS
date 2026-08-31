@@ -1,12 +1,15 @@
 {
-  "id": "reset-to-threshold-main-20260831-0919",
+  "id": "verify-threshold-010-20260831-0921",
   "action": "EXEC",
   "argv": [
-    "git",
-    "reset",
-    "--hard",
-    "origin/main"
+    "grep",
+    "-n",
+    "MIN_PROFIT_PERCENT\\|MIN_NET_PERCENT\\|minimum_profit_percent",
+    "aris_paper_ledger_v01.py",
+    "aris_cross_paper_ledger_v01.py",
+    "aris_cross_inventory_low_risk_v01.py",
+    "aris_config_v01.json"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 60
+  "timeout": 30
 }
