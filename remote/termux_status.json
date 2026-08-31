@@ -2,7 +2,7 @@
   "ok": true,
   "id": "deploy-usdt-only-20260831-0940",
   "action": "EXEC",
-  "time": "2026-08-31T09:33:57",
+  "time": "2026-08-31T09:33:58",
   "result": {
     "argv": [
       "python",
@@ -10,7 +10,7 @@
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-31 09:33:54\n========================================================\n[1] Checking GitHub...\nLOCAL : d16be28075\nREMOTE: d16be28075\n[OK] ARIS is up to date\n========================================================\n",
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-31 09:33:53\n========================================================\n[1] Checking GitHub...\nLOCAL : 02bb0a6f9a\nREMOTE: d16be28075\n[2] Update available\n - aris_cross_inventory_low_risk_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260831-093356\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : 02bb0a6f9a\nNEW : 8070f3a070\nBACKUP TAG: aris-backup-20260831-093356\n========================================================\n",
     "stderr": ""
   }
 }
