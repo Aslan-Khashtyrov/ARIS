@@ -1,11 +1,5 @@
 {
-  "id": "start-usdt-only-daemon-20260831-0943",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py",
-    "--daemon"
-  ],
-  "cwd": "~/Arbitrage",
-  "timeout": 30
+  "id": "verify-usdt-only-balances-20260831-0944",
+  "action": "READ_TEXT",
+  "path": "~/Arbitrage/journal/cross_inventory_low_risk_summary_v01.json"
 }
