@@ -1,11 +1,12 @@
 {
-  "id": "backup-before-threshold-sync-20260831-0918",
+  "id": "reset-to-threshold-main-20260831-0919",
   "action": "EXEC",
   "argv": [
     "git",
-    "branch",
-    "aris-recovery-threshold-20260831-0918"
+    "reset",
+    "--hard",
+    "origin/main"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 60
 }
