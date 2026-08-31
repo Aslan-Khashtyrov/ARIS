@@ -1,5 +1,10 @@
 {
-  "id": "locate-usdt-daemon-20260831-0941",
-  "action": "READ_TEXT",
-  "path": "~/Arbitrage/guardian_state/cross_inventory_low_risk.pid"
+  "id": "stop-old-inventory-daemon-20260831-0942",
+  "action": "EXEC",
+  "argv": [
+    "kill",
+    "20930"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 30
 }
