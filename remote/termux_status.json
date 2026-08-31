@@ -1,11 +1,17 @@
 {
   "ok": true,
-  "id": "paper-state-check-20260831-latest1",
-  "action": "READ_TEXT",
-  "time": "2026-08-31T08:00:44",
+  "id": "paper-process-check-20260831-latest2",
+  "action": "EXEC",
+  "time": "2026-08-31T08:01:29",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/paper_state.json",
-    "size": 394,
-    "content": "{\n  \"balance_usdt\": 1000.45792772261,\n  \"day\": \"2026-08-30\",\n  \"day_start_balance_usdt\": 1000.0,\n  \"last_routes\": {\n    \"DOGE:Binance>Bybit\": 1788128553.018147,\n    \"DOGE:Bybit>OKX\": 1788132576.8061028\n  },\n  \"losses\": 0,\n  \"realized_pnl_usdt\": 0.45792772260990944,\n  \"saved_at\": \"2026-08-31T02:29:36\",\n  \"starting_balance_usdt\": 1000.0,\n  \"trades\": 2,\n  \"version\": \"0.2.0-paper\",\n  \"wins\": 2\n}"
+    "argv": [
+      "pgrep",
+      "-af",
+      "main.py"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "9932 python /data/data/com.termux/files/usr/bin/python main.py\n16537 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/main.py\n",
+    "stderr": ""
   }
 }
