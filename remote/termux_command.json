@@ -1,11 +1,9 @@
 {
-  "id": "inspect-positive-routes-20260831-1015",
+  "id": "check-aris-processes-20260831-1020",
   "action": "EXEC",
   "argv": [
-    "tail",
-    "-n",
-    "5",
-    "journal/cross_exchange_positive_v01.jsonl"
+    "ps",
+    "-ef"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 30
