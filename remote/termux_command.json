@@ -1,11 +1,5 @@
 {
-  "id": "restart-usdt-daemon-after-state-fix-20260831-0947",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py",
-    "--daemon"
-  ],
-  "cwd": "~/Arbitrage",
-  "timeout": 30
+  "id": "final-usdt-only-summary-20260831-0948",
+  "action": "READ_TEXT",
+  "path": "~/Arbitrage/journal/cross_inventory_low_risk_summary_v01.json"
 }
