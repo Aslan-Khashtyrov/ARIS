@@ -1,10 +1,9 @@
 {
-  "id": "deploy-usdt-paired-v01-20260831-1028",
+  "id": "fetch-usdt-paired-v01-20260831-1031",
   "action": "EXEC",
   "argv": [
     "git",
-    "pull",
-    "--ff-only",
+    "fetch",
     "origin",
     "main"
   ],
