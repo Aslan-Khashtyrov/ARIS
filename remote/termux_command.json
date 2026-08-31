@@ -1,10 +1,13 @@
 {
-  "id": "check-aris-processes-20260831-1020",
+  "id": "deploy-usdt-paired-v01-20260831-1028",
   "action": "EXEC",
   "argv": [
-    "ps",
-    "-ef"
+    "git",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
