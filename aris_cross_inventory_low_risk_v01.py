@@ -34,9 +34,15 @@ RISK_TRIM_FEE_RATE = 0.0010
 RISK_TRIM_SLIPPAGE_RATE = 0.0003
 
 def atomic_json(path, payload):
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    tmp.replace(path)
+    tmp = path.with_name(f".{path.name}.{os.getpid()}.{time.time_ns()}.tmp")
+    try:
+        tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        os.replace(tmp, path)
+    finally:
+        try:
+            tmp.unlink()
+        except FileNotFoundError:
+            pass
 
 def read_json(path, default):
     try:
