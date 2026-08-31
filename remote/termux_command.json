@@ -1,9 +1,10 @@
 {
-  "id": "stop-old-inventory-daemon-20260831-0942",
+  "id": "start-usdt-only-daemon-20260831-0943",
   "action": "EXEC",
   "argv": [
-    "kill",
-    "20930"
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py",
+    "--daemon"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 30
