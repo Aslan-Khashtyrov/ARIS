@@ -1,10 +1,5 @@
 {
-  "id": "deploy-usdt-only-20260831-0940",
-  "action": "EXEC",
-  "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
-  ],
-  "cwd": "~/Arbitrage",
-  "timeout": 180
+  "id": "locate-usdt-daemon-20260831-0941",
+  "action": "READ_TEXT",
+  "path": "~/Arbitrage/guardian_state/cross_inventory_low_risk.pid"
 }
