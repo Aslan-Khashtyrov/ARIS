@@ -1,19 +1,7 @@
 {
-  "ok": true,
-  "id": "install-usdt-paired-v01-20260831-1034",
+  "ok": false,
+  "id": "start-usdt-paired-v01-20260831-1036",
   "action": "EXEC",
-  "time": "2026-08-31T10:08:49",
-  "result": {
-    "argv": [
-      "git",
-      "checkout",
-      "FETCH_HEAD",
-      "--",
-      "aris_usdt_paired_paper_v01.py"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "",
-    "stderr": ""
-  }
+  "time": "2026-08-31T10:09:37",
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: '/data/data/com.termux/files/home/aris_usdt_paired_paper_v01.py'"
 }
