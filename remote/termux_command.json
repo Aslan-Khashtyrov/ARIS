@@ -1,6 +1,11 @@
 {
-  "id": "restore-pre-usdt-paper-state-20260831-0946",
-  "action": "WRITE_TEXT",
-  "path": "~/Arbitrage/journal/cross_inventory_low_risk_state_v01.json",
-  "content": "{\n  \"model\": \"usdt-only-paper-v01\",\n  \"started_at\": \"2026-08-28T08:04:22\",\n  \"initial_equity_usdt\": 3000,\n  \"balances\": {\n    \"binance:SOL\": 1.2291021548309682,\n    \"binance:USDT\": 874.6501861107254,\n    \"bybit:SOL\": 1.221491233862401,\n    \"bybit:USDT\": 868.0503301273642,\n    \"okx:SOL\": 0.5757060960645212,\n    \"okx:USDT\": 933.6939058609744\n  },\n  \"initial_prices\": {},\n  \"processed\": [],\n  \"last_trade_by_route\": {},\n  \"real_trading\": false\n}\n"
+  "id": "restart-usdt-daemon-after-state-fix-20260831-0947",
+  "action": "EXEC",
+  "argv": [
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py",
+    "--daemon"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 30
 }
