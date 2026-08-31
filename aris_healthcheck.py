@@ -68,6 +68,7 @@ required = (
     "aris_cross_exchange_v01.py",
     "aris_cross_inventory_ledger_v01.py",
     "aris_cross_inventory_low_risk_v01.py",
+    "aris_usdt_paired_paper_v01.py",
     "aris_config_v01.json",
     "aris_fee_schedule_v01.json",
     "aris_foreman_v01.py",
@@ -85,6 +86,7 @@ processes = {
     "autopilot": "aris_autopilot_v01.py",
     "termux_control": "aris_termux_control_v01.py",
     "foreman": "aris_foreman_v01.py",
+    "usdt_paired_paper": "aris_usdt_paired_paper_v01.py",
 }
 for name, script in processes.items():
     ok, detail = valid_process(name, script)
@@ -195,18 +197,42 @@ try:
         for exchange in ("binance", "bybit", "okx")
         for asset in ("USDT", "SOL")
     }
+    waiting_status = low_risk_inventory.get("status") in {
+        "WAITING_FOR_SOL_USDT_QUOTES",
+        "WAITING_FOR_MARKET_QUOTES",
+    }
+    active_status_ok = (
+        required_low_risk_accounts.issubset(low_risk_balances)
+        and abs(float(low_risk_inventory.get("initial_equity_usdt", 0)) - 3000.0) < 0.01
+    )
     low_risk_ok = (
         low_risk_age is not None
         and low_risk_age <= 45
         and low_risk_inventory.get("ok") is True
         and low_risk_inventory.get("real_trading") is False
         and low_risk_inventory.get("model") == "cross-inventory-low-risk-v01"
-        and required_low_risk_accounts.issubset(low_risk_balances)
-        and abs(float(low_risk_inventory.get("initial_equity_usdt", 0)) - 3000.0) < 0.01
+        and (waiting_status or active_status_ok)
     )
-    add("cross_inventory_low_risk_live", low_risk_ok, f"age_seconds={low_risk_age};trades={low_risk_inventory.get('paper_trades')};realized_profit_usdt={low_risk_inventory.get('realized_arbitrage_profit_usdt')};market_pnl_usdt={low_risk_inventory.get('inventory_market_pnl_usdt')}")
+    add("cross_inventory_low_risk_live", low_risk_ok, f"age_seconds={low_risk_age};status={low_risk_inventory.get('status')};trades={low_risk_inventory.get('paper_trades')};realized_profit_usdt={low_risk_inventory.get('realized_arbitrage_profit_usdt')};market_pnl_usdt={low_risk_inventory.get('inventory_market_pnl_usdt')}")
 except Exception as exc:
     add("cross_inventory_low_risk_live", False, f"{type(exc).__name__}: {exc}")
+
+usdt_paired_paper = None
+try:
+    paired_path = JOURNAL / "usdt_paired_paper_state_v01.json"
+    paired_age = age(paired_path)
+    usdt_paired_paper = json.loads(paired_path.read_text(encoding="utf-8"))
+    paired_ok = (
+        paired_age is not None
+        and paired_age <= 45
+        and usdt_paired_paper.get("model") == "usdt-paired-paper-v01"
+        and usdt_paired_paper.get("real_trading") is False
+        and float(usdt_paired_paper.get("balance_usdt", -1)) >= 0
+        and float(usdt_paired_paper.get("realized_profit_usdt", -1)) >= 0
+    )
+    add("usdt_paired_paper_live", paired_ok, f"age_seconds={paired_age};trades={usdt_paired_paper.get('trades')};profit_usdt={usdt_paired_paper.get('realized_profit_usdt')};balance_usdt={usdt_paired_paper.get('balance_usdt')}")
+except Exception as exc:
+    add("usdt_paired_paper_live", False, f"{type(exc).__name__}: {exc}")
 
 try:
     metrics_path = JOURNAL / "cycle_metrics_summary_v03.json"
@@ -289,6 +315,7 @@ report = {
     "paper_ledger": paper_ledger,
     "cross_inventory_ledger": inventory_ledger,
     "cross_inventory_low_risk": low_risk_inventory,
+    "usdt_paired_paper": usdt_paired_paper,
     "cycle_metrics": cycle_metrics,
     "p2p": p2p_status,
     "unified": unified,
@@ -316,6 +343,7 @@ if "--summary" in sys.argv:
         "cross_exchange": compact_cross,
         "cross_inventory_ledger": inventory_ledger,
         "cross_inventory_low_risk": low_risk_inventory,
+        "usdt_paired_paper": usdt_paired_paper,
     }
 
 print(json.dumps(report, ensure_ascii=False, indent=2))
