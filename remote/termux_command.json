@@ -1,5 +1,12 @@
 {
-  "id": "final-usdt-only-summary-20260831-0948",
-  "action": "READ_TEXT",
-  "path": "~/Arbitrage/journal/cross_inventory_low_risk_summary_v01.json"
+  "id": "show-paper-trades-20260831-1008",
+  "action": "EXEC",
+  "argv": [
+    "tail",
+    "-n",
+    "20",
+    "journal/cross_inventory_low_risk_ledger_v01.jsonl"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 30
 }
