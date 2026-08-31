@@ -1,10 +1,11 @@
 {
-  "id": "deploy-paper-threshold-010-20260831-0920",
+  "id": "backup-before-threshold-sync-20260831-0918",
   "action": "EXEC",
   "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+    "git",
+    "branch",
+    "aris-recovery-threshold-20260831-0918"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 180
+  "timeout": 30
 }
