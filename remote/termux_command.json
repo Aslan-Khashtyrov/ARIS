@@ -1,10 +1,9 @@
 {
-  "id": "paper-process-check-20260831-latest2",
+  "id": "stop-duplicate-main-20260831-latest3",
   "action": "EXEC",
   "argv": [
-    "pgrep",
-    "-af",
-    "main.py"
+    "kill",
+    "9932"
   ],
   "cwd": "~/Arbitrage",
   "timeout": 30
