@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-risk-daemon-20260831-0814",
+  "id": "start-risk-daemon-20260831-0815",
   "action": "EXEC",
-  "time": "2026-08-31T08:11:32",
+  "time": "2026-08-31T08:12:10",
   "result": {
     "argv": [
       "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+      "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py",
+      "--daemon"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-31 08:11:26\n========================================================\n[1] Checking GitHub...\nLOCAL : c83bdd26e5\nREMOTE: f30c214883\n[2] Update available\n - aris_cross_inventory_low_risk_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260831-081128\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : c83bdd26e5\nNEW : f30c214883\nBACKUP TAG: aris-backup-20260831-081128\n========================================================\n",
+    "stdout": "low-risk paper daemon starting pid=20930\n",
     "stderr": ""
   }
 }
