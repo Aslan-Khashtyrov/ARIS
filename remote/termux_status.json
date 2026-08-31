@@ -1,10 +1,17 @@
 {
   "ok": true,
-  "id": "restore-pre-usdt-paper-state-20260831-0946",
-  "action": "WRITE_TEXT",
-  "time": "2026-08-31T09:38:23",
+  "id": "restart-usdt-daemon-after-state-fix-20260831-0947",
+  "action": "EXEC",
+  "time": "2026-08-31T09:39:00",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cross_inventory_low_risk_state_v01.json",
-    "bytes": 445
+    "argv": [
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py",
+      "--daemon"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "low-risk paper daemon starting pid=24205\n",
+    "stderr": ""
   }
 }
