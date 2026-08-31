@@ -1,5 +1,11 @@
 {
-  "id": "paper-state-check-20260831-latest1",
-  "action": "READ_TEXT",
-  "path": "~/Arbitrage/journal/paper_state.json"
+  "id": "paper-process-check-20260831-latest2",
+  "action": "EXEC",
+  "argv": [
+    "pgrep",
+    "-af",
+    "main.py"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 30
 }
