@@ -1,16 +1,16 @@
 {
   "ok": true,
-  "id": "run-risk-trim-model-20260831-0813",
+  "id": "deploy-risk-daemon-20260831-0814",
   "action": "EXEC",
-  "time": "2026-08-31T08:10:20",
+  "time": "2026-08-31T08:11:32",
   "result": {
     "argv": [
       "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py"
+      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-31T08:10:20\",\n  \"model\": \"cross-inventory-low-risk-v01\",\n  \"mode\": \"INVENTORY_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"started_at\": \"2026-08-28T08:04:22\",\n  \"initial_equity_usdt\": 3000.0,\n  \"mark_to_market_equity_usdt\": 2983.699560930282,\n  \"realized_arbitrage_profit_usdt\": 14.274133544856994,\n  \"gross_arbitrage_turnover_usdt\": 5556.0136006006005,\n  \"average_trade_profit_usdt\": 0.11239475232170862,\n  \"realized_return_on_turnover_percent\": 0.25691322179834064,\n  \"profitable_trades\": 127,\n  \"trade_win_rate_percent\": 100.0,\n  \"total_mark_to_market_pnl_usdt\": -16.300439069717868,\n  \"inventory_market_pnl_usdt\": -30.574572614574862,\n  \"pnl_explanation\": \"Total mark-to-market PnL = realized arbitrage PnL + inventory market/valuation PnL.\",\n  \"paper_trades\": 127,\n  \"balances\": {\n    \"binance:SOL\": 0.9839126790799373,\n    \"binance:USDT\": 899.6501861107254,\n    \"bybit:SOL\": 0.9774756012292793,\n    \"bybit:USDT\": 893.0503301273642,\n    \"okx:SOL\": 1.0649112044486737,\n    \"okx:USDT\": 883.6130661568407\n  },\n  \"inventory_assets\": [\n    \"USDT\",\n    \"SOL\"\n  ],\n  \"minimum_net_profit_percent\": 0.1,\n  \"minimum_confirmations\": 3,\n  \"maximum_quote_stake\": 25.0,\n  \"route_cooldown_seconds\": 60,\n  \"minimum_base_share_percent\": 5.0,\n  \"maximum_base_share_percent\": 15.0,\n  \"target_base_share_percent\": 10.0,\n  \"risk_trimmed_sol_this_cycle\": 2.583274318397259,\n  \"risk_trim_cost_usdt_this_cycle\": 0.34101589002268895,\n  \"inventory_by_exchange\": {\n    \"binance\": {\n      \"quote_balance_usdt\": 899.6501861107254,\n      \"base_balance_sol\": 0.9839126790799373,\n      \"base_value_usdt\": 99.98028688470784,\n      \"mark_to_market_equity_usdt\": 999.6304729954333,\n      \"base_share_percent\": 10.001724595801171,\n      \"low_assets\": []\n    },\n    \"bybit\": {\n      \"quote_balance_usdt\": 893.0503301273642,\n      \"base_balance_sol\": 0.9774756012292793,\n      \"base_value_usdt\": 99.24798517081487,\n      \"mark_to_market_equity_usdt\": 992.2983152981791,\n      \"base_share_percent\": 10.001829453977408,\n      \"low_assets\": []\n    },\n    \"okx\": {\n      \"quote_balance_usdt\": 883.6130661568407,\n      \"base_balance_sol\": 1.0649112044486737,\n      \"base_value_usdt\": 108.15770647982954,\n      \"mark_to_market_equity_usdt\": 991.7707726366702,\n      \"base_share_percent\": 10.905514607199715,\n      \"low_assets\": []\n    }\n  },\n  \"rebalance_required\": [],\n  \"added_this_cycle\": 0,\n  \"rejected_this_cycle\": 0,\n  \"rejection_reasons\": {}\n}\n",
+    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-31 08:11:26\n========================================================\n[1] Checking GitHub...\nLOCAL : c83bdd26e5\nREMOTE: f30c214883\n[2] Update available\n - aris_cross_inventory_low_risk_v01.py\n - remote/termux_command.json\n[3] Backup tag: aris-backup-20260831-081128\n[4] Validating Python files...\n[5] Validation passed\n[OK] ARIS updated safely\nOLD : c83bdd26e5\nNEW : f30c214883\nBACKUP TAG: aris-backup-20260831-081128\n========================================================\n",
     "stderr": ""
   }
 }
