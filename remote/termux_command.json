@@ -1,11 +1,10 @@
 {
-  "id": "locate-low-risk-process-20260831-0812",
+  "id": "run-risk-trim-model-20260831-0813",
   "action": "EXEC",
   "argv": [
-    "pgrep",
-    "-af",
-    "aris_cross_inventory_low_risk_v01.py"
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
