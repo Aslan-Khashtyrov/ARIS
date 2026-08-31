@@ -1,5 +1,11 @@
 {
-  "id": "paper-trades-check-20260831-0202",
-  "action": "READ_TEXT",
-  "path": "~/Arbitrage/journal/paper_trades.csv"
+  "id": "hourly-healthcheck-20260831-0457",
+  "action": "EXEC",
+  "argv": [
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py",
+    "--summary"
+  ],
+  "cwd": "/data/data/com.termux/files/home/Arbitrage",
+  "timeout": 180
 }
