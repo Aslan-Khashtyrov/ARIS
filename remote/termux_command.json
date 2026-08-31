@@ -1,7 +1,7 @@
 {
-  "id": "verify-usdt-health-final-20260831-1206",
+  "id": "inspect-paper-processes-20260831-1207",
   "action": "EXEC",
-  "argv": ["python", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py", "--summary"],
+  "argv": ["pgrep", "-af", "aris_.*paper|aris_cross_inventory_low_risk"],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 180
+  "timeout": 30
 }
