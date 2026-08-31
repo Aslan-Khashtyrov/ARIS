@@ -1,7 +1,17 @@
 {
-  "ok": false,
-  "id": "start-usdt-paired-v01-20260831-1036",
+  "ok": true,
+  "id": "start-usdt-paired-v01-absolute-20260831-1015",
   "action": "EXEC",
-  "time": "2026-08-31T10:12:42",
-  "error": "FileNotFoundError: [Errno 2] No such file or directory: '/data/data/com.termux/files/home/aris_usdt_paired_paper_v01.py'"
+  "time": "2026-08-31T10:14:53",
+  "result": {
+    "argv": [
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_usdt_paired_paper_v01.py",
+      "--daemon"
+    ],
+    "cwd": "/data/data/com.termux/files/home/Arbitrage",
+    "returncode": 0,
+    "stdout": "paired paper daemon starting pid=9126\n",
+    "stderr": ""
+  }
 }
