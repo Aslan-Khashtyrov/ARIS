@@ -1,5 +1,10 @@
 {
-  "id": "verify-usdt-only-balances-20260831-0944",
-  "action": "READ_TEXT",
-  "path": "~/Arbitrage/journal/cross_inventory_low_risk_summary_v01.json"
+  "id": "stop-usdt-daemon-for-state-fix-20260831-0945",
+  "action": "EXEC",
+  "argv": [
+    "kill",
+    "22818"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 30
 }
