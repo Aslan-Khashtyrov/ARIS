@@ -1,7 +1,7 @@
 {
-  "id": "deploy-compact-health-summary-20260831-1202",
+  "id": "verify-compact-health-20260831-1203",
   "action": "EXEC",
-  "argv": ["git", "pull", "--ff-only"],
+  "argv": ["python", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py", "--summary"],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 120
+  "timeout": 180
 }
