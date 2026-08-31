@@ -2,6 +2,8 @@
 from __future__ import annotations
 import hashlib
 import json
+import os
+import sys
 import time
 from collections import defaultdict
 from datetime import datetime
@@ -14,6 +16,7 @@ SNAPSHOT = JOURNAL / "cycle_quotes_v01.json"
 LEDGER = JOURNAL / "cross_inventory_low_risk_ledger_v01.jsonl"
 STATE = JOURNAL / "cross_inventory_low_risk_state_v01.json"
 SUMMARY = JOURNAL / "cross_inventory_low_risk_summary_v01.json"
+PIDFILE = ROOT / "guardian_state" / "cross_inventory_low_risk.pid"
 MODEL = "cross-inventory-low-risk-v01"
 EXCHANGES = ("binance", "bybit", "okx")
 BASE_ASSET = "SOL"
@@ -357,5 +360,37 @@ def run_forever():
             atomic_json(SUMMARY, {"ok": False, "error": f"{type(exc).__name__}: {exc}", "real_trading": False})
         time.sleep(5)
 
+def daemonize():
+    PIDFILE.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        current_pid = int(PIDFILE.read_text(encoding="utf-8").strip())
+        os.kill(current_pid, 0)
+        print(f"low-risk paper daemon already running pid={current_pid}")
+        return
+    except Exception:
+        pass
+    pid = os.fork()
+    if pid:
+        print(f"low-risk paper daemon starting pid={pid}")
+        return
+    os.setsid()
+    null = os.open("/dev/null", os.O_RDWR)
+    os.dup2(null, 0)
+    os.dup2(null, 1)
+    os.dup2(null, 2)
+    PIDFILE.write_text(str(os.getpid()), encoding="utf-8")
+    try:
+        run_forever()
+    finally:
+        try:
+            PIDFILE.unlink()
+        except OSError:
+            pass
+    os._exit(0)
+
+
 if __name__ == "__main__":
-    print(json.dumps(process_once(), ensure_ascii=False, indent=2))
+    if "--daemon" in sys.argv:
+        daemonize()
+    else:
+        print(json.dumps(process_once(), ensure_ascii=False, indent=2))
