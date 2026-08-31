@@ -1,13 +1,11 @@
 {
-  "id": "install-usdt-paired-v01-20260831-1034",
+  "id": "start-usdt-paired-v01-20260831-1036",
   "action": "EXEC",
   "argv": [
-    "git",
-    "checkout",
-    "FETCH_HEAD",
-    "--",
-    "aris_usdt_paired_paper_v01.py"
+    "python",
+    "aris_usdt_paired_paper_v01.py",
+    "--daemon"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 60
+  "timeout": 30
 }
