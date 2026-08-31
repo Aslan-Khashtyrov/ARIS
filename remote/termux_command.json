@@ -1,11 +1,10 @@
 {
-  "id": "hourly-healthcheck-20260831-0802",
+  "id": "deploy-inventory-risk-trim-20260831-0810",
   "action": "EXEC",
   "argv": [
     "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py",
-    "--summary"
+    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
   ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
+  "cwd": "~/Arbitrage",
   "timeout": 180
 }
