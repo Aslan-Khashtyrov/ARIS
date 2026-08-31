@@ -1,7 +1,7 @@
 {
-  "id": "verify-compact-health-20260831-1203",
+  "id": "deploy-usdt-health-model-fix-20260831-1205",
   "action": "EXEC",
-  "argv": ["python", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py", "--summary"],
+  "argv": ["git", "pull", "--ff-only"],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 180
+  "timeout": 120
 }
