@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "stop-old-inventory-daemon-20260831-0942",
+  "id": "start-usdt-only-daemon-20260831-0943",
   "action": "EXEC",
-  "time": "2026-08-31T09:35:17",
+  "time": "2026-08-31T09:36:04",
   "result": {
     "argv": [
-      "kill",
-      "20930"
+      "python",
+      "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py",
+      "--daemon"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "",
+    "stdout": "low-risk paper daemon starting pid=22818\n",
     "stderr": ""
   }
 }
