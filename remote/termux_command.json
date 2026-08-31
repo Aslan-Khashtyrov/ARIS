@@ -1,11 +1,7 @@
 {
-  "id": "start-usdt-paired-v01-absolute-20260831-1015",
+  "id": "healthcheck-20260831-1016",
   "action": "EXEC",
-  "argv": [
-    "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_usdt_paired_paper_v01.py",
-    "--daemon"
-  ],
+  "argv": ["python", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py", "--summary"],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 30
+  "timeout": 180
 }
