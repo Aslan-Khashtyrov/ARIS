@@ -1,17 +1,11 @@
 {
   "ok": true,
-  "id": "restart-usdt-daemon-after-state-fix-20260831-0947",
-  "action": "EXEC",
-  "time": "2026-08-31T09:39:00",
+  "id": "final-usdt-only-summary-20260831-0948",
+  "action": "READ_TEXT",
+  "time": "2026-08-31T09:39:38",
   "result": {
-    "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py",
-      "--daemon"
-    ],
-    "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
-    "stdout": "low-risk paper daemon starting pid=24205\n",
-    "stderr": ""
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/cross_inventory_low_risk_summary_v01.json",
+    "size": 2260,
+    "content": "{\n  \"ok\": true,\n  \"generated_at\": \"2026-08-31T09:39:37\",\n  \"model\": \"usdt-only-paper-v01\",\n  \"mode\": \"INVENTORY_PAPER_ONLY\",\n  \"real_trading\": false,\n  \"started_at\": \"2026-08-31T09:39:37\",\n  \"initial_equity_usdt\": 3000.0,\n  \"mark_to_market_equity_usdt\": 2999.161871185964,\n  \"realized_arbitrage_profit_usdt\": 14.354973248990788,\n  \"gross_arbitrage_turnover_usdt\": 5606.0136006006005,\n  \"average_trade_profit_usdt\": 0.11127886239527743,\n  \"realized_return_on_turnover_percent\": 0.2560638320151929,\n  \"profitable_trades\": 129,\n  \"trade_win_rate_percent\": 100.0,\n  \"total_mark_to_market_pnl_usdt\": -0.8381288140358265,\n  \"inventory_market_pnl_usdt\": -15.193102063026615,\n  \"pnl_explanation\": \"Total mark-to-market PnL = realized arbitrage PnL + inventory market/valuation PnL.\",\n  \"paper_trades\": 129,\n  \"balances\": {\n    \"binance:SOL\": 0.0,\n    \"binance:USDT\": 999.7206262521892,\n    \"bybit:SOL\": 0.0,\n    \"bybit:USDT\": 999.7206149007009,\n    \"okx:SOL\": 0.0,\n    \"okx:USDT\": 999.7206300330739\n  },\n  \"inventory_assets\": [\n    \"USDT\",\n    \"SOL\"\n  ],\n  \"minimum_net_profit_percent\": 0.1,\n  \"minimum_confirmations\": 3,\n  \"maximum_quote_stake\": 25.0,\n  \"route_cooldown_seconds\": 60,\n  \"minimum_base_share_percent\": 0.0,\n  \"maximum_base_share_percent\": 0.0,\n  \"target_base_share_percent\": 0.0,\n  \"risk_trimmed_sol_this_cycle\": 5.838469662619867,\n  \"risk_trim_cost_usdt_this_cycle\": 0.7797441174097912,\n  \"inventory_by_exchange\": {\n    \"binance\": {\n      \"quote_balance_usdt\": 999.7206262521892,\n      \"base_balance_sol\": 0.0,\n      \"base_value_usdt\": 0.0,\n      \"mark_to_market_equity_usdt\": 999.7206262521892,\n      \"base_share_percent\": 0.0,\n      \"low_assets\": []\n    },\n    \"bybit\": {\n      \"quote_balance_usdt\": 999.7206149007009,\n      \"base_balance_sol\": 0.0,\n      \"base_value_usdt\": 0.0,\n      \"mark_to_market_equity_usdt\": 999.7206149007009,\n      \"base_share_percent\": 0.0,\n      \"low_assets\": []\n    },\n    \"okx\": {\n      \"quote_balance_usdt\": 999.7206300330739,\n      \"base_balance_sol\": 0.0,\n      \"base_value_usdt\": 0.0,\n      \"mark_to_market_equity_usdt\": 999.7206300330739,\n      \"base_share_percent\": 0.0,\n      \"low_assets\": []\n    }\n  },\n  \"rebalance_required\": [],\n  \"added_this_cycle\": 0,\n  \"rejected_this_cycle\": 0,\n  \"rejection_reasons\": {}\n}\n"
   }
 }
