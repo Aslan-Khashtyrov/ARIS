@@ -1,10 +1,11 @@
 {
-  "id": "stop-duplicate-main-20260831-latest3",
+  "id": "hourly-healthcheck-20260831-0802",
   "action": "EXEC",
   "argv": [
-    "kill",
-    "9932"
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py",
+    "--summary"
   ],
-  "cwd": "~/Arbitrage",
-  "timeout": 30
+  "cwd": "/data/data/com.termux/files/home/Arbitrage",
+  "timeout": 180
 }
