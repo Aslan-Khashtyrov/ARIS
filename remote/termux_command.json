@@ -1,7 +1,11 @@
 {
-  "id": "confirm-healthcheck-20260831-0902",
+  "id": "diagnose-no-profit-20260831-0820",
   "action": "EXEC",
-  "argv": ["python", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py", "--summary"],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 180
+  "argv": [
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py",
+    "--summary"
+  ],
+  "cwd": "~/Arbitrage",
+  "timeout": 120
 }
