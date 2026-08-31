@@ -1,17 +1,18 @@
 {
   "ok": true,
-  "id": "backup-before-threshold-sync-20260831-0918",
+  "id": "reset-to-threshold-main-20260831-0919",
   "action": "EXEC",
-  "time": "2026-08-31T09:18:25",
+  "time": "2026-08-31T09:18:51",
   "result": {
     "argv": [
       "git",
-      "branch",
-      "aris-recovery-threshold-20260831-0918"
+      "reset",
+      "--hard",
+      "origin/main"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 128,
-    "stdout": "",
-    "stderr": "fatal: a branch named 'aris-recovery-threshold-20260831-0918' already exists\n"
+    "returncode": 0,
+    "stdout": "HEAD is now at ccacf98 Sync Termux to unified 0.10 percent threshold\n",
+    "stderr": ""
   }
 }
