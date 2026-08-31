@@ -15,7 +15,7 @@ LEDGER = JOURNAL / "paper_ledger_v01.jsonl"
 STATE = JOURNAL / "paper_ledger_state_v01.json"
 SUMMARY = JOURNAL / "paper_ledger_summary_v01.json"
 CONFIG = ROOT / "aris_config_v01.json"
-MIN_PROFIT_PERCENT = 0.30
+MIN_PROFIT_PERCENT = 0.10
 MIN_CONFIRMATIONS = 3
 VALIDATION_MODEL = "executable-paper-v07-risk"
 
