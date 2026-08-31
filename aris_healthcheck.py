@@ -335,6 +335,15 @@ if "--summary" in sys.argv:
                 "confirmed_positive_routes", "minimum_confirmations",
             )
         }
+    compact_paired = None
+    if isinstance(usdt_paired_paper, dict):
+        compact_paired = {
+            key: usdt_paired_paper.get(key)
+            for key in (
+                "model", "started_at", "updated_at", "balance_usdt",
+                "realized_profit_usdt", "trades", "real_trading",
+            )
+        }
     report = {
         "ok": report["ok"],
         "time": report["time"],
@@ -343,7 +352,7 @@ if "--summary" in sys.argv:
         "cross_exchange": compact_cross,
         "cross_inventory_ledger": inventory_ledger,
         "cross_inventory_low_risk": low_risk_inventory,
-        "usdt_paired_paper": usdt_paired_paper,
+        "usdt_paired_paper": compact_paired,
     }
 
 print(json.dumps(report, ensure_ascii=False, indent=2))
