@@ -1,7 +1,7 @@
 {
-  "id": "inspect-risk-daemon-20260831-0901",
+  "id": "confirm-healthcheck-20260831-0902",
   "action": "EXEC",
-  "argv": ["pgrep", "-af", "aris_cross_inventory_low_risk_v01.py"],
+  "argv": ["python", "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py", "--summary"],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 30
+  "timeout": 180
 }
