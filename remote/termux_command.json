@@ -1,7 +1,7 @@
 {
-  "id": "inspect-paper-processes-20260831-1207",
+  "id": "deploy-atomic-state-fix-20260831-1210",
   "action": "EXEC",
-  "argv": ["pgrep", "-af", "aris_.*paper|aris_cross_inventory_low_risk"],
+  "argv": ["git", "pull", "--ff-only"],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
