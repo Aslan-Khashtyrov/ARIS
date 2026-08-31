@@ -1,17 +1,17 @@
 {
   "ok": true,
-  "id": "inspect-paper-processes-20260831-1207",
+  "id": "deploy-atomic-state-fix-20260831-1210",
   "action": "EXEC",
-  "time": "2026-08-31T12:06:08",
+  "time": "2026-08-31T12:12:39",
   "result": {
     "argv": [
-      "pgrep",
-      "-af",
-      "aris_.*paper|aris_cross_inventory_low_risk"
+      "git",
+      "pull",
+      "--ff-only"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "9126 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_usdt_paired_paper_v01.py --daemon\n24205 python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py --daemon\n",
+    "stdout": "Updating 6112a48..2bb7574\nFast-forward\n aris_cross_inventory_low_risk_v01.py | 12 +++++++++---\n aris_usdt_paired_paper_v01.py        | 12 +++++++++---\n remote/termux_command.json           |  6 +++---\n 3 files changed, 21 insertions(+), 9 deletions(-)\n",
     "stderr": ""
   }
 }
