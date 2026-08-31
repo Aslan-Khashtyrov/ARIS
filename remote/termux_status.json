@@ -1,16 +1,17 @@
 {
   "ok": true,
-  "id": "deploy-paper-threshold-010-20260831-0920",
+  "id": "backup-before-threshold-sync-20260831-0918",
   "action": "EXEC",
-  "time": "2026-08-31T09:17:33",
+  "time": "2026-08-31T09:18:22",
   "result": {
     "argv": [
-      "python",
-      "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
+      "git",
+      "branch",
+      "aris-recovery-threshold-20260831-0918"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 1,
-    "stdout": "========================================================\nARIS UPDATER v0.2\nTime: 2026-08-31 09:17:31\n========================================================\n[1] Checking GitHub...\nLOCAL : b1a872fd0e\nREMOTE: 8254a3b00a\n[ERROR] Remote branch is not a fast-forward update. Manual review required.\n",
+    "returncode": 0,
+    "stdout": "",
     "stderr": ""
   }
 }
