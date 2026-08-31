@@ -210,7 +210,7 @@ try:
         and low_risk_age <= 45
         and low_risk_inventory.get("ok") is True
         and low_risk_inventory.get("real_trading") is False
-        and low_risk_inventory.get("model") == "cross-inventory-low-risk-v01"
+        and low_risk_inventory.get("model") in {"cross-inventory-low-risk-v01", "usdt-only-paper-v01"}
         and (waiting_status or active_status_ok)
     )
     add("cross_inventory_low_risk_live", low_risk_ok, f"age_seconds={low_risk_age};status={low_risk_inventory.get('status')};trades={low_risk_inventory.get('paper_trades')};realized_profit_usdt={low_risk_inventory.get('realized_arbitrage_profit_usdt')};market_pnl_usdt={low_risk_inventory.get('inventory_market_pnl_usdt')}")
