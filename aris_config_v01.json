@@ -83,7 +83,7 @@
       "okx:USDT": 1000
     },
     "minimum_confirmations": 3,
-    "minimum_profit_percent": 0.3,
+    "minimum_profit_percent": 0.1,
     "risk_controls": {
       "maximum_trade_allocation_percent": 25,
       "maximum_trades_per_wallet_per_day": 20,
