@@ -1,18 +1,19 @@
 {
   "ok": true,
-  "id": "fetch-usdt-paired-v01-20260831-1031",
+  "id": "install-usdt-paired-v01-20260831-1034",
   "action": "EXEC",
-  "time": "2026-08-31T10:07:59",
+  "time": "2026-08-31T10:08:49",
   "result": {
     "argv": [
       "git",
-      "fetch",
-      "origin",
-      "main"
+      "checkout",
+      "FETCH_HEAD",
+      "--",
+      "aris_usdt_paired_paper_v01.py"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
     "stdout": "",
-    "stderr": "From https://github.com/Aslan-Khashtyrov/ARIS\n * branch            main       -> FETCH_HEAD\n"
+    "stderr": ""
   }
 }
