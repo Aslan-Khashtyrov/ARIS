@@ -1,12 +1,13 @@
 {
-  "id": "fetch-usdt-paired-v01-20260831-1031",
+  "id": "install-usdt-paired-v01-20260831-1034",
   "action": "EXEC",
   "argv": [
     "git",
-    "fetch",
-    "origin",
-    "main"
+    "checkout",
+    "FETCH_HEAD",
+    "--",
+    "aris_usdt_paired_paper_v01.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 60
 }
