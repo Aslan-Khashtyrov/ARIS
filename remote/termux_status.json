@@ -1,17 +1,16 @@
 {
   "ok": true,
-  "id": "paper-process-check-20260831-latest2",
+  "id": "stop-duplicate-main-20260831-latest3",
   "action": "EXEC",
-  "time": "2026-08-31T08:01:30",
+  "time": "2026-08-31T08:01:56",
   "result": {
     "argv": [
-      "pgrep",
-      "-af",
-      "main.py"
+      "kill",
+      "9932"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
     "returncode": 0,
-    "stdout": "9932 python /data/data/com.termux/files/usr/bin/python main.py\n16537 /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/usr/bin/python /data/data/com.termux/files/home/Arbitrage/main.py\n",
+    "stdout": "",
     "stderr": ""
   }
 }
