@@ -1,5 +1,5 @@
 {
-  "id": "paper-state-check-20260831-0201",
+  "id": "paper-trades-check-20260831-0202",
   "action": "READ_TEXT",
-  "path": "~/Arbitrage/journal/paper_state.json"
+  "path": "~/Arbitrage/journal/paper_trades.csv"
 }
