@@ -1,11 +1,11 @@
 {
-  "id": "start-usdt-paired-v01-20260831-1036",
+  "id": "start-usdt-paired-v01-absolute-20260831-1015",
   "action": "EXEC",
   "argv": [
     "python",
-    "aris_usdt_paired_paper_v01.py",
+    "/data/data/com.termux/files/home/Arbitrage/aris_usdt_paired_paper_v01.py",
     "--daemon"
   ],
-  "cwd": "~/Arbitrage",
+  "cwd": "/data/data/com.termux/files/home/Arbitrage",
   "timeout": 30
 }
