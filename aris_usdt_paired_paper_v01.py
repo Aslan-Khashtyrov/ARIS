@@ -164,6 +164,22 @@ if __name__ == "__main__":
         print(json.dumps(process_once(), ensure_ascii=False, indent=2))
     else:
         PIDFILE.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            old_pid = int(PIDFILE.read_text(encoding="utf-8"))
+            os.kill(old_pid, 0)
+            print(f"paired paper daemon already running pid={old_pid}")
+            raise SystemExit(0)
+        except (OSError, ValueError, FileNotFoundError):
+            pass
+        pid = os.fork()
+        if pid:
+            print(f"paired paper daemon starting pid={pid}")
+            raise SystemExit(0)
+        os.setsid()
+        null = os.open("/dev/null", os.O_RDWR)
+        os.dup2(null, 0)
+        os.dup2(null, 1)
+        os.dup2(null, 2)
         PIDFILE.write_text(str(os.getpid()), encoding="utf-8")
         try:
             run_forever()
