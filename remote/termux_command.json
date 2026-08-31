@@ -1,11 +1,7 @@
 {
-  "id": "inspect-usdt-paper-20260831-continue",
+  "id": "reload-paper-stop-20260831-1305",
   "action": "EXEC",
-  "argv": [
-    "python",
-    "-c",
-    "import json,subprocess,pathlib; j=pathlib.Path.home()/'Arbitrage'/'journal'; out={'processes':subprocess.run(['pgrep','-af','aris_usdt_paired_paper_v01.py|aris_cross_inventory_low_risk_v01.py'],capture_output=True,text=True).stdout.splitlines()};\nfor n in ['usdt_paired_paper_state_v01.json','cross_inventory_low_risk_summary_v01.json']:\n p=j/n\n try: out[n]=json.loads(p.read_text())\n except Exception as e: out[n]={'error':type(e).__name__+': '+str(e)}\nprint(json.dumps(out,ensure_ascii=False))"
-  ],
+  "argv": ["pkill", "-f", "aris_usdt_paired_paper_v01.py|aris_cross_inventory_low_risk_v01.py"],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 60
+  "timeout": 30
 }
