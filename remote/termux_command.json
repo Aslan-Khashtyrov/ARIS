@@ -1,10 +1,10 @@
 {
-  "id": "run-risk-trim-model-20260831-0813",
+  "id": "deploy-risk-daemon-20260831-0814",
   "action": "EXEC",
   "argv": [
     "python",
-    "/data/data/com.termux/files/home/Arbitrage/aris_cross_inventory_low_risk_v01.py"
+    "/data/data/com.termux/files/home/Arbitrage/aris_updater_v02.py"
   ],
   "cwd": "~/Arbitrage",
-  "timeout": 120
+  "timeout": 180
 }
