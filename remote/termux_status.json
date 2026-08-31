@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "id": "paper-state-check-20260831-0201",
+  "id": "paper-trades-check-20260831-0202",
   "action": "READ_TEXT",
-  "time": "2026-08-31T04:24:43",
+  "time": "2026-08-31T04:25:27",
   "result": {
-    "path": "/data/data/com.termux/files/home/Arbitrage/journal/paper_state.json",
-    "size": 394,
-    "content": "{\n  \"balance_usdt\": 1000.45792772261,\n  \"day\": \"2026-08-30\",\n  \"day_start_balance_usdt\": 1000.0,\n  \"last_routes\": {\n    \"DOGE:Binance>Bybit\": 1788128553.018147,\n    \"DOGE:Bybit>OKX\": 1788132576.8061028\n  },\n  \"losses\": 0,\n  \"realized_pnl_usdt\": 0.45792772260990944,\n  \"saved_at\": \"2026-08-31T02:29:36\",\n  \"starting_balance_usdt\": 1000.0,\n  \"trades\": 2,\n  \"version\": \"0.2.0-paper\",\n  \"wins\": 2\n}"
+    "path": "/data/data/com.termux/files/home/Arbitrage/journal/paper_trades.csv",
+    "size": 375,
+    "content": "timestamp,asset,quote,buy_exchange,sell_exchange,buy_ask,sell_bid,net_edge_percent,capital_usdt,final_usdt,profit_usdt,balance_usdt\n2026-08-31 01:22:33,DOGE,USDT,Binance,Bybit,0.0836300000,0.0839900000,0.119687,100.000000,100.119687,0.119687,1000.119687\n2026-08-31 02:29:36,DOGE,USDT,Bybit,OKX,0.0815900000,0.0821200000,0.338240,100.000000,100.338240,0.338240,1000.457928\n"
   }
 }
