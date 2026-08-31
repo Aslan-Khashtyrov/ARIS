@@ -2,7 +2,7 @@
   "ok": true,
   "id": "backup-before-threshold-sync-20260831-0918",
   "action": "EXEC",
-  "time": "2026-08-31T09:18:22",
+  "time": "2026-08-31T09:18:25",
   "result": {
     "argv": [
       "git",
@@ -10,8 +10,8 @@
       "aris-recovery-threshold-20260831-0918"
     ],
     "cwd": "/data/data/com.termux/files/home/Arbitrage",
-    "returncode": 0,
+    "returncode": 128,
     "stdout": "",
-    "stderr": ""
+    "stderr": "fatal: a branch named 'aris-recovery-threshold-20260831-0918' already exists\n"
   }
 }
