@@ -1,7 +1,11 @@
 {
-  "id": "reload-paper-stop-20260831-1305",
+  "id": "healthcheck-20260901-continue-safe",
   "action": "EXEC",
-  "argv": ["pkill", "-f", "aris_usdt_paired_paper_v01.py|aris_cross_inventory_low_risk_v01.py"],
+  "argv": [
+    "python",
+    "/data/data/com.termux/files/home/Arbitrage/aris_healthcheck.py",
+    "--summary"
+  ],
   "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 30
+  "timeout": 120
 }
