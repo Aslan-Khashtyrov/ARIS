@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "id": "sync-bridge-activation-20260906",
+  "id": "verify-isolated-controller-v08-20260906",
   "action": "PING",
-  "time": "2026-09-06T12:47:01+03:00",
+  "time": "2026-09-06T12:48:41+03:00",
   "result": {
     "pong": true,
-    "version": "0.7",
+    "version": "0.8",
     "mode": "github_ping_only",
     "real_trading": false
   }
