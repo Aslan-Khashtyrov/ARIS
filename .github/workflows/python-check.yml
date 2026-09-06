@@ -19,6 +19,8 @@ jobs:
           python-version: '3.13'
       - name: Compile Python sources
         run: python -m compileall -q .
+      - name: Enforce worker import safety
+        run: python -m unittest -q test_aris_worker_import_safety_v01.py
       - name: Enforce ping-only Termux bridge
         run: python -m unittest -q test_termux_control_policy_v01.py
       - name: Enforce read-only Codex review bridge
