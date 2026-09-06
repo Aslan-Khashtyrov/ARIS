@@ -1,5 +1,5 @@
 {
-  "id": "safe-idle-20260906-github-bridge",
+  "id": "sync-hardened-bridge-20260906",
   "action": "PING",
-  "note": "Safety neutralization only; no process, file, or trading action."
+  "note": "Harmless PING to fast-forward local main to the reviewed bridge code; no process or trading action."
 }
