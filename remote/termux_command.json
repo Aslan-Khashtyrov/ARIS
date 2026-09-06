@@ -1,11 +1,5 @@
 {
-  "id": "freeze-aris-20260902-2302",
-  "action": "EXEC",
-  "argv": [
-    "pkill",
-    "-f",
-    "aris_foreman_v01.py|aris_autopilot_v01.py|aris_worker_v03.py|guardian_v04.py|multi_scanner_v03.py|main.py|aris_cross_inventory_low_risk_v01.py|aris_usdt_paired_paper_v01.py"
-  ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 30
+  "id": "safe-idle-20260906-github-bridge",
+  "action": "PING",
+  "note": "Safety neutralization only; no process, file, or trading action."
 }
