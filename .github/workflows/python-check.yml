@@ -25,6 +25,8 @@ jobs:
         run: python -m unittest -q test_codex_review_worker_v01.py
       - name: Enforce retired remote agents and PID safety
         run: python -m unittest -q test_remote_safety_policy_v01.py
+      - name: Validate bridge activation shell
+        run: bash -n aris_restart_bridges_safe.sh
       - name: Validate finite paper state
         run: python -m unittest -q test_main_paper_state_validation_v01.py
       - name: Reject obvious committed secrets
