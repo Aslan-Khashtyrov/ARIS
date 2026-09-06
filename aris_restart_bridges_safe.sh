@@ -44,6 +44,17 @@ review_worker_running() {
   return 1
 }
 
+controller_process_running() {
+  for proc_dir in /proc/[0-9]*; do
+    [ -r "$proc_dir/cmdline" ] || continue
+    proc_cmdline="$(tr '\000' ' ' <"$proc_dir/cmdline" 2>/dev/null)" || continue
+    case "$proc_cmdline" in
+      *"aris_termux_control_v01.py"*) return 0 ;;
+    esac
+  done
+  return 1
+}
+
 [ -f "$CONTROL_SCRIPT" ] || fail "Контроллер не найден: $CONTROL_SCRIPT"
 [ -f "$BRIDGE_SCRIPT" ] || fail "Codex-мост не найден: $BRIDGE_SCRIPT"
 command -v python >/dev/null 2>&1 || fail "Python не найден в Termux"
@@ -72,6 +83,10 @@ if [ -f "$CONTROL_PIDFILE" ]; then
     fi
   fi
   rm -f -- "$CONTROL_PIDFILE"
+fi
+
+if controller_process_running; then
+  fail "Обнаружен контроллер без доверенного PID; дубликат не запущен."
 fi
 
 printf '%s\n' "[3/3] Запускаю изолированный PING-контроллер v0.8..."
