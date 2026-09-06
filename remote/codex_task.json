@@ -1,0 +1,5 @@
+{
+  "id": "codex-bridge-bootstrap-20260906",
+  "type": "PING",
+  "note": "Bootstrap only: confirm the read-only Codex bridge without invoking a model."
+}
