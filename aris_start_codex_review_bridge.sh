@@ -3,6 +3,8 @@ set -eu
 
 MAIN_ROOT="/data/data/com.termux/files/home/Arbitrage"
 WORKTREE="/data/data/com.termux/files/home/aris_codex_review_worktree"
+WORKER_PATH="aris_codex_review_worker_v01.py"
+TRUSTED_WORKER_BLOB="bbc8fcc153e942daa5f86c2bf5c7d2f4657bd766"
 
 if [ "${1-}" != "--inside-ubuntu" ]; then
   if ! command -v proot-distro >/dev/null 2>&1; then
@@ -41,10 +43,20 @@ else
   git -C "${MAIN_ROOT}" worktree add --detach "${WORKTREE}" origin/main
 fi
 
+if ! worker_blob="$(git -C "${WORKTREE}" rev-parse "HEAD:${WORKER_PATH}" 2>/dev/null)"; then
+  printf '%s\n' "[ОШИБКА] Не удалось проверить закреплённый worker."
+  exit 1
+fi
+if [ "${worker_blob}" != "${TRUSTED_WORKER_BLOB}" ]; then
+  printf '%s\n' "[БЛОК] Worker изменён и не прошёл отдельное одобрение."
+  exit 1
+fi
+printf '%s\n' "[OK] Проверена закреплённая версия worker: ${worker_blob}"
+
 printf '%s\n' "[4/4] Запускаю GitHub ↔ Codex мост."
 printf '%s\n' "Codex работает только с заранее заданными задачами в sandbox=read-only."
 printf '%s\n' "Ctrl+C остановит только этот мост."
 export ARIS_MAIN_ROOT="${MAIN_ROOT}"
 export ARIS_CODEX_WORKTREE="${WORKTREE}"
 cd "${WORKTREE}"
-exec /usr/bin/python3 aris_codex_review_worker_v01.py
+exec /usr/bin/python3 "${WORKER_PATH}"
