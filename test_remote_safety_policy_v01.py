@@ -40,5 +40,18 @@ class RetiredRemoteAgentPolicyTests(unittest.TestCase):
         self.assertNotIn("kill -9", source)
 
 
+    def test_bridge_activation_is_narrow_and_identity_checked(self):
+        source = Path("aris_restart_bridges_safe.sh").read_text(encoding="utf-8")
+        self.assertIn("review_worker_running", source)
+        self.assertIn("process_matches", source)
+        self.assertIn('kill -TERM -- "$old_pid"', source)
+        self.assertIn("aris_termux_control_v01.py", source)
+        self.assertIn("aris_start_codex_review_bridge.sh", source)
+        self.assertNotIn("pkill", source)
+        self.assertNotIn("killall", source)
+        self.assertNotIn("aris_stop_safe.sh", source)
+        self.assertNotIn("main.py", source)
+
+
 if __name__ == "__main__":
     unittest.main()
