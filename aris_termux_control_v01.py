@@ -12,11 +12,17 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.7"
-HOME = Path.home().resolve()
-ROOT = (HOME / "Arbitrage").resolve()
-STATE = ROOT / "guardian_state"
-JOURNAL = ROOT / "journal"
+VERSION = "0.8"
+USER_HOME = Path.home().resolve()
+MAIN_ROOT = (USER_HOME / "Arbitrage").resolve()
+ROOT = Path(
+    os.environ.get(
+        "ARIS_TERMUX_CONTROL_WORKTREE",
+        USER_HOME / "aris_termux_control_worktree",
+    )
+).resolve()
+STATE = MAIN_ROOT / "guardian_state"
+JOURNAL = MAIN_ROOT / "journal"
 COMMAND_PATH = "remote/termux_command.json"
 REPORT_PATH = ROOT / "remote" / "termux_status.json"
 LAST_ID = STATE / "termux_control_last_id"
@@ -41,7 +47,6 @@ def now() -> str:
 def ensure_runtime_dirs() -> None:
     STATE.mkdir(parents=True, exist_ok=True)
     JOURNAL.mkdir(parents=True, exist_ok=True)
-    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 
 def atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -159,14 +164,55 @@ def execute(command: object) -> tuple[str, str, dict[str, Any]]:
 
 
 def require_clean_repository() -> None:
-    unstaged = git_run(["git", "diff", "--quiet"])
-    staged = git_run(["git", "diff", "--cached", "--quiet"])
-    if unstaged.returncode != 0 or staged.returncode != 0:
-        raise RuntimeError("repository has tracked local changes")
+    if ROOT == MAIN_ROOT:
+        raise RuntimeError("controller refuses to use the live A.R.I.S. working tree")
 
-    branch = git_run(["git", "branch", "--show-current"])
-    if branch.returncode != 0 or branch.stdout.strip() != "main":
-        raise RuntimeError("controller requires local main branch")
+    top = git_run(["git", "rev-parse", "--show-toplevel"])
+    if top.returncode != 0 or Path(top.stdout.strip()).resolve() != ROOT:
+        raise RuntimeError("controller is not in its dedicated Git worktree")
+
+    branch = git_run(["git", "symbolic-ref", "-q", "--short", "HEAD"])
+    if branch.returncode == 0:
+        raise RuntimeError("controller worktree must remain detached")
+
+    status = git_run(["git", "status", "--porcelain", "--untracked-files=all"])
+    if status.returncode != 0 or status.stdout.strip():
+        raise RuntimeError("controller worktree is not clean")
+
+
+def prepare_control_worktree() -> None:
+    if ROOT == MAIN_ROOT:
+        raise RuntimeError("controller worktree must differ from the live A.R.I.S. tree")
+    if not (MAIN_ROOT / ".git").is_dir():
+        raise RuntimeError("live A.R.I.S. Git repository is unavailable")
+
+    if not (ROOT / ".git").exists():
+        if ROOT.exists():
+            raise RuntimeError(f"controller worktree path is occupied: {ROOT}")
+        created = subprocess.run(
+            [
+                "git",
+                "-c",
+                "core.hooksPath=/dev/null",
+                "worktree",
+                "add",
+                "--detach",
+                str(ROOT),
+                "HEAD",
+            ],
+            cwd=MAIN_ROOT,
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        if created.returncode != 0:
+            raise RuntimeError(
+                "cannot create controller worktree: "
+                + safe_display(created.stderr, 300)
+            )
+
+    require_clean_repository()
+    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 
 def publish(payload: dict[str, Any]) -> None:
@@ -326,6 +372,7 @@ def process_once() -> None:
 
 def main() -> None:
     ensure_runtime_dirs()
+    prepare_control_worktree()
     step(
         f"[СТАРТ] Контроллер v{VERSION} активен: "
         "только PING, реальные сделки выключены."
