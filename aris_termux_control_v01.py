@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -9,8 +10,9 @@ import tempfile
 import time
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
-VERSION = "0.5"
+VERSION = "0.6"
 HOME = Path.home().resolve()
 ROOT = (HOME / "Arbitrage").resolve()
 STATE = ROOT / "guardian_state"
@@ -21,252 +23,294 @@ LAST_ID = STATE / "termux_control_last_id"
 AUDIT = JOURNAL / "termux_control_audit.jsonl"
 HEARTBEAT = STATE / "termux_control_heartbeat.json"
 POLL_EVERY = 20
-MAX_OUTPUT = 48_000
-MAX_READ = 128_000
-MAX_WRITE = 256_000
 
-PROTECTED_PARTS = {
-    ".env", ".ssh", ".gnupg", ".aws", ".config/gh", ".git-credentials",
-    "credentials", "credential", "secrets", "secret", "api_key", "apikey",
-    "private_key", "keystore", "wallet", "seed", "mnemonic",
-}
-FINANCIAL_WORDS = {
-    "withdraw", "withdrawal", "deposit", "payout", "payment", "transfer_funds",
-    "place_order", "create_order", "market_order", "limit_order", "buy_order",
-    "sell_order", "send_money", "cashout", "вывод", "пополнение", "перевод_средств",
-}
-DENIED_PROGRAMS = {
-    "curl", "wget", "nc", "netcat", "socat", "ssh", "scp", "sftp", "ftp",
-    "telnet", "openssl", "gpg", "su", "sudo", "termux-api-start",
-}
-ALLOWED_PROGRAMS = {
-    "pwd", "ls", "whoami", "id", "uname", "date", "uptime", "df", "du", "stat",
-    "find", "rg", "grep", "sed", "head", "tail", "wc", "sort", "uniq", "cut",
-    "tr", "xargs", "basename", "dirname", "realpath", "readlink", "file", "md5sum",
-    "sha256sum", "ps", "pgrep", "pkill", "kill", "top", "free", "lsof",
-    "git", "python", "python3", "pip", "pip3", "pytest", "ruff", "mypy",
-    "pkg", "apt", "apt-get", "dpkg", "termux-info", "chmod", "mkdir", "touch",
-    "cp", "mv", "rm", "tar", "gzip", "gunzip", "zip", "unzip",
-}
-
-STATE.mkdir(parents=True, exist_ok=True)
-JOURNAL.mkdir(parents=True, exist_ok=True)
-REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+# Security invariant: GitHub-originated commands are data, not shell input.
+# The remote bridge may only answer a PING. It cannot read or write arbitrary
+# local files, execute programs, manage processes, or perform trading actions.
+ALLOWED_ACTIONS = frozenset({"PING"})
+ALLOWED_FIELDS = frozenset({"id", "action", "note"})
+COMMAND_ID_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}")
+MAX_NOTE_LENGTH = 500
 
 
 def now() -> str:
-    return datetime.now().isoformat(timespec="seconds")
+    return datetime.now().astimezone().isoformat(timespec="seconds")
 
 
-def audit(event: str, **fields) -> None:
+def ensure_runtime_dirs() -> None:
+    STATE.mkdir(parents=True, exist_ok=True)
+    JOURNAL.mkdir(parents=True, exist_ok=True)
+    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+
+def atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp_name: str | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            "w",
+            encoding="utf-8",
+            dir=path.parent,
+            delete=False,
+        ) as handle:
+            json.dump(payload, handle, ensure_ascii=False, indent=2)
+            handle.write("\n")
+            temp_name = handle.name
+        os.replace(temp_name, path)
+        temp_name = None
+    finally:
+        if temp_name:
+            try:
+                os.unlink(temp_name)
+            except FileNotFoundError:
+                pass
+
+
+def audit(event: str, **fields: Any) -> None:
     record = {"time": now(), "event": event, **fields}
     with AUDIT.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-def write_heartbeat(phase: str, **fields) -> None:
-    payload = {"time": now(), "pid": os.getpid(), "version": VERSION, "phase": phase, **fields}
-    temp = HEARTBEAT.with_suffix(".tmp")
-    temp.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
-    os.replace(temp, HEARTBEAT)
-
-
-def git_run(args: list[str], timeout: int = 60) -> subprocess.CompletedProcess:
-    return subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
-
-
-def normalized_text(value: object) -> str:
-    return str(value or "").strip().lower().replace("-", "_").replace(" ", "_")
-
-
-def reject_forbidden_text(values: list[object]) -> None:
-    joined = " ".join(normalized_text(v) for v in values)
-    if any(word in joined for word in FINANCIAL_WORDS):
-        raise PermissionError("FINANCIAL_ACTION_BLOCKED")
-    if any(part in joined for part in PROTECTED_PARTS):
-        raise PermissionError("PROTECTED_SECRET_PATH_BLOCKED")
-
-
-def safe_path(raw: object, *, must_exist: bool = False) -> Path:
-    value = str(raw or "").strip()
-    if not value:
-        raise ValueError("path is required")
-    reject_forbidden_text([value])
-    candidate = Path(value).expanduser()
-    if not candidate.is_absolute():
-        candidate = HOME / candidate
-    resolved = candidate.resolve(strict=must_exist)
-    if resolved != HOME and HOME not in resolved.parents:
-        raise PermissionError("PATH_OUTSIDE_TERMUX_HOME")
-    reject_forbidden_text([str(resolved.relative_to(HOME))])
-    return resolved
-
-
-def redact(text: str) -> str:
-    patterns = [
-        r"(?i)(api[_-]?key|api[_-]?secret|access[_-]?token|refresh[_-]?token|password)\s*[:=]\s*\S+",
-        r"(?i)bearer\s+[A-Za-z0-9._~+/-]{12,}",
-        r"-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----",
-    ]
-    result = text
-    for pattern in patterns:
-        result = re.sub(pattern, "[REDACTED]", result)
-    return result[-MAX_OUTPUT:]
-
-
-def list_dir(command: dict) -> dict:
-    path = safe_path(command.get("path", str(HOME)), must_exist=True)
-    if not path.is_dir():
-        raise NotADirectoryError(str(path))
-    limit = max(1, min(int(command.get("limit", 500)), 2000))
-    entries = []
-    for item in sorted(path.iterdir(), key=lambda p: (not p.is_dir(), p.name.lower())):
-        if any(part in normalized_text(item.name) for part in PROTECTED_PARTS):
-            continue
-        try:
-            stat = item.stat()
-            entries.append({"name": item.name, "type": "dir" if item.is_dir() else "file", "size": stat.st_size, "mtime": int(stat.st_mtime)})
-        except OSError:
-            entries.append({"name": item.name, "type": "unavailable"})
-        if len(entries) >= limit:
-            break
-    return {"path": str(path), "entries": entries, "truncated": len(entries) >= limit}
-
-
-def read_text(command: dict) -> dict:
-    path = safe_path(command.get("path"), must_exist=True)
-    if not path.is_file():
-        raise ValueError("not a regular file")
-    size = path.stat().st_size
-    if size > MAX_READ:
-        raise ValueError(f"file exceeds {MAX_READ} bytes")
-    content = path.read_text(encoding="utf-8", errors="replace")
-    return {"path": str(path), "size": size, "content": redact(content)}
-
-
-def write_text(command: dict) -> dict:
-    path = safe_path(command.get("path"), must_exist=False)
-    content = str(command.get("content", ""))
-    reject_forbidden_text([path, content[:4000]])
-    encoded = content.encode("utf-8")
-    if len(encoded) > MAX_WRITE:
-        raise ValueError(f"content exceeds {MAX_WRITE} bytes")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
-        handle.write(content)
-        temp_name = handle.name
-    os.replace(temp_name, path)
-    return {"path": str(path), "bytes": len(encoded)}
-
-
-def validate_exec(argv: object) -> list[str]:
-    if not isinstance(argv, list) or not argv or not all(isinstance(v, str) for v in argv):
-        raise ValueError("argv must be a non-empty string array")
-    if len(argv) > 80:
-        raise ValueError("too many arguments")
-    reject_forbidden_text(argv)
-    program = Path(argv[0]).name
-    if program in DENIED_PROGRAMS or program not in ALLOWED_PROGRAMS:
-        raise PermissionError(f"PROGRAM_NOT_ALLOWED: {program}")
-    if program in {"python", "python3"}:
-        if len(argv) < 2 or argv[1].startswith("-"):
-            raise PermissionError("python requires a script path; -c and stdin are blocked")
-        argv = list(argv)
-        argv[1] = str(safe_path(argv[1], must_exist=True))
-    if program in {"pip", "pip3", "pkg", "apt", "apt-get"} and any(v in {"remove", "uninstall", "purge"} for v in argv[1:]):
-        raise PermissionError("PACKAGE_REMOVAL_BLOCKED")
-    if program == "git" and any(v in {"credential", "credential-store"} for v in argv[1:]):
-        raise PermissionError("GIT_CREDENTIAL_ACCESS_BLOCKED")
-    return argv
-
-
-def exec_argv(command: dict) -> dict:
-    argv = validate_exec(command.get("argv"))
-    cwd = safe_path(command.get("cwd", str(HOME)), must_exist=True)
-    if not cwd.is_dir():
-        raise NotADirectoryError(str(cwd))
-    timeout = max(1, min(int(command.get("timeout", 60)), 300))
-    safe_env_keys = (
-        "PATH", "PREFIX", "TMPDIR", "LD_PRELOAD", "SHELL", "TERM", "COLORTERM",
-        "ANDROID_DATA", "ANDROID_ROOT", "ANDROID_RUNTIME_ROOT", "BOOTCLASSPATH",
-        "DEX2OATBOOTCLASSPATH",
+def write_heartbeat(phase: str, **fields: Any) -> None:
+    atomic_write_json(
+        HEARTBEAT,
+        {
+            "time": now(),
+            "pid": os.getpid(),
+            "version": VERSION,
+            "mode": "github_ping_only",
+            "phase": phase,
+            **fields,
+        },
     )
-    safe_env = {key: os.environ[key] for key in safe_env_keys if os.environ.get(key)}
-    for key, value in os.environ.items():
-        if key.startswith(("TERMUX_", "TERMUX__", "ANDROID__")):
-            safe_env[key] = value
-    safe_env.update({"HOME": str(HOME), "LANG": os.environ.get("LANG", "C.UTF-8")})
-    proc = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=safe_env)
-    return {"argv": argv, "cwd": str(cwd), "returncode": proc.returncode, "stdout": redact(proc.stdout), "stderr": redact(proc.stderr)}
 
 
-def execute(command: dict) -> dict:
+def git_run(args: list[str], timeout: int = 60) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        args,
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+    )
+
+
+def safe_identifier(value: object) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9._:-]+", "_", str(value or "").strip())
+    return cleaned[:128] or "invalid"
+
+
+def validate_command(command: object) -> tuple[str, str]:
+    if not isinstance(command, dict):
+        raise ValueError("command must be a JSON object")
+
+    unexpected = set(command) - ALLOWED_FIELDS
+    if unexpected:
+        raise PermissionError("UNEXPECTED_FIELDS")
+
+    command_id = str(command.get("id", "")).strip()
+    if not COMMAND_ID_PATTERN.fullmatch(command_id):
+        raise ValueError("invalid command id")
+
     action = str(command.get("action", "")).strip().upper()
-    if action == "PING":
-        return {"pong": True, "version": VERSION, "home": str(HOME)}
-    if action == "LIST_DIR":
-        return list_dir(command)
-    if action == "READ_TEXT":
-        return read_text(command)
-    if action == "WRITE_TEXT":
-        return write_text(command)
-    if action == "EXEC":
-        return exec_argv(command)
-    raise PermissionError("ACTION_NOT_ALLOWED")
+    if action not in ALLOWED_ACTIONS:
+        raise PermissionError("ACTION_NOT_ALLOWED_PING_ONLY")
+
+    note = command.get("note")
+    if note is not None and (
+        not isinstance(note, str) or len(note) > MAX_NOTE_LENGTH
+    ):
+        raise ValueError("invalid note")
+
+    return command_id, action
 
 
-def publish(payload: dict) -> None:
-    merge = git_run(["git", "merge", "--ff-only", "origin/main"], timeout=45)
+def execute(command: object) -> tuple[str, str, dict[str, Any]]:
+    command_id, action = validate_command(command)
+    return (
+        command_id,
+        action,
+        {
+            "pong": True,
+            "version": VERSION,
+            "mode": "github_ping_only",
+            "real_trading": False,
+        },
+    )
+
+
+def require_clean_repository() -> None:
+    unstaged = git_run(["git", "diff", "--quiet"])
+    staged = git_run(["git", "diff", "--cached", "--quiet"])
+    if unstaged.returncode != 0 or staged.returncode != 0:
+        raise RuntimeError("repository has tracked local changes")
+
+    branch = git_run(["git", "branch", "--show-current"])
+    if branch.returncode != 0 or branch.stdout.strip() != "main":
+        raise RuntimeError("controller requires local main branch")
+
+
+def publish(payload: dict[str, Any]) -> None:
+    require_clean_repository()
+
+    merge = git_run(
+        [
+            "git",
+            "-c",
+            "core.hooksPath=/dev/null",
+            "merge",
+            "--ff-only",
+            "origin/main",
+        ],
+        timeout=45,
+    )
     if merge.returncode != 0:
         raise RuntimeError("cannot fast-forward: " + merge.stderr[-300:])
-    REPORT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    git_run(["git", "add", "remote/termux_status.json"])
-    commit = git_run(["git", "commit", "-m", f"Termux report {payload.get('id', 'unknown')}"])
-    if commit.returncode != 0 and "nothing to commit" not in (commit.stdout + commit.stderr).lower():
+
+    atomic_write_json(REPORT_PATH, payload)
+    add = git_run(["git", "add", "--", "remote/termux_status.json"])
+    if add.returncode != 0:
+        raise RuntimeError("git add failed: " + add.stderr[-300:])
+
+    commit = git_run(
+        [
+            "git",
+            "-c",
+            "core.hooksPath=/dev/null",
+            "commit",
+            "-m",
+            f"Termux report {payload.get('id', 'unknown')}",
+            "--",
+            "remote/termux_status.json",
+        ]
+    )
+    combined = (commit.stdout + commit.stderr).lower()
+    if commit.returncode != 0 and "nothing to commit" not in combined:
         raise RuntimeError("git commit failed: " + commit.stderr[-300:])
+    if commit.returncode != 0:
+        return
+
+    push = git_run(["git", "push", "origin", "HEAD:main"], timeout=60)
+    if push.returncode == 0:
+        return
+
+    rebase = git_run(
+        [
+            "git",
+            "-c",
+            "core.hooksPath=/dev/null",
+            "pull",
+            "--rebase",
+            "origin",
+            "main",
+        ],
+        timeout=60,
+    )
+    if rebase.returncode != 0:
+        git_run(
+            [
+                "git",
+                "-c",
+                "core.hooksPath=/dev/null",
+                "rebase",
+                "--abort",
+            ]
+        )
+        raise RuntimeError("git rebase failed: " + rebase.stderr[-300:])
+
     push = git_run(["git", "push", "origin", "HEAD:main"], timeout=60)
     if push.returncode != 0:
-        pull = git_run(["git", "pull", "--rebase", "origin", "main"], timeout=60)
-        if pull.returncode != 0:
-            raise RuntimeError("git rebase failed: " + pull.stderr[-300:])
-        push = git_run(["git", "push", "origin", "HEAD:main"], timeout=60)
-        if push.returncode != 0:
-            raise RuntimeError("git push failed: " + push.stderr[-300:])
+        raise RuntimeError("git push failed: " + push.stderr[-300:])
 
 
-audit("started", version=VERSION, mode="managed_termux", real_trading=False)
-while True:
+def process_once() -> None:
+    write_heartbeat("polling")
+    fetch = git_run(
+        [
+            "git",
+            "fetch",
+            "--quiet",
+            "--no-tags",
+            "origin",
+            "refs/heads/main:refs/remotes/origin/main",
+        ],
+        timeout=45,
+    )
+    if fetch.returncode != 0:
+        write_heartbeat("fetch_error", returncode=fetch.returncode)
+        audit("fetch_error", detail=fetch.stderr[-500:])
+        return
+
+    shown = git_run(["git", "show", f"origin/main:{COMMAND_PATH}"])
+    if shown.returncode != 0:
+        write_heartbeat("command_unavailable")
+        return
+
+    fingerprint = hashlib.sha256(shown.stdout.encode("utf-8")).hexdigest()
+    previous = LAST_ID.read_text(encoding="utf-8").strip() if LAST_ID.exists() else ""
+    if fingerprint == previous:
+        return
+
+    raw_id: object = "invalid"
+    raw_action: object = "UNKNOWN"
     try:
-        write_heartbeat("polling")
-        fetch = git_run(["git", "fetch", "--quiet", "origin", "main"], timeout=45)
-        if fetch.returncode != 0:
-            write_heartbeat("fetch_error", returncode=fetch.returncode)
-            audit("fetch_error", detail=fetch.stderr[-500:])
-            time.sleep(POLL_EVERY)
-            continue
-        shown = git_run(["git", "show", f"origin/main:{COMMAND_PATH}"])
-        if shown.returncode != 0:
-            time.sleep(POLL_EVERY)
-            continue
         command = json.loads(shown.stdout)
-        command_id = str(command.get("id", "")).strip()
-        action = str(command.get("action", "")).strip().upper()
-        previous = LAST_ID.read_text(encoding="utf-8").strip() if LAST_ID.exists() else ""
-        if not command_id or command_id == previous:
-            time.sleep(POLL_EVERY)
-            continue
-        try:
-            result = execute(command)
-            payload = {"ok": True, "id": command_id, "action": action, "time": now(), "result": result}
-            audit("executed", id=command_id, action=action)
-        except Exception as exc:
-            payload = {"ok": False, "id": command_id, "action": action, "time": now(), "error": f"{type(exc).__name__}: {exc}"}
-            audit("denied_or_failed", id=command_id, action=action, detail=payload["error"])
-        publish(payload)
-        LAST_ID.write_text(command_id, encoding="utf-8")
-        write_heartbeat("published", command_id=command_id, action=action)
-        audit("published", id=command_id, action=action)
+        if isinstance(command, dict):
+            raw_id = command.get("id", "invalid")
+            raw_action = command.get("action", "UNKNOWN")
+        command_id, action, result = execute(command)
+        payload = {
+            "ok": True,
+            "id": command_id,
+            "action": action,
+            "time": now(),
+            "result": result,
+        }
+        audit("executed", id=command_id, action=action)
     except Exception as exc:
-        write_heartbeat("loop_error", error_type=type(exc).__name__)
-        audit("loop_error", detail=f"{type(exc).__name__}: {exc}")
-    time.sleep(POLL_EVERY)
+        command_id = safe_identifier(raw_id)
+        action = safe_identifier(raw_action).upper()
+        payload = {
+            "ok": False,
+            "id": command_id,
+            "action": action,
+            "time": now(),
+            "error": f"{type(exc).__name__}: {exc}",
+        }
+        audit(
+            "denied_or_failed",
+            id=command_id,
+            action=action,
+            detail=payload["error"],
+        )
+
+    publish(payload)
+    LAST_ID.write_text(fingerprint, encoding="utf-8")
+    write_heartbeat("published", command_id=command_id, action=action)
+    audit("published", id=command_id, action=action)
+
+
+def main() -> None:
+    ensure_runtime_dirs()
+    audit(
+        "started",
+        version=VERSION,
+        mode="github_ping_only",
+        real_trading=False,
+        local_read=False,
+        local_write=False,
+        process_control=False,
+        shell_access=False,
+    )
+    while True:
+        try:
+            process_once()
+        except Exception as exc:
+            write_heartbeat("loop_error", error_type=type(exc).__name__)
+            audit("loop_error", detail=f"{type(exc).__name__}: {exc}")
+        time.sleep(POLL_EVERY)
+
+
+if __name__ == "__main__":
+    main()
