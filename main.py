@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+import math
 import os
 import csv
 import threading
@@ -229,8 +230,9 @@ def safe_float(value):
     try:
         if value is None:
             return None
-        return float(value)
-    except (TypeError, ValueError):
+        number = float(value)
+        return number if math.isfinite(number) else None
+    except (TypeError, ValueError, OverflowError):
         return None
 
 
@@ -931,6 +933,8 @@ def update_multi_books(exchange, books):
     now = time.time()
     with multi_lock:
         for asset, (bid, ask) in books.items():
+            bid = safe_float(bid)
+            ask = safe_float(ask)
             if bid is None or ask is None or bid <= 0 or ask <= 0 or bid > ask:
                 continue
             multi_market[(exchange, asset)] = {
@@ -963,16 +967,88 @@ def get_multi_snapshot():
         }
 
 
+PAPER_STATE_FLOAT_FIELDS = (
+    "starting_balance_usdt",
+    "balance_usdt",
+    "realized_pnl_usdt",
+    "day_start_balance_usdt",
+)
+PAPER_STATE_NONNEGATIVE_FLOAT_FIELDS = frozenset(
+    {
+        "starting_balance_usdt",
+        "balance_usdt",
+        "day_start_balance_usdt",
+    }
+)
+PAPER_STATE_COUNT_FIELDS = ("trades", "wins", "losses")
+
+
+def validate_paper_state(saved):
+    if not isinstance(saved, dict):
+        raise ValueError("paper state must be an object")
+
+    validated = dict(paper_state)
+    for field in PAPER_STATE_FLOAT_FIELDS:
+        if field not in saved:
+            continue
+        value = safe_float(saved[field])
+        if value is None:
+            raise ValueError(f"paper state {field} must be finite")
+        if field in PAPER_STATE_NONNEGATIVE_FLOAT_FIELDS and value < 0:
+            raise ValueError(f"paper state {field} must be nonnegative")
+        validated[field] = value
+
+    if validated["starting_balance_usdt"] <= 0:
+        raise ValueError("paper starting balance must be positive")
+
+    for field in PAPER_STATE_COUNT_FIELDS:
+        if field not in saved:
+            continue
+        value = saved[field]
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise ValueError(f"paper state {field} must be a nonnegative integer")
+        validated[field] = value
+
+    if validated["wins"] + validated["losses"] > validated["trades"]:
+        raise ValueError("paper win/loss counts exceed trade count")
+
+    if "day" in saved:
+        day = saved["day"]
+        if not isinstance(day, str):
+            raise ValueError("paper state day must be a string")
+        datetime.strptime(day, "%Y-%m-%d")
+        validated["day"] = day
+
+    if "last_routes" in saved:
+        routes = saved["last_routes"]
+        if not isinstance(routes, dict) or len(routes) > 10_000:
+            raise ValueError("paper state last_routes must be a bounded object")
+        clean_routes = {}
+        for route, raw_timestamp in routes.items():
+            timestamp = safe_float(raw_timestamp)
+            if (
+                not isinstance(route, str)
+                or not route
+                or len(route) > 256
+                or timestamp is None
+                or timestamp < 0
+            ):
+                raise ValueError("paper state contains an invalid route timestamp")
+            clean_routes[route] = timestamp
+        validated["last_routes"] = clean_routes
+
+    return validated
+
+
 def load_paper_state():
     if not os.path.exists(PAPER_STATE_FILE):
         return
     try:
         with open(PAPER_STATE_FILE, "r", encoding="utf-8") as file:
             saved = json.load(file)
+        validated = validate_paper_state(saved)
         with paper_lock:
-            for key in paper_state:
-                if key in saved:
-                    paper_state[key] = saved[key]
+            paper_state.update(validated)
     except (OSError, ValueError, TypeError):
         log_event("PAPER", "STATE_LOAD_FAILED")
 
@@ -1066,10 +1142,42 @@ def append_paper_trade(timestamp, opportunity, capital, final_value, profit, bal
 
 
 def maybe_execute_paper_trade(opportunity):
-    if not PAPER_ENABLED or opportunity is None:
+    if not PAPER_ENABLED or not isinstance(opportunity, dict):
         return None
-    if opportunity["net_edge_percent"] < PAPER_MIN_NET_EDGE_PERCENT:
+
+    asset = opportunity.get("asset")
+    buy_exchange = opportunity.get("buy_exchange")
+    sell_exchange = opportunity.get("sell_exchange")
+    ask = safe_float(opportunity.get("ask"))
+    bid = safe_float(opportunity.get("bid"))
+    net_edge = safe_float(opportunity.get("net_edge_percent"))
+    multiplier = safe_float(opportunity.get("final_multiplier"))
+    if (
+        asset not in PAPER_ASSETS
+        or buy_exchange not in PAPER_EXCHANGES
+        or sell_exchange not in PAPER_EXCHANGES
+        or buy_exchange == sell_exchange
+        or ask is None
+        or bid is None
+        or ask <= 0
+        or bid <= 0
+        or net_edge is None
+        or multiplier is None
+        or multiplier < 0
+    ):
         return None
+    if net_edge < PAPER_MIN_NET_EDGE_PERCENT:
+        return None
+
+    opportunity = dict(opportunity)
+    opportunity.update(
+        {
+            "ask": ask,
+            "bid": bid,
+            "net_edge_percent": net_edge,
+            "final_multiplier": multiplier,
+        }
+    )
 
     now = time.time()
     route_key = (
@@ -1090,7 +1198,9 @@ def maybe_execute_paper_trade(opportunity):
         capital = min(PAPER_MAX_TRADE_USDT, balance * PAPER_BALANCE_FRACTION)
         if capital <= 0:
             return None
-        final_value = capital * opportunity["final_multiplier"]
+        final_value = safe_float(capital * opportunity["final_multiplier"])
+        if final_value is None or final_value < 0:
+            return None
         profit = final_value - capital
         paper_state["balance_usdt"] = balance + profit
         paper_state["realized_pnl_usdt"] += profit
