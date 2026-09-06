@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "id": "sync-codex-review-bridge-20260906",
+  "id": "sync-hardened-bridges-20260906",
   "action": "PING",
-  "time": "2026-09-06T11:36:16+03:00",
+  "time": "2026-09-06T12:26:54+03:00",
   "result": {
     "pong": true,
     "version": "0.7",
