@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "id": "not-started",
+  "id": "codex-bridge-bootstrap-20260906",
   "type": "PING",
-  "time": null,
+  "time": "2026-09-06T11:58:06+03:00",
   "worker_version": "0.1",
   "policy": {
     "predefined_tasks_only": true,
@@ -11,7 +11,10 @@
     "process_control": false
   },
   "result": {
-    "state": "awaiting_local_start",
-    "codex_invoked": false
+    "pong": true,
+    "worker_version": "0.1",
+    "codex_invoked": false,
+    "mode": "predefined_read_only_reviews",
+    "real_trading": false
   }
 }
