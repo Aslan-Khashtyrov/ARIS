@@ -1,3 +1,5 @@
+import ast
+from pathlib import Path
 import unittest
 
 import aris_termux_control_v01 as bridge
@@ -47,6 +49,33 @@ class TermuxControlPolicyTests(unittest.TestCase):
     def test_invalid_command_id_is_denied(self):
         with self.assertRaises(ValueError):
             bridge.execute({"id": "../unsafe", "action": "PING"})
+
+    def test_visible_log_text_removes_terminal_controls(self):
+        rendered = bridge.safe_display("\x1b[31mстрока\nдва\x07")
+        self.assertNotIn("\x1b", rendered)
+        self.assertNotIn("\x07", rendered)
+        self.assertNotIn("\n", rendered)
+        self.assertIn("строка два", rendered)
+
+    def test_one_shot_handoff_can_signal_only_verified_parent(self):
+        source = Path("aris_controller_handoff_once.py").read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        kill_calls = [
+            node
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and isinstance(node.func.value, ast.Name)
+            and node.func.value.id == "os"
+            and node.func.attr == "kill"
+        ]
+        self.assertEqual(len(kill_calls), 1)
+        self.assertEqual(ast.unparse(kill_calls[0].args[0]), "parent_pid")
+        self.assertEqual(ast.unparse(kill_calls[0].args[1]), "signal.SIGTERM")
+        self.assertIn('"aris_termux_control_v01.py" not in parent_cmdline', source)
+        self.assertNotIn("pkill", source)
+        self.assertNotIn("killall", source)
+        self.assertNotIn("subprocess", source)
 
 
 if __name__ == "__main__":
