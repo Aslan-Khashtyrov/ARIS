@@ -19,6 +19,8 @@ jobs:
           python-version: '3.13'
       - name: Compile Python sources
         run: python -m compileall -q .
+      - name: Enforce ping-only Termux bridge
+        run: python -m unittest -q test_termux_control_policy_v01.py
       - name: Reject obvious committed secrets
         shell: bash
         run: |
