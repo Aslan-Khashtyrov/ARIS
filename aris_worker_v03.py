@@ -19,8 +19,10 @@ RESULTS = BASE / "results"
 JOURNAL = ROOT / "journal"
 LOG = JOURNAL / "aris_worker.log"
 
-for folder in (PENDING, DONE, REJECTED, RESULTS, JOURNAL):
-    folder.mkdir(parents=True, exist_ok=True)
+def ensure_runtime_dirs():
+    for folder in (PENDING, DONE, REJECTED, RESULTS, JOURNAL):
+        folder.mkdir(parents=True, exist_ok=True)
+
 
 ALLOWED_ACTIONS = {"STATUS", "ANALYZE"}
 PROCESSES = {
@@ -182,20 +184,61 @@ def cycle_collector_supervisor():
             log(f"CYCLE COLLECTOR ERROR | {type(exc).__name__}: {exc}")
             time.sleep(10)
 
-print(f"A.R.I.S. WORKER v{VERSION} | SAFE QUEUE | SHELL DISABLED | REAL TRADING DISABLED")
-log(f"WORKER STARTED | v{VERSION} | SAFE MODE")
-threading.Thread(target=cycle_collector_supervisor, daemon=True, name="cycle-collector-supervisor").start()
-threading.Thread(target=paper_ledger_supervisor, daemon=True, name="paper-ledger-supervisor").start()
-threading.Thread(target=operational_report_supervisor, daemon=True, name="operational-report-supervisor").start()
-threading.Thread(target=cycle_metrics_supervisor, daemon=True, name="cycle-metrics-supervisor").start()
-threading.Thread(target=cross_exchange_supervisor, daemon=True, name="cross-exchange-supervisor").start()
-threading.Thread(target=cross_paper_ledger_supervisor, daemon=True, name="cross-paper-ledger-supervisor").start()
-log("STANDARD INVENTORY MODEL DISABLED | LOW RISK MODEL PRIMARY")
-threading.Thread(target=cross_inventory_low_risk_supervisor, daemon=True, name="cross-inventory-low-risk-supervisor").start()
-try:
-    while True:
-        for task_file in sorted(PENDING.glob("*.json")):
-            execute(task_file)
-        time.sleep(CHECK_EVERY)
-except KeyboardInterrupt:
-    log("WORKER STOPPED BY USER")
+def start_services():
+    threading.Thread(
+        target=cycle_collector_supervisor,
+        daemon=True,
+        name="cycle-collector-supervisor",
+    ).start()
+    threading.Thread(
+        target=paper_ledger_supervisor,
+        daemon=True,
+        name="paper-ledger-supervisor",
+    ).start()
+    threading.Thread(
+        target=operational_report_supervisor,
+        daemon=True,
+        name="operational-report-supervisor",
+    ).start()
+    threading.Thread(
+        target=cycle_metrics_supervisor,
+        daemon=True,
+        name="cycle-metrics-supervisor",
+    ).start()
+    threading.Thread(
+        target=cross_exchange_supervisor,
+        daemon=True,
+        name="cross-exchange-supervisor",
+    ).start()
+    threading.Thread(
+        target=cross_paper_ledger_supervisor,
+        daemon=True,
+        name="cross-paper-ledger-supervisor",
+    ).start()
+    log("STANDARD INVENTORY MODEL DISABLED | LOW RISK MODEL PRIMARY")
+    threading.Thread(
+        target=cross_inventory_low_risk_supervisor,
+        daemon=True,
+        name="cross-inventory-low-risk-supervisor",
+    ).start()
+
+
+def main():
+    ensure_runtime_dirs()
+    print(
+        f"A.R.I.S. WORKER v{VERSION} | "
+        "SAFE QUEUE | SHELL DISABLED | REAL TRADING DISABLED"
+    )
+    log(f"WORKER STARTED | v{VERSION} | SAFE MODE")
+    start_services()
+    try:
+        while True:
+            for task_file in sorted(PENDING.glob("*.json")):
+                execute(task_file)
+            time.sleep(CHECK_EVERY)
+    except KeyboardInterrupt:
+        log("WORKER STOPPED BY USER")
+
+
+if __name__ == "__main__":
+    main()
