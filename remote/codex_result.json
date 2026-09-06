@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "id": "not-started",
+  "type": "PING",
+  "time": null,
+  "worker_version": "0.1",
+  "policy": {
+    "predefined_tasks_only": true,
+    "codex_sandbox": "read-only",
+    "real_trading": false,
+    "process_control": false
+  },
+  "result": {
+    "state": "awaiting_local_start",
+    "codex_invoked": false
+  }
+}
