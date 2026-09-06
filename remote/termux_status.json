@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "id": "cleanup-handoff-complete-20260906",
+  "id": "sync-codex-review-bridge-20260906",
   "action": "PING",
-  "time": "2026-09-06T11:14:19+03:00",
+  "time": "2026-09-06T11:36:16+03:00",
   "result": {
     "pong": true,
     "version": "0.7",
