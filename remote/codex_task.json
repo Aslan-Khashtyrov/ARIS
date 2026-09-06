@@ -1,5 +1,5 @@
 {
-  "id": "codex-bridge-bootstrap-20260906",
-  "type": "PING",
-  "note": "Bootstrap only: confirm the read-only Codex bridge without invoking a model."
+  "id": "repository-safety-review-20260906-01",
+  "type": "REPOSITORY_SAFETY_REVIEW",
+  "note": "Первая проверка через GitHub bridge; только анализ, без изменений и запуска A.R.I.S."
 }
