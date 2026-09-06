@@ -21,6 +21,8 @@ jobs:
         run: python -m compileall -q .
       - name: Enforce ping-only Termux bridge
         run: python -m unittest -q test_termux_control_policy_v01.py
+      - name: Enforce read-only Codex review bridge
+        run: python -m unittest -q test_codex_review_worker_v01.py
       - name: Reject obvious committed secrets
         shell: bash
         run: |
