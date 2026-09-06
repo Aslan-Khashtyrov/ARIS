@@ -1,11 +1,7 @@
 {
-  "ok": true,
-  "id": "prepare-visible-restart-20260906",
-  "action": "PING",
-  "time": "2026-09-06T11:10:12",
-  "result": {
-    "pong": true,
-    "version": "0.5",
-    "home": "/data/data/com.termux/files/home"
-  }
+  "ok": false,
+  "id": "activate-ping-only-bridge-20260906",
+  "action": "EXEC",
+  "time": "2026-09-06T11:10:39+03:00",
+  "error": "PermissionError: UNEXPECTED_FIELDS"
 }
