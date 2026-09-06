@@ -1,5 +1,5 @@
 {
-  "id": "repository-safety-review-20260906-01",
-  "type": "REPOSITORY_SAFETY_REVIEW",
-  "note": "Первая проверка через GitHub bridge; только анализ, без изменений и запуска A.R.I.S."
+  "id": "verify-pinned-codex-bridge-20260906",
+  "type": "PING",
+  "note": "Проверяю закреплённый read-only bridge после разрешённого перезапуска; модель не запускается."
 }
