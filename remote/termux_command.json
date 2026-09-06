@@ -1,5 +1,5 @@
 {
-  "id": "cleanup-handoff-complete-20260906",
+  "id": "sync-codex-review-bridge-20260906",
   "action": "PING",
-  "note": "Завершено: одноразовый переходник удалён, активна v0.7 PING-only; A.R.I.S. не затронут."
+  "note": "Синхронизирую GitHub-to-Codex read-only bridge; A.R.I.S. не трогаю."
 }
