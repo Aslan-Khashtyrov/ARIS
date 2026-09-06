@@ -1,12 +1,5 @@
 {
-  "id": "activate-ping-only-bridge-20260906",
-  "action": "EXEC",
-  "argv": [
-    "python3",
-    "/data/data/com.termux/files/home/Arbitrage/aris_controller_handoff_once.py",
-    "activate-ping-only-bridge-20260906"
-  ],
-  "cwd": "/data/data/com.termux/files/home/Arbitrage",
-  "timeout": 30,
-  "note": "One-time user-authorized restart of aris_termux_control_v01.py only."
+  "id": "verify-ping-only-v07-20260906",
+  "action": "PING",
+  "note": "Этап 3/3: подтверждаю работу v0.7; разрешён только PING, реальные сделки выключены."
 }
