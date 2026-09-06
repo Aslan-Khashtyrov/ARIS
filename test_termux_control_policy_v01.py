@@ -1,3 +1,4 @@
+from pathlib import Path
 import unittest
 
 import aris_termux_control_v01 as bridge
@@ -54,6 +55,16 @@ class TermuxControlPolicyTests(unittest.TestCase):
         self.assertNotIn("\x07", rendered)
         self.assertNotIn("\n", rendered)
         self.assertIn("строка два", rendered)
+
+    def test_status_publication_uses_a_dedicated_detached_worktree(self):
+        self.assertNotEqual(bridge.ROOT, bridge.MAIN_ROOT)
+        self.assertTrue(bridge.REPORT_PATH.is_relative_to(bridge.ROOT))
+        source = Path(bridge.__file__).read_text(encoding="utf-8")
+        self.assertIn('"worktree",', source)
+        self.assertIn('"--detach",', source)
+        self.assertIn("controller refuses to use the live A.R.I.S. working tree", source)
+        self.assertNotIn("controller requires local main branch", source)
+
 
 if __name__ == "__main__":
     unittest.main()
