@@ -1,4 +1,6 @@
+import hashlib
 from pathlib import Path
+import re
 import unittest
 
 import aris_codex_review_worker_v01 as worker
@@ -81,6 +83,33 @@ class CodexReviewWorkerPolicyTests(unittest.TestCase):
         self.assertNotIn("super-secret-value", redacted)
         self.assertNotIn("github_pat_", redacted)
         self.assertIn("[REDACTED]", redacted)
+
+
+    def test_redacts_quoted_secret_assignments(self):
+        samples = (
+            '"api_key": "quoted-json-secret"',
+            "'password': 'quoted-python-secret'",
+            "access_token = bare-shell-secret",
+        )
+        for sample in samples:
+            with self.subTest(sample=sample):
+                rendered = worker.redact(sample)
+                self.assertIn("[REDACTED]", rendered)
+                self.assertNotIn("secret", rendered.lower())
+
+    def test_launcher_pins_exact_worker_blob(self):
+        worker_bytes = Path(worker.__file__).read_bytes()
+        expected_blob = hashlib.sha1(
+            b"blob " + str(len(worker_bytes)).encode("ascii") + b"\0" + worker_bytes
+        ).hexdigest()
+        launcher = Path("aris_start_codex_review_bridge.sh").read_text(
+            encoding="utf-8"
+        )
+        match = re.search(r'TRUSTED_WORKER_BLOB="([0-9a-f]{40})"', launcher)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), expected_blob)
+        self.assertIn('rev-parse "HEAD:${WORKER_PATH}"', launcher)
+        self.assertIn('if [ "${worker_blob}" != "${TRUSTED_WORKER_BLOB}" ]', launcher)
 
 
 if __name__ == "__main__":

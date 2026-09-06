@@ -9,6 +9,7 @@ import os
 import re
 import subprocess
 import tempfile
+import threading
 import time
 from datetime import datetime
 from pathlib import Path
@@ -81,8 +82,12 @@ def safe_display(value: object, limit: int = 800) -> str:
 
 def redact(text: str) -> str:
     patterns = (
-        r"(?i)(api[_-]?key|api[_-]?secret|access[_-]?token|refresh[_-]?token|password)"
-        r"\s*[:=]\s*\S+",
+        r"""(?ix)
+        (?:["']?(?:api[_-]?key|api[_-]?secret|access[_-]?token|
+        refresh[_-]?token|password)["']?)
+        \s*[:=]\s*
+        (?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,}]+)
+        """,
         r"(?i)bearer\s+[A-Za-z0-9._~+/-]{12,}",
         r"\bsk-[A-Za-z0-9_-]{16,}\b",
         r"\bgithub_pat_[A-Za-z0-9_]{16,}\b",
@@ -240,6 +245,56 @@ def safe_codex_environment() -> dict[str, str]:
     return {key: os.environ[key] for key in allowed if os.environ.get(key)}
 
 
+def stream_redacted_codex(
+    command: list[str], prompt: str, timeout: int = 900
+) -> int:
+    """Run Codex while showing only redacted output in the local terminal."""
+    process = subprocess.Popen(
+        command,
+        cwd=ROOT,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1,
+        env=safe_codex_environment(),
+    )
+    if process.stdin is None or process.stdout is None:
+        process.kill()
+        process.wait()
+        raise RuntimeError("Codex stream pipes are unavailable")
+
+    process.stdin.write(prompt)
+    process.stdin.close()
+
+    def drain() -> None:
+        assert process.stdout is not None
+        for line in iter(process.stdout.readline, ""):
+            rendered = redact(line)
+            if rendered:
+                print(
+                    rendered,
+                    end="" if rendered.endswith("\n") else "\n",
+                    flush=True,
+                )
+
+    reader = threading.Thread(target=drain, daemon=True)
+    reader.start()
+    try:
+        returncode = process.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        process.terminate()
+        try:
+            process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait()
+        raise
+    finally:
+        reader.join(timeout=5)
+    return returncode
+
+
 def run_codex_review(task_type: str) -> dict[str, Any]:
     if not CODEX_BIN.is_file():
         return {
@@ -258,14 +313,7 @@ def run_codex_review(task_type: str) -> dict[str, Any]:
     command = codex_command(CODEX_OUTPUT)
     step(f"[CODEX] Запускаю {task_type} в sandbox=read-only.")
     try:
-        completed = subprocess.run(
-            command,
-            cwd=ROOT,
-            input=prompt,
-            text=True,
-            timeout=900,
-            env=safe_codex_environment(),
-        )
+        returncode = stream_redacted_codex(command, prompt, timeout=900)
     except subprocess.TimeoutExpired:
         step("[CODEX] Время анализа истекло; дочерний запуск остановлен.")
         return {
@@ -277,10 +325,10 @@ def run_codex_review(task_type: str) -> dict[str, Any]:
     message = ""
     if CODEX_OUTPUT.is_file():
         message = redact(CODEX_OUTPUT.read_text(encoding="utf-8", errors="replace"))
-    step(f"[CODEX] Анализ завершён, код возврата {completed.returncode}.")
+    step(f"[CODEX] Анализ завершён, код возврата {returncode}.")
     return {
         "codex_invoked": True,
-        "returncode": completed.returncode,
+        "returncode": returncode,
         "sandbox": "read-only",
         "ephemeral": True,
         "report": message,
