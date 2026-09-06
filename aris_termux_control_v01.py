@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.6"
+VERSION = "0.7"
 HOME = Path.home().resolve()
 ROOT = (HOME / "Arbitrage").resolve()
 STATE = ROOT / "guardian_state"
@@ -22,6 +22,7 @@ REPORT_PATH = ROOT / "remote" / "termux_status.json"
 LAST_ID = STATE / "termux_control_last_id"
 AUDIT = JOURNAL / "termux_control_audit.jsonl"
 HEARTBEAT = STATE / "termux_control_heartbeat.json"
+STEPS = JOURNAL / "codex_github_steps.log"
 POLL_EVERY = 20
 
 # Security invariant: GitHub-originated commands are data, not shell input.
@@ -64,6 +65,23 @@ def atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
                 os.unlink(temp_name)
             except FileNotFoundError:
                 pass
+
+
+def safe_display(value: object, limit: int = 800) -> str:
+    """Make untrusted repository text safe to display in a terminal log."""
+    compact = " ".join(str(value or "").split())
+    printable = "".join(character for character in compact if character.isprintable())
+    return printable[:limit]
+
+
+def step(message: object) -> None:
+    line = f"{now()} {safe_display(message)}"
+    with STEPS.open("a", encoding="utf-8") as handle:
+        handle.write(line + "\n")
+    try:
+        print(line, flush=True)
+    except OSError:
+        pass
 
 
 def audit(event: str, **fields: Any) -> None:
@@ -240,6 +258,7 @@ def process_once() -> None:
     if fetch.returncode != 0:
         write_heartbeat("fetch_error", returncode=fetch.returncode)
         audit("fetch_error", detail=fetch.stderr[-500:])
+        step("[ОШИБКА] Не удалось проверить GitHub; повторю позже.")
         return
 
     shown = git_run(["git", "show", f"origin/main:{COMMAND_PATH}"])
@@ -254,11 +273,19 @@ def process_once() -> None:
 
     raw_id: object = "invalid"
     raw_action: object = "UNKNOWN"
+    raw_note: object = ""
     try:
         command = json.loads(shown.stdout)
         if isinstance(command, dict):
             raw_id = command.get("id", "invalid")
             raw_action = command.get("action", "UNKNOWN")
+            raw_note = command.get("note", "")
+        step(
+            f"[GITHUB] Получена запись id={safe_identifier(raw_id)} "
+            f"action={safe_identifier(raw_action).upper()}"
+        )
+        if raw_note:
+            step(f"[ШАГ] {safe_display(raw_note, MAX_NOTE_LENGTH)}")
         command_id, action, result = execute(command)
         payload = {
             "ok": True,
@@ -268,6 +295,7 @@ def process_once() -> None:
             "result": result,
         }
         audit("executed", id=command_id, action=action)
+        step("[OK] Выполнен безопасный PING.")
     except Exception as exc:
         command_id = safe_identifier(raw_id)
         action = safe_identifier(raw_action).upper()
@@ -284,22 +312,31 @@ def process_once() -> None:
             action=action,
             detail=payload["error"],
         )
+        step(
+            "[БЛОК] Запись отклонена политикой PING-only: "
+            f"{type(exc).__name__}: {safe_display(exc)}"
+        )
 
     publish(payload)
     LAST_ID.write_text(fingerprint, encoding="utf-8")
     write_heartbeat("published", command_id=command_id, action=action)
     audit("published", id=command_id, action=action)
+    step(f"[GITHUB] Ответ опубликован: id={command_id}.")
 
 
 def main() -> None:
     ensure_runtime_dirs()
+    step(
+        f"[СТАРТ] Контроллер v{VERSION} активен: "
+        "только PING, реальные сделки выключены."
+    )
     audit(
         "started",
         version=VERSION,
         mode="github_ping_only",
         real_trading=False,
-        local_read=False,
-        local_write=False,
+        arbitrary_local_read=False,
+        arbitrary_local_write=False,
         process_control=False,
         shell_access=False,
     )
@@ -309,6 +346,10 @@ def main() -> None:
         except Exception as exc:
             write_heartbeat("loop_error", error_type=type(exc).__name__)
             audit("loop_error", detail=f"{type(exc).__name__}: {exc}")
+            step(
+                "[ОШИБКА] Цикл контроллера: "
+                f"{type(exc).__name__}: {safe_display(exc)}"
+            )
         time.sleep(POLL_EVERY)
 
 
