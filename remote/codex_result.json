@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "id": "codex-bridge-bootstrap-20260906",
-  "type": "PING",
-  "time": "2026-09-06T11:58:06+03:00",
+  "id": "repository-safety-review-20260906-01",
+  "type": "REPOSITORY_SAFETY_REVIEW",
+  "time": "2026-09-06T12:04:52+03:00",
   "worker_version": "0.1",
   "policy": {
     "predefined_tasks_only": true,
@@ -11,10 +11,10 @@
     "process_control": false
   },
   "result": {
-    "pong": true,
-    "worker_version": "0.1",
-    "codex_invoked": false,
-    "mode": "predefined_read_only_reviews",
-    "real_trading": false
+    "codex_invoked": true,
+    "returncode": 0,
+    "sandbox": "read-only",
+    "ephemeral": true,
+    "report": "Static review found these issues, ordered by priority:\n\n- **High — PING handling updates live code.** `aris_termux_control_v01.py:175` merges all of `origin/main` into the live checkout when publishing a response, including rejected commands. Updated scripts can subsequently execute through the supervisor. **Proposed:** publish status from an isolated checkout; require separately approved deployment of live code.\n\n- **High — Legacy remote process control remains available.** `aris_remote_agent_v01.py:65` and `aris_remote_agent_v02.py:73` accept `RESTART_COMPONENTS` from remote JSON and send SIGTERM. **Proposed:** retire these handlers or restrict them to PING through a reviewed change.\n\n- **High — Stop operations trust unverified PIDs.** `aris_stop_safe.sh:14` and `aris_remote_agent_v02.py:78` signal PID-file values without checking process identity. Stale PIDs can target unrelated processes; zero or negative values can target groups. **Proposed:** require positive PIDs and verify executable, script path, ownership, and process start time before signaling.\n\n- **High — Review launcher executes freshly fetched code outside the review sandbox.** `aris_start_codex_review_bridge.sh:34` updates the worktree, then line 50 executes its worker directly. **Proposed:** keep the trusted launcher and worker in a separately approved, pinned installation.\n\n- **Medium — Report redaction misses common secret formats.** `aris_codex_review_worker_v01.py:82` does not match quoted JSON assignments such as `\"api_key\": \"…\"`. Line 279 applies this filter before automatic publication; subprocess output also bypasses it. **Proposed:** sanitize all output channels, add synthetic quoted-secret tests, and require human review before publishing free-form reports.\n\n- **Medium — Paper state lacks numeric validation.** `main.py:966` restores values without schema checks; line 1068 uses comparisons that do not reject NaN. Invalid state or opportunities can bypass thresholds and corrupt simulated balances. **Proposed:** validate types, finite values, positive prices, and balance constraints before accepting state or recording trades.\n\nThe inspected trading paths use public market data and simulated accounting; I found no explicit authenticated order-placement or funds-transfer calls. The newer Termux action allowlist is PING-only, and review prompts exclude remote notes.\n\nNo files were changed, project programs or tests run, or excluded locations inspected. Runtime activation of legacy components remains unverified."
   }
 }
