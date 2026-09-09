@@ -4,7 +4,7 @@ set -eu
 MAIN_ROOT="/data/data/com.termux/files/home/Arbitrage"
 WORKTREE="/data/data/com.termux/files/home/aris_codex_review_worktree"
 WORKER_PATH="aris_codex_review_worker_v01.py"
-TRUSTED_WORKER_BLOB="bbc8fcc153e942daa5f86c2bf5c7d2f4657bd766"
+TRUSTED_WORKER_BLOB="018559e425085e40e4836f67e5039097655932e4"
 
 if [ "${1-}" != "--inside-ubuntu" ]; then
   if ! command -v proot-distro >/dev/null 2>&1; then
