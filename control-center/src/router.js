@@ -1,27 +1,18 @@
-import { agentRegistry, routingPolicy } from './agents.js';
+import { agentRegistry } from './agents.js';
+import { russianSource } from './i18n.js';
 
 const codeHints = /код|ошибк|репозитор|git|github|terminal|терминал|android|react|python|javascript|typescript|build|сборк/i;
 const reviewHints = /проверь|аудит|review|уязв|безопас|архитект|длинн|документ/i;
 
-function intentFor(text) {
-  const normalized = String(text || '').trim();
-  if (codeHints.test(normalized)) return 'coding';
-  if (reviewHints.test(normalized)) return 'review';
-  return 'reasoning';
-}
-
 export function chooseAgent(text) {
-  const chain = routingPolicy[intentFor(text)] || routingPolicy.fallback;
-  for (const id of chain) {
-    const agent = agentRegistry.find(item => item.id === id && item.enabled && item.mode === 'configured');
-    if (agent) return agent;
-  }
-  return agentRegistry.find(item => item.enabled && item.mode === 'configured') || null;
+  const normalized = String(text || '').trim();
+  const preferred = codeHints.test(normalized) ? 'codex' : reviewHints.test(normalized) ? 'gpt' : 'gpt';
+  const primary = agentRegistry.find(agent => agent.id === preferred && agent.enabled);
+  if (primary) return primary;
+  return agentRegistry.find(agent => agent.enabled) || agentRegistry[0];
 }
 
-export function routingPreview(text) {
+export function routingPreview(text, strings = russianSource) {
   const agent = chooseAgent(text);
-  return agent
-    ? { agent, message: `Задача подготовлена для ${agent.name}. Живое выполнение включится после подключения безопасного моста или официального API.` }
-    : { agent: { name: 'Project One' }, message: 'Нет настроенного агента. Задача сохранена локально и не отправлена наружу.' };
+  return { agent, message: strings.routingPrepared(agent.name) };
 }

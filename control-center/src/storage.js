@@ -1,6 +1,9 @@
+import { DEFAULT_LOCALE, isSupportedLocale } from './i18n.js';
+
 const KEY = 'project-one-state-v1';
 
 export const defaultState = {
+  locale: DEFAULT_LOCALE,
   safeMode: true,
   localBridgeEnabled: false,
   bridgeUrl: 'http://127.0.0.1:8765',
@@ -16,11 +19,11 @@ const list = value => Array.isArray(value) ? value : [];
 function sanitize(saved = {}) {
   return {
     ...defaultState,
+    locale: isSupportedLocale(saved.locale) ? saved.locale : DEFAULT_LOCALE,
     safeMode: saved.safeMode !== false,
     localBridgeEnabled: saved.localBridgeEnabled === true,
     bridgeUrl: text(saved.bridgeUrl || defaultState.bridgeUrl, 200),
-    monthlyBudget: finiteNonNegative(saved.monthlyBudget),
-    providerBudgets: {
+    monthlyBudget: finiteNonNegative(saved.monthlyBudget),    providerBudgets: {
       openai: finiteNonNegative(saved.providerBudgets?.openai),
       anthropic: finiteNonNegative(saved.providerBudgets?.anthropic),
       openrouter: finiteNonNegative(saved.providerBudgets?.openrouter),

@@ -103,3 +103,9 @@ button{cursor:pointer}
 
 .action-button{justify-self:start;border:0;border-radius:12px;padding:11px 15px;background:#eef3fb;color:#0b0f18;font-weight:800}
 .task-panel{overflow:hidden}.task-list{display:grid}.task-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-top:1px solid #202a3c}.task-row label{display:flex;align-items:center;gap:10px}.task-row.done span{text-decoration:line-through;color:#68748a}.small{border:1px solid #2a354c;border-radius:10px;padding:8px 10px;background:#151d2c;color:#aebbd0}.empty-state{padding:20px;color:#77849b}.log-list{display:grid}.log-row{display:grid;grid-template-columns:170px 1fr;gap:14px;padding:13px 16px;border-bottom:1px solid #202a3c}.log-row:last-child{border-bottom:0}.log-row span{color:#6f7d93;font-size:11px}.log-row b{font-size:13px;font-weight:600}@media(max-width:600px){.log-row{grid-template-columns:1fr;gap:5px}}
+
+.language-row{align-items:center;gap:18px}
+.language-row>div{display:grid;gap:5px;max-width:70%}
+.language-row small{color:#7f8aa1;line-height:1.4}
+.language-row select{min-width:150px;border:1px solid #263149;background:#111827;color:#fff;border-radius:11px;padding:10px 12px}
+@media(max-width:560px){.language-row{align-items:stretch;flex-direction:column}.language-row>div{max-width:none}.language-row select{width:100%}}
