@@ -6,6 +6,21 @@ import { agentRegistry, routingPolicy } from './agents.js';
 import { isAllowedServiceUrl, services } from './services.js';
 import { checkBridge, normalizeBridgeUrl } from './localBridge.js';
 
+
+export function HomeScreen({ t, state, configured, onNavigate }) {
+  const completed = state.tasks.filter(task => task.done).length;
+  return <section className="dashboard">
+    <div className="hero-card home-hero"><div className="hero-copy"><span className="pill">{t.homeKicker}</span><h2>{t.homeTitle}</h2><p>{t.homeDescription}</p></div><div className="shield-mark">P1</div></div>
+    <div className="metric-grid">
+      <button className="panel metric-card" onClick={() => onNavigate('agents')}><span>{t.homeAgents}</span><b>{configured}</b><small>{t.homeAgentsHint}</small></button>
+      <button className="panel metric-card" onClick={() => onNavigate('aris')}><span>{t.homeAris}</span><b>{t.homeSafe}</b><small>real_trading=false</small></button>
+      <button className="panel metric-card" onClick={() => onNavigate('tasks')}><span>{t.homeTasks}</span><b>{completed}/{state.tasks.length}</b><small>{t.homeTasksHint}</small></button>
+      <button className="panel metric-card" onClick={() => onNavigate('terminal')}><span>{t.homeBridge}</span><b>{state.localBridgeEnabled ? t.homeAllowed : t.homeDisabled}</b><small>{t.homeBridgeHint}</small></button>
+    </div>
+    <div className="panel quick-panel"><div><span className="kicker">{t.homeQuick}</span><h3>{t.homeQuickTitle}</h3></div><div className="quick-actions"><button onClick={() => onNavigate('chat')}>{t.homeOpenChat}</button><button onClick={() => onNavigate('services')}>{t.homeOpenServices}</button><button onClick={() => onNavigate('settings')}>{t.homeOpenSettings}</button></div></div>
+  </section>;
+}
+
 export function ChatScreen({ t, text, setText, history, onSend, onClear }) {
   return <section className="dashboard">
     <div className="hero-card"><div className="hero-copy"><span className="pill">{t.autoRouting}</span><h2>{t.hero}</h2><p>{t.heroDescription}</p></div><Gauge size={64}/></div>

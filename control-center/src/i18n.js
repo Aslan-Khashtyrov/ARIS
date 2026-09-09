@@ -20,8 +20,12 @@ export const russianSource = {
   openFailed: 'Не удалось открыть сервис. Проверь соединение и повтори попытку.',
   nativeLanguage: 'Родной и исходный язык приложения — русский.',
   safeModeOn: 'Безопасный режим включён', safeModeOff: 'Безопасный режим выключен',
+  homeKicker: 'ЦЕНТР УПРАВЛЕНИЯ', homeTitle: 'Project One под контролем.', homeDescription: 'Главный экран показывает состояние ключевых модулей и даёт быстрый доступ без лишнего шума.',
+  homeAgents: 'ИИ-агенты', homeAgentsHint: 'настроено для маршрутизации', homeAris: 'ARIS', homeSafe: 'БЕЗОПАСНО', homeTasks: 'Задачи', homeTasksHint: 'выполнено локально',
+  homeBridge: 'Локальный мост', homeAllowed: 'РАЗРЕШЁН', homeDisabled: 'ВЫКЛЮЧЕН', homeBridgeHint: 'только loopback', homeQuick: 'БЫСТРЫЙ ДОСТУП', homeQuickTitle: 'Что открыть?',
+  homeOpenChat: 'Открыть чат', homeOpenServices: 'Сервисы', homeOpenSettings: 'Настройки',
 };Object.assign(russianSource, {
-  nav: { chat: 'Чат', agents: 'Агенты', terminal: 'Терминал', services: 'Сервисы', aris: 'ARIS', tasks: 'Задачи', logs: 'Журнал', usage: 'Расходы', settings: 'Настройки' },
+  nav: { home: 'Главная', chat: 'Чат', agents: 'Агенты', terminal: 'Терминал', services: 'Сервисы', aris: 'ARIS', tasks: 'Задачи', logs: 'Журнал', usage: 'Расходы', settings: 'Настройки' },
   roles: { codex: 'Код и терминал', gpt: 'Анализ и планирование', claude: 'Проверка и длинный контекст', hermes: 'Резервный оператор' },
   modes: { configured: 'настроен', planned: 'запланирован' },
   screens: {
@@ -67,9 +71,13 @@ export const russianSource = {
     servicesDescription: 'Only pre-approved HTTPS addresses can be opened. The app does not intercept passwords or sign-in data.',
     blockedUrl: 'Opening blocked: the address is not on the approved services list.', openFailed: 'Could not open the service. Check your connection and try again.',
     safeModeOn: 'Safe mode is on', safeModeOff: 'Safe mode is off', you: 'You',
+    homeKicker: 'CONTROL CENTER', homeTitle: 'Project One under control.', homeDescription: 'The home screen shows key module state and gives fast access without clutter.',
+    homeAgents: 'AI agents', homeAgentsHint: 'configured for routing', homeAris: 'ARIS', homeSafe: 'SAFE', homeTasks: 'Tasks', homeTasksHint: 'completed locally',
+    homeBridge: 'Local bridge', homeAllowed: 'ALLOWED', homeDisabled: 'OFF', homeBridgeHint: 'loopback only', homeQuick: 'QUICK ACCESS', homeQuickTitle: 'What do you want to open?',
+    homeOpenChat: 'Open chat', homeOpenServices: 'Services', homeOpenSettings: 'Settings',
   },
 };Object.assign(translations.en, {
-  nav: { chat: 'Chat', agents: 'Agents', terminal: 'Terminal', services: 'Services', aris: 'ARIS', tasks: 'Tasks', logs: 'Log', usage: 'Usage', settings: 'Settings' },
+  nav: { home: 'Home', chat: 'Chat', agents: 'Agents', terminal: 'Terminal', services: 'Services', aris: 'ARIS', tasks: 'Tasks', logs: 'Log', usage: 'Usage', settings: 'Settings' },
   roles: { codex: 'Code and terminal', gpt: 'Analysis and planning', claude: 'Review and long context', hermes: 'Fallback operator' },
   modes: { configured: 'configured', planned: 'planned' },
   screens: {

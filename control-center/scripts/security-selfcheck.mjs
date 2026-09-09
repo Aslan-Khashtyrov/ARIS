@@ -68,7 +68,7 @@ const services = read('services.js');
 if (!i18n.includes('export const russianSource') || !i18n.includes("export const DEFAULT_LOCALE = 'ru'")) {
   console.error('FAIL LANG: русский источник не объявлен основным'); failed++;
 }
-for (const id of ['chat','agents','terminal','services','aris','tasks','logs','usage','settings']) {
+for (const id of ['home','chat','agents','terminal','services','aris','tasks','logs','usage','settings']) {
   if (!app.includes(`${id}: <`)) { console.error(`FAIL NAV: экран ${id} не подключён`); failed++; }
 }
 if (/[А-Яа-яЁё]/.test(app) || /[А-Яа-яЁё]/.test(screens)) {

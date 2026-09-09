@@ -1,19 +1,19 @@
 import { useMemo, useState } from 'react';
-import { Bot, Cpu, Globe2, ListTodo, MessageSquare, ScrollText, Settings, TerminalSquare, WalletCards } from 'lucide-react';
+import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText, Settings, TerminalSquare, WalletCards } from 'lucide-react';
 import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
 import { loadState, saveState } from './storage.js';
-import { AgentsScreen, ArisScreen, ChatScreen, LogsScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
+import { AgentsScreen, ArisScreen, ChatScreen, HomeScreen, LogsScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
 import './styles.css';
 
 const nav = [
-  ['chat', MessageSquare], ['agents', Bot], ['terminal', TerminalSquare],
+  ['home', LayoutDashboard], ['chat', MessageSquare], ['agents', Bot], ['terminal', TerminalSquare],
   ['services', Globe2], ['aris', Cpu], ['tasks', ListTodo], ['logs', ScrollText], ['usage', WalletCards], ['settings', Settings],
 ];
 
 function App() {
-  const [tab, setTab] = useState('chat');
+  const [tab, setTab] = useState('home');
   const [text, setText] = useState('');
   const [notice, setNotice] = useState('');
   const [state, setState] = useState(() => loadState());
@@ -60,6 +60,7 @@ function App() {
 
   const common = { t };
   const screens = {
+    home: <HomeScreen {...common} state={state} configured={configured} onNavigate={setTab}/>,
     chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onClear={() => updateState({ chatHistory: [] })}/>,
     agents: <AgentsScreen {...common}/>,
     terminal: <TerminalScreen {...common} state={state} updateState={updateState}/>,
@@ -71,7 +72,7 @@ function App() {
     settings: <SettingsScreen {...common} state={state} updateState={updateState}/>,
   };
 
-  return <div className="app-shell" lang={state.locale}>
+  return <div className="app-shell" lang={state.locale} data-safe-mode={state.safeMode ? 'on' : 'off'}>
     <aside className="rail"><div className="brand">P1</div>{nav.map(([id, Icon]) => <button key={id} className={tab === id ? 'nav active' : 'nav'} onClick={() => setTab(id)}><Icon size={20}/><span>{t.nav[id]}</span></button>)}</aside>
     <main className="main"><header className="topbar"><div><div className="eyebrow">{t.appSystem}</div><h1>Project One</h1></div><div className="status"><span className="dot"/> {configured} {t.agentsOnline}</div></header>{screens[tab]}</main>
   </div>;
