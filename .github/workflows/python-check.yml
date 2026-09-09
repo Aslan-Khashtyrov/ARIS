@@ -17,6 +17,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - name: Install test dependencies
+        run: python -m pip install --disable-pip-version-check websocket-client requests
+      - name: Mirror Termux project path for tests
+        run: ln -s "$GITHUB_WORKSPACE" "$HOME/Arbitrage"
       - name: Compile Python sources
         run: python -m compileall -q .
       - name: Enforce worker import safety
@@ -34,6 +38,7 @@ jobs:
       - name: Run full tracked unit-test suite
         run: python -m unittest discover -q -p 'test_*.py'
       - name: Reject obvious committed secrets
+        if: always()
         shell: bash
         run: |
           pattern='(sk-[A-Za-z0-9_-]{20,}|github_pat_[A-Za-z0-9_]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|OPENAI_API_KEY[[:space:]]*=[[:space:]]*[^$[:space:]]+|TELEGRAM(_BOT)?_TOKEN[[:space:]]*=[[:space:]]*[^$[:space:]]+|BOT_TOKEN[[:space:]]*=[[:space:]]*[^$[:space:]]+|BYBIT_(API_)?(KEY|SECRET)[[:space:]]*=[[:space:]]*[^$[:space:]]+|BINANCE_(API_)?(KEY|SECRET)[[:space:]]*=[[:space:]]*[^$[:space:]]+|OKX_(API_)?(KEY|SECRET|PASSPHRASE)[[:space:]]*=[[:space:]]*[^$[:space:]]+)'
