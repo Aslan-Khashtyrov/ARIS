@@ -59,3 +59,15 @@ Object.assign(russianSource, {
   bridgeOffline: 'Локальный мост не отвечает.',
   bridgeInvalid: 'Разрешены только локальные адреса localhost / 127.0.0.1 / ::1 без логина, пароля, параметров и фрагментов.',
 });
+
+Object.assign(russianSource, {
+  tasksTitle: 'Задачи', tasksKicker: 'ЛОКАЛЬНЫЕ ЗАДАЧИ', tasksDescription: 'Черновик задач Project One. Ничего не выполняется без подключённого агента или моста.',
+  taskPlaceholder: 'Новая задача…', addTask: 'Добавить', noTasks: 'Задач пока нет.', done: 'Готово', delete: 'Удалить',
+  logsTitle: 'Журнал', logsKicker: 'ЖУРНАЛ СОБЫТИЙ', logsDescription: 'Локальная история действий приложения без секретов и содержимого токенов.', noLogs: 'Событий пока нет.',
+  navTasks: 'Задачи', navLogs: 'Журнал',
+  logChatRouted: agent => `Задача маршрутизирована к ${agent}.`,
+  logTaskAdded: 'Добавлена локальная задача.', logTaskChanged: 'Статус локальной задачи изменён.', logTaskDeleted: 'Локальная задача удалена.',
+  versionLabel: 'Версия оболочки', versionValue: 'MVP 0.2',
+});
+russianSource.nav.tasks = russianSource.navTasks;
+russianSource.nav.logs = russianSource.navLogs;

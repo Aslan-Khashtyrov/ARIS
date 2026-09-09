@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react';
-import { Bot, Cpu, Globe2, MessageSquare, Settings, TerminalSquare, WalletCards } from 'lucide-react';
+import { Bot, Cpu, Globe2, ListTodo, MessageSquare, ScrollText, Settings, TerminalSquare, WalletCards } from 'lucide-react';
 import { russianSource as t } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
 import { loadState, saveState } from './storage.js';
-import { AgentsScreen, ArisScreen, ChatScreen, ServicesScreen, SettingsScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
+import { AgentsScreen, ArisScreen, ChatScreen, LogsScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
 import './styles.css';
 
 const nav = [
   ['chat', MessageSquare], ['agents', Bot], ['terminal', TerminalSquare],
-  ['services', Globe2], ['aris', Cpu], ['usage', WalletCards], ['settings', Settings],
+  ['services', Globe2], ['aris', Cpu], ['tasks', ListTodo], ['logs', ScrollText], ['usage', WalletCards], ['settings', Settings],
 ];
 
 function App() {
@@ -27,6 +27,11 @@ function App() {
     });
   }
 
+  function appendLog(text) {
+    const entry = { id: `${Date.now()}-${Math.random()}`, time: new Date().toLocaleString('ru-RU'), text };
+    return [...state.logs, entry].slice(-200);
+  }
+
   function sendMessage() {
     const value = text.trim();
     if (!value) return;
@@ -35,8 +40,20 @@ function App() {
       { kind: 'me', author: t.you, text: value },
       { kind: 'agent', author: route.agent.name, text: route.message },
     ].slice(-100);
-    updateState({ chatHistory: history });
+    updateState({ chatHistory: history, logs: appendLog(t.logChatRouted(route.agent.name)) });
     setText('');
+  }
+
+
+  function addTask(textValue) {
+    const task = { id: `${Date.now()}-${Math.random()}`, text: textValue, done: false };
+    updateState({ tasks: [...state.tasks, task].slice(-100), logs: appendLog(t.logTaskAdded) });
+  }
+  function toggleTask(id) {
+    updateState({ tasks: state.tasks.map(task => task.id === id ? { ...task, done: !task.done } : task), logs: appendLog(t.logTaskChanged) });
+  }
+  function deleteTask(id) {
+    updateState({ tasks: state.tasks.filter(task => task.id !== id), logs: appendLog(t.logTaskDeleted) });
   }
 
   const screens = {
@@ -44,7 +61,10 @@ function App() {
     agents: <AgentsScreen/>,
     terminal: <TerminalScreen state={state} updateState={updateState}/>,
     services: <ServicesScreen notice={notice} setNotice={setNotice}/>,
-    aris: <ArisScreen/>, usage: <UsageScreen state={state} updateState={updateState}/>,
+    aris: <ArisScreen/>,
+    tasks: <TasksScreen state={state} addTask={addTask} toggleTask={toggleTask} deleteTask={deleteTask}/>,
+    logs: <LogsScreen state={state}/>,
+    usage: <UsageScreen state={state} updateState={updateState}/>,
     settings: <SettingsScreen state={state} updateState={updateState}/>,
   };
 

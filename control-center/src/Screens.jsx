@@ -76,6 +76,7 @@ export function SettingsScreen({ state, updateState }) {
     <div className="setting-row"><b>{t.languageLabel}</b><span>{t.languageValue}</span></div>
     <div className="setting-row"><b>{t.realTradesLabel}</b><span>{t.realTradesValue}</span></div>
     <div className="setting-row"><b>{t.secretsLabel}</b><span>{t.secretsValue}</span></div>
+    <div className="setting-row"><b>{t.versionLabel}</b><span>{t.versionValue}</span></div>
   </div></section>;
 }
 
@@ -94,4 +95,21 @@ export function ServicesScreen({ notice, setNotice }) {
 function Header({ id }) {
   const screen = t.screens[id];
   return <div className="section-title"><span className="kicker">{screen.kicker}</span><h2>{screen.title}</h2><p>{screen.description}</p></div>;
+}
+
+export function TasksScreen({ state, addTask, toggleTask, deleteTask }) {
+  const [draft, setDraft] = useState('');
+  function submit() { if (!draft.trim()) return; addTask(draft.trim()); setDraft(''); }
+  return <section className="services-view">
+    <div className="section-title"><span className="kicker">{t.tasksKicker}</span><h2>{t.tasksTitle}</h2><p>{t.tasksDescription}</p></div>
+    <div className="panel task-panel"><div className="composer"><input value={draft} onChange={e => setDraft(e.target.value)} onKeyDown={e => e.key === 'Enter' && submit()} placeholder={t.taskPlaceholder}/><button onClick={submit}>{t.addTask}</button></div>
+    <div className="task-list">{state.tasks.length ? state.tasks.map(task => <div className={'task-row ' + (task.done ? 'done' : '')} key={task.id}><label><input type="checkbox" checked={task.done} onChange={() => toggleTask(task.id)}/><span>{task.text}</span></label><button className="secondary small" onClick={() => deleteTask(task.id)}>{t.delete}</button></div>) : <div className="empty-state">{t.noTasks}</div>}</div></div>
+  </section>;
+}
+
+export function LogsScreen({ state }) {
+  return <section className="services-view">
+    <div className="section-title"><span className="kicker">{t.logsKicker}</span><h2>{t.logsTitle}</h2><p>{t.logsDescription}</p></div>
+    <div className="panel log-list">{state.logs.length ? [...state.logs].reverse().map(item => <div className="log-row" key={item.id}><span>{item.time}</span><b>{item.text}</b></div>) : <div className="empty-state">{t.noLogs}</div>}</div>
+  </section>;
 }

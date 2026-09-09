@@ -7,16 +7,19 @@ export const defaultState = {
   monthlyBudget: 0,
   providerBudgets: { openai: 0, anthropic: 0, openrouter: 0 },
   chatHistory: [],
+  tasks: [],
+  logs: [],
 };
 
 export function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
     return {
-      ...defaultState,
-      ...saved,
+      ...defaultState, ...saved,
       providerBudgets: { ...defaultState.providerBudgets, ...(saved.providerBudgets || {}) },
       chatHistory: Array.isArray(saved.chatHistory) ? saved.chatHistory.slice(-100) : [],
+      tasks: Array.isArray(saved.tasks) ? saved.tasks.slice(-100) : [],
+      logs: Array.isArray(saved.logs) ? saved.logs.slice(-200) : [],
     };
   } catch {
     return defaultState;

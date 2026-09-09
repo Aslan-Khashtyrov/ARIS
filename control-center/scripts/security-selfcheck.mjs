@@ -42,7 +42,7 @@ if (!i18n.includes('export const russianSource')) {
 if (/\ben\s*:/.test(i18n) || i18n.includes('PERSONAL AI SYSTEM')) {
   console.error('FAIL LANG: найден параллельный английский каталог'); failed++;
 }
-for (const id of ['chat','agents','terminal','services','aris','usage','settings']) {
+for (const id of ['chat','agents','terminal','services','aris','tasks','logs','usage','settings']) {
   if (!app.includes(`${id}: <`)) { console.error(`FAIL NAV: экран ${id} не подключён`); failed++; }
 }
 if (/[А-Яа-яЁё]/.test(app) || /[А-Яа-яЁё]/.test(screens)) {
