@@ -1,16 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Browser } from '@capacitor/browser';
 import { Bot, Code2, Cpu, Gauge, Globe2, MessageSquare, Settings, TerminalSquare, WalletCards } from 'lucide-react';
 import { russianSource as t } from './i18n.js';
+import { agentRegistry, configuredAgentCount, routingPolicy } from './agents.js';
 import { isAllowedServiceUrl, services } from './services.js';
 import './styles.css';
-
-const agents = [
-  { name: 'Codex', roleKey: 'codex', state: 'ready' },
-  { name: 'GPT', roleKey: 'gpt', state: 'ready' },
-  { name: 'Claude', roleKey: 'claude', state: 'standby' },
-  { name: 'Hermes', roleKey: 'hermes', state: 'ready' },
-];
 
 const nav = [
   ['chat', MessageSquare], ['agents', Bot], ['terminal', TerminalSquare],
@@ -29,7 +23,7 @@ function App() {
   const [tab, setTab] = useState('chat');
   const [text, setText] = useState('');
   const [notice, setNotice] = useState('');
-  const online = useMemo(() => agents.filter(a => a.state === 'ready').length, []);
+  const configured = configuredAgentCount();
   async function openService(service) {
     if (!isAllowedServiceUrl(service.url)) {
       setNotice(t.blockedUrl);
@@ -43,6 +37,24 @@ function App() {
     }
   }
 
+  function renderAgents() {
+    return <section className="services-view">
+      <div className="section-title"><span className="kicker">{t.screens.agents.kicker}</span><h2>{t.screens.agents.title}</h2><p>{t.screens.agents.description}</p></div>
+      <div className="panel agent-screen-list">
+        {agentRegistry.map(agent => <div className="agent-screen-row" key={agent.id}>
+          <div><b>{agent.name}</b><span>{t.roles[agent.roleKey]}</span></div>
+          <div className={'agent-mode ' + agent.mode}>{t.agentModes[agent.mode]}</div>
+          <small>{t.priority} {agent.priority}</small>
+        </div>)}
+      </div>
+      <div className="routing-grid">
+        <div className="panel route-card"><b>{t.routingCoding}</b><span>{routingPolicy.coding.join(' → ')}</span></div>
+        <div className="panel route-card"><b>{t.routingReasoning}</b><span>{routingPolicy.reasoning.join(' → ')}</span></div>
+        <div className="panel route-card"><b>{t.routingFallback}</b><span>{routingPolicy.fallback.join(' → ')}</span></div>
+      </div>
+      <div className="notice">{t.agentStatusNote}</div>
+    </section>;
+  }
   function renderServices() {
     return <section className="services-view">
       <div className="section-title"><span className="kicker">{t.servicesKicker}</span><h2>{t.servicesTitle}</h2><p>{t.servicesDescription}</p></div>
@@ -60,7 +72,8 @@ function App() {
       <div className="hero-card">
         <div className="hero-copy"><span className="pill">{t.autoRouting}</span><h2>{t.hero}</h2><p>{t.heroDescription}</p></div>
         <Gauge size={64}/>
-      </div>      <div className="grid">
+      </div>
+      <div className="grid">
         <section className="panel chat-panel">
           <div className="panel-head"><div><span className="kicker">{t.unifiedChat}</span><h3>{t.mainChat}</h3></div><Code2 size={20}/></div>
           <div className="messages">
@@ -71,9 +84,9 @@ function App() {
         </section>
         <section className="panel agents-panel">
           <div className="panel-head"><div><span className="kicker">{t.router}</span><h3>{t.agents}</h3></div><Bot size={20}/></div>
-          <div className="agent-list">{agents.map((agent, i) => <div className="agent-row" key={agent.name}>
+          <div className="agent-list">{agentRegistry.map((agent, i) => <div className="agent-row" key={agent.id}>
             <div className="rank">{i + 1}</div><div className="agent-meta"><b>{agent.name}</b><span>{t.roles[agent.roleKey]}</span></div>
-            <div className={'agent-state ' + agent.state}>{t.states[agent.state]}</div>
+            <div className={'agent-state ' + agent.mode}>{t.agentModes[agent.mode]}</div>
           </div>)}</div>
         </section>
         <section className="panel terminal-panel">
@@ -84,7 +97,11 @@ function App() {
     </section>;
   }
 
-  const content = tab === 'chat' ? renderHome() : tab === 'services' ? renderServices() : <PlaceholderScreen id={tab}/>;
+  const content = tab === 'chat' ? renderHome()
+    : tab === 'agents' ? renderAgents()
+    : tab === 'services' ? renderServices()
+    : <PlaceholderScreen id={tab}/>;
+
   return <div className="app-shell" lang="ru">
     <aside className="rail">
       <div className="brand">P1</div>
@@ -95,7 +112,7 @@ function App() {
     <main className="main">
       <header className="topbar">
         <div><div className="eyebrow">{t.appSystem}</div><h1>Project One</h1></div>
-        <div className="status"><span className="dot"/> {online} {t.agentsOnline}</div>
+        <div className="status"><span className="dot"/> {configured} {t.agentsConfigured}</div>
       </header>
       {content}
     </main>

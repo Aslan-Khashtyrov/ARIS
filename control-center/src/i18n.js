@@ -40,3 +40,13 @@ Object.assign(russianSource, {
 export const localeCatalog = { ru: russianSource };
 
 russianSource.openingService = name => `Открываем ${name} во встроенном защищённом браузере…`;
+
+Object.assign(russianSource, {
+  agentsConfigured: 'агента в конфигурации',
+  agentModes: { configured: 'настроен', planned: 'запланирован' },
+  priority: 'Приоритет',
+  routingCoding: 'Маршрут для кода',
+  routingReasoning: 'Маршрут для анализа',
+  routingFallback: 'Резервный маршрут',
+  agentStatusNote: 'Статусы на этом экране означают конфигурацию маршрутизатора, а не живое подключение к провайдеру. Реальная доступность будет проверяться отдельным мостом.',
+});
