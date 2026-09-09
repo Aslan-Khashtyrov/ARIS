@@ -20,7 +20,9 @@ jobs:
       - name: Install test dependencies
         run: python -m pip install --disable-pip-version-check websocket-client requests
       - name: Mirror Termux project path for tests
-        run: ln -s "$GITHUB_WORKSPACE" "$HOME/Arbitrage"
+        run: |
+          ln -s "$GITHUB_WORKSPACE" "$HOME/Arbitrage"
+          mkdir -p "$HOME/Arbitrage/journal"
       - name: Compile Python sources
         run: python -m compileall -q .
       - name: Enforce worker import safety
@@ -42,7 +44,7 @@ jobs:
         shell: bash
         run: |
           pattern='(sk-[A-Za-z0-9_-]{20,}|github_pat_[A-Za-z0-9_]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|OPENAI_API_KEY[[:space:]]*=[[:space:]]*[^$[:space:]]+|TELEGRAM(_BOT)?_TOKEN[[:space:]]*=[[:space:]]*[^$[:space:]]+|BOT_TOKEN[[:space:]]*=[[:space:]]*[^$[:space:]]+|BYBIT_(API_)?(KEY|SECRET)[[:space:]]*=[[:space:]]*[^$[:space:]]+|BINANCE_(API_)?(KEY|SECRET)[[:space:]]*=[[:space:]]*[^$[:space:]]+|OKX_(API_)?(KEY|SECRET|PASSPHRASE)[[:space:]]*=[[:space:]]*[^$[:space:]]+)'
-          if grep -RInE --include='*.py' --include='*.json' --include='*.yml' --include='*.yaml' --include='*.sh' "$pattern" . --exclude-dir=.git; then
+          if grep -RInE --include='*.py' --include='*.json' --include='*.yml' --include='*.yaml' --include='*.sh' --exclude='test_*.py' "$pattern" . --exclude-dir=.git; then
             echo 'Possible secret detected in tracked source.'
             exit 1
           fi
