@@ -14,6 +14,8 @@ const urlCases = [
   ['http://github.com/x', false],
   ['https://evil.github.com/x', false],
   ['javascript:alert(1)', false],
+  ['https://github.com/evil/arbitrary/path?token=x#frag', false],
+  ['https://github.com/Aslan-Khashtyrov/ARIS?x=1', false],
 ];
 for (const [url, expected] of urlCases) {
   const actual = isAllowedServiceUrl(url);
@@ -28,7 +30,7 @@ const bridgeCases = [
 for (const [url, expected] of bridgeCases) {
   if (Boolean(normalizeBridgeUrl(url)) !== expected) { console.error(`FAIL BRIDGE: ${url}`); failed++; }
 }
-for (const [prompt, expected] of [['собери android код','codex'], ['проведи аудит безопасности','gpt'], ['объясни идею','gpt']]) {
+for (const [prompt, expected] of [['собери android код','codex'], ['проведи аудит безопасности','gpt'], ['проверь код приложения на уязвимости и сделай security review','gpt'], ['объясни идею','gpt']]) {
   const agent = chooseAgent(prompt);
   if (agent?.id !== expected) { console.error(`FAIL ROUTER: ${prompt} -> ${agent?.id}`); failed++; }
 }
@@ -52,8 +54,10 @@ const english = getLocaleStrings('en');
 if (english.nav.settings !== 'Settings' || english.nativeLanguage !== russianSource.nativeLanguage) {
   console.error('FAIL LANG: перевод или русский fallback работают неверно'); failed++;
 }
-const unknown = getLocaleStrings('zz');
-if (unknown.hero !== russianSource.hero) { console.error('FAIL LANG: неизвестный язык не откатывается на русский'); failed++; }
+for (const locale of ['zz', 'constructor', '__proto__', 'toString']) {
+  const unknown = getLocaleStrings(locale);
+  if (unknown !== russianSource || unknown.hero !== russianSource.hero) { console.error(`FAIL LANG: неизвестный язык ${locale} не откатывается на русский`); failed++; }
+}
 const root = new URL('../src/', import.meta.url);
 const read = name => fs.readFileSync(new URL(name, root), 'utf8');
 const i18n = read('i18n.js');

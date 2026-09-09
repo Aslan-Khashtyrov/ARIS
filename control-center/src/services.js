@@ -16,15 +16,16 @@ export const services = [
 ];
 
 export const allowedHosts = new Set(services.map(service => service.host));
+export const allowedServiceUrls = new Set(services.map(service => new URL(service.url).href));
 
 export function isAllowedServiceUrl(rawUrl) {
   try {
     const url = new URL(rawUrl);
     if (url.protocol !== 'https:') return false;
     if (!allowedHosts.has(url.hostname)) return false;
-    if (url.username || url.password) return false;
-    if (url.port) return false;
-    return true;
+    if (url.username || url.password || url.port) return false;
+    if (url.search || url.hash) return false;
+    return allowedServiceUrls.has(url.href);
   } catch {
     return false;
   }

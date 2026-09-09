@@ -112,7 +112,9 @@ function merge(base, patch) {
 }
 
 export function getLocaleStrings(locale) {
-  return locale === DEFAULT_LOCALE ? russianSource : merge(russianSource, translations[locale] || {});
+  if (locale === DEFAULT_LOCALE) return russianSource;
+  const patch = Object.prototype.hasOwnProperty.call(translations, locale) ? translations[locale] : null;
+  return patch ? merge(russianSource, patch) : russianSource;
 }
 
 export function isSupportedLocale(locale) {
