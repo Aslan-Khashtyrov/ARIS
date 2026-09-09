@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import { isAllowedServiceUrl } from '../src/services.js';
 import { normalizeBridgeUrl } from '../src/localBridge.js';
+import { chooseAgent } from '../src/router.js';
+import { loadState, saveState } from '../src/storage.js';
 
 let failed = 0;
 const urlCases = [
@@ -29,6 +31,29 @@ for (const [url, expected] of bridgeCases) {
   if (actual !== expected) { console.error(`FAIL BRIDGE: ${url}`); failed++; }
 }
 
+
+const routeCases = [
+  ['собери android код', 'codex'],
+  ['проведи аудит безопасности', 'gpt'],
+  ['объясни идею', 'gpt'],
+];
+for (const [prompt, expected] of routeCases) {
+  const agent = chooseAgent(prompt);
+  if (agent?.id !== expected) { console.error(`FAIL ROUTER: ${prompt} -> ${agent?.id}`); failed++; }
+}
+
+globalThis.localStorage = {
+  value: '',
+  getItem() { return this.value; },
+  setItem(_key, value) { this.value = value; },
+};
+localStorage.value = JSON.stringify({ safeMode: 'no', monthlyBudget: -5, chatHistory: [{ kind: 'x', author: 'A'.repeat(200), text: 'B'.repeat(5000) }] });
+const safeState = loadState();
+if (safeState.safeMode !== true || safeState.monthlyBudget !== 0 || safeState.chatHistory[0].author.length > 80 || safeState.chatHistory[0].text.length > 4000) {
+  console.error('FAIL STORAGE: сохранённое состояние не санитизируется'); failed++;
+}
+if (!saveState(safeState)) { console.error('FAIL STORAGE: безопасное состояние не сохраняется'); failed++; }
+
 const root = new URL('../src/', import.meta.url);
 const read = name => fs.readFileSync(new URL(name, root), 'utf8');
 const i18n = read('i18n.js');
@@ -56,4 +81,4 @@ if (!screens.includes('real_trading=false')) {
 }
 
 if (failed) process.exit(1);
-console.log('PASS: русский источник, навигация, paper-only, bridge и URL-защита проверены.');
+console.log('PASS: русский источник, навигация, router, storage, paper-only, bridge и URL-защита проверены.');

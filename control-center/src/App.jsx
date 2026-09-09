@@ -19,41 +19,44 @@ function App() {
   const [state, setState] = useState(() => loadState());
   const configured = useMemo(() => configuredAgentCount(), []);
 
-  function updateState(patch) {
+  function updateState(patchOrUpdater) {
     setState(current => {
+      const patch = typeof patchOrUpdater === 'function' ? patchOrUpdater(current) : patchOrUpdater;
       const next = { ...current, ...patch };
       saveState(next);
       return next;
     });
   }
 
-  function appendLog(text) {
+  function appendLog(logs, text) {
     const entry = { id: `${Date.now()}-${Math.random()}`, time: new Date().toLocaleString('ru-RU'), text };
-    return [...state.logs, entry].slice(-200);
+    return [...logs, entry].slice(-200);
   }
 
   function sendMessage() {
     const value = text.trim();
     if (!value) return;
     const route = routingPreview(value);
-    const history = [...state.chatHistory,
-      { kind: 'me', author: t.you, text: value },
-      { kind: 'agent', author: route.agent.name, text: route.message },
-    ].slice(-100);
-    updateState({ chatHistory: history, logs: appendLog(t.logChatRouted(route.agent.name)) });
+    updateState(current => ({
+      chatHistory: [...current.chatHistory,
+        { kind: 'me', author: t.you, text: value },
+        { kind: 'agent', author: route.agent.name, text: route.message },
+      ].slice(-100),
+      logs: appendLog(current.logs, t.logChatRouted(route.agent.name)),
+    }));
     setText('');
   }
 
 
   function addTask(textValue) {
     const task = { id: `${Date.now()}-${Math.random()}`, text: textValue, done: false };
-    updateState({ tasks: [...state.tasks, task].slice(-100), logs: appendLog(t.logTaskAdded) });
+    updateState(current => ({ tasks: [...current.tasks, task].slice(-100), logs: appendLog(current.logs, t.logTaskAdded) }));
   }
   function toggleTask(id) {
-    updateState({ tasks: state.tasks.map(task => task.id === id ? { ...task, done: !task.done } : task), logs: appendLog(t.logTaskChanged) });
+    updateState(current => ({ tasks: current.tasks.map(task => task.id === id ? { ...task, done: !task.done } : task), logs: appendLog(current.logs, t.logTaskChanged) }));
   }
   function deleteTask(id) {
-    updateState({ tasks: state.tasks.filter(task => task.id !== id), logs: appendLog(t.logTaskDeleted) });
+    updateState(current => ({ tasks: current.tasks.filter(task => task.id !== id), logs: appendLog(current.logs, t.logTaskDeleted) }));
   }
 
   const screens = {

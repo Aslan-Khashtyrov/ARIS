@@ -6,26 +6,37 @@ export const defaultState = {
   bridgeUrl: 'http://127.0.0.1:8765',
   monthlyBudget: 0,
   providerBudgets: { openai: 0, anthropic: 0, openrouter: 0 },
-  chatHistory: [],
-  tasks: [],
-  logs: [],
+  chatHistory: [], tasks: [], logs: [],
 };
 
+const finiteNonNegative = value => Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
+const text = (value, max = 4000) => String(value ?? '').slice(0, max);
+const list = value => Array.isArray(value) ? value : [];
+
+function sanitize(saved = {}) {
+  return {
+    ...defaultState,
+    safeMode: saved.safeMode !== false,
+    localBridgeEnabled: saved.localBridgeEnabled === true,
+    bridgeUrl: text(saved.bridgeUrl || defaultState.bridgeUrl, 200),
+    monthlyBudget: finiteNonNegative(saved.monthlyBudget),
+    providerBudgets: {
+      openai: finiteNonNegative(saved.providerBudgets?.openai),
+      anthropic: finiteNonNegative(saved.providerBudgets?.anthropic),
+      openrouter: finiteNonNegative(saved.providerBudgets?.openrouter),
+    },
+    chatHistory: list(saved.chatHistory).slice(-100).map(item => ({ kind: item?.kind === 'me' ? 'me' : 'agent', author: text(item?.author, 80), text: text(item?.text) })),
+    tasks: list(saved.tasks).slice(-100).map(item => ({ id: text(item?.id, 120), text: text(item?.text, 1000), done: item?.done === true })),
+    logs: list(saved.logs).slice(-200).map(item => ({ id: text(item?.id, 120), time: text(item?.time, 80), text: text(item?.text, 1000) })),
+  };
+}
+
 export function loadState() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
-    return {
-      ...defaultState, ...saved,
-      providerBudgets: { ...defaultState.providerBudgets, ...(saved.providerBudgets || {}) },
-      chatHistory: Array.isArray(saved.chatHistory) ? saved.chatHistory.slice(-100) : [],
-      tasks: Array.isArray(saved.tasks) ? saved.tasks.slice(-100) : [],
-      logs: Array.isArray(saved.logs) ? saved.logs.slice(-200) : [],
-    };
-  } catch {
-    return defaultState;
-  }
+  try { return sanitize(JSON.parse(localStorage.getItem(KEY) || '{}')); }
+  catch { return { ...defaultState, providerBudgets: { ...defaultState.providerBudgets } }; }
 }
 
 export function saveState(state) {
-  localStorage.setItem(KEY, JSON.stringify(state));
+  try { localStorage.setItem(KEY, JSON.stringify(sanitize(state))); return true; }
+  catch { return false; }
 }

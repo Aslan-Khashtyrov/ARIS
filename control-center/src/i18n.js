@@ -67,7 +67,7 @@ Object.assign(russianSource, {
   navTasks: 'Задачи', navLogs: 'Журнал',
   logChatRouted: agent => `Задача маршрутизирована к ${agent}.`,
   logTaskAdded: 'Добавлена локальная задача.', logTaskChanged: 'Статус локальной задачи изменён.', logTaskDeleted: 'Локальная задача удалена.',
-  versionLabel: 'Версия оболочки', versionValue: 'MVP 0.2',
+  versionLabel: 'Версия оболочки', versionValue: 'MVP 0.3 — готов к тестированию',
 });
 russianSource.nav.tasks = russianSource.navTasks;
 russianSource.nav.logs = russianSource.navLogs;
