@@ -15,7 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1"
+VERSION = "0.2"
 DEFAULT_MAIN_ROOT = Path("/data/data/com.termux/files/home/Arbitrage")
 MAIN_ROOT = Path(os.environ.get("ARIS_MAIN_ROOT", DEFAULT_MAIN_ROOT)).resolve()
 ROOT = Path(os.environ.get("ARIS_CODEX_WORKTREE", Path.cwd())).resolve()
@@ -27,6 +27,10 @@ REPORT_PATH = ROOT / "remote" / "codex_result.json"
 LAST_FINGERPRINT = STATE / "codex_review_last_fingerprint"
 CODEX_OUTPUT = STATE / "codex_review_last_message.txt"
 CODEX_BIN = Path("/usr/bin/codex")
+TERMUX_HOME = Path("/data/data/com.termux/files/home")
+HERMES_HOME = TERMUX_HOME / ".hermes"
+HERMES_BIN = HERMES_HOME / "hermes-agent" / "venv" / "bin" / "hermes"
+HERMES_USAGE = STATE / "hermes_fallback_usage.json"
 POLL_EVERY = 20
 MAX_NOTE_LENGTH = 500
 MAX_REPORT_LENGTH = 24_000
@@ -295,6 +299,25 @@ def stream_redacted_codex(
     return returncode
 
 
+def safe_hermes_environment() -> dict[str, str]:
+    env = safe_codex_environment()
+    env["HERMES_HOME"] = str(HERMES_HOME)
+    env["HOME"] = str(TERMUX_HOME)
+    return env
+
+
+def run_hermes_fallback(prompt: str, timeout: int = 900) -> dict[str, Any]:
+    if not HERMES_BIN.is_file():
+        return {"fallback_invoked": False, "error": "Hermes CLI not found"}
+    command = [str(HERMES_BIN), "-z", prompt, "-t", "safe", "--usage-file", str(HERMES_USAGE)]
+    step("[HERMES] Codex failed; starting safe fallback chain.")
+    try:
+        completed = subprocess.run(command, cwd=ROOT, env=safe_hermes_environment(), text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=timeout, check=False)
+    except subprocess.TimeoutExpired:
+        return {"fallback_invoked": True, "returncode": 124, "error": "Hermes fallback timed out"}
+    return {"fallback_invoked": True, "fallback": "hermes-safe", "returncode": completed.returncode, "report": redact(completed.stdout or "")[:MAX_REPORT_LENGTH], "real_trading": False}
+
+
 def run_codex_review(task_type: str) -> dict[str, Any]:
     if not CODEX_BIN.is_file():
         return {
@@ -326,6 +349,11 @@ def run_codex_review(task_type: str) -> dict[str, Any]:
     if CODEX_OUTPUT.is_file():
         message = redact(CODEX_OUTPUT.read_text(encoding="utf-8", errors="replace"))
     step(f"[CODEX] Анализ завершён, код возврата {returncode}.")
+    if returncode != 0:
+        fallback = run_hermes_fallback(prompt, timeout=900)
+        if fallback.get("returncode") == 0 and fallback.get("report"):
+            fallback.update({"codex_invoked": True, "codex_returncode": returncode, "sandbox": "read-only", "ephemeral": True})
+            return fallback
     return {
         "codex_invoked": True,
         "returncode": returncode,
