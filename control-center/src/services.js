@@ -20,7 +20,11 @@ export const allowedHosts = new Set(services.map(service => service.host));
 export function isAllowedServiceUrl(rawUrl) {
   try {
     const url = new URL(rawUrl);
-    return url.protocol === 'https:' && allowedHosts.has(url.hostname);
+    if (url.protocol !== 'https:') return false;
+    if (!allowedHosts.has(url.hostname)) return false;
+    if (url.username || url.password) return false;
+    if (url.port) return false;
+    return true;
   } catch {
     return false;
   }

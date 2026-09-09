@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Browser } from '@capacitor/browser';
 import { Bot, Code2, Cpu, Gauge, Globe2, MessageSquare, Settings, TerminalSquare, WalletCards } from 'lucide-react';
-import { localeCatalog } from './i18n.js';
+import { russianSource as t } from './i18n.js';
 import { isAllowedServiceUrl, services } from './services.js';
 import './styles.css';
 
@@ -13,59 +13,54 @@ const agents = [
 ];
 
 const nav = [
-  ['chat', MessageSquare],
-  ['agents', Bot],
-  ['terminal', TerminalSquare],
-  ['services', Globe2],
-  ['aris', Cpu],
-  ['usage', WalletCards],
-  ['settings', Settings],
+  ['chat', MessageSquare], ['agents', Bot], ['terminal', TerminalSquare],
+  ['services', Globe2], ['aris', Cpu], ['usage', WalletCards], ['settings', Settings],
 ];
+
+function PlaceholderScreen({ id }) {
+  const screen = t.screens[id];
+  return <section className="services-view">
+    <div className="section-title"><span className="kicker">{screen.kicker}</span><h2>{screen.title}</h2><p>{screen.description}</p></div>
+    <div className="panel placeholder-panel"><p>{t.screenNotReady}</p><small>{t.nativeLanguage}</small></div>
+  </section>;
+}
 
 function App() {
   const [tab, setTab] = useState('chat');
   const [text, setText] = useState('');
   const [notice, setNotice] = useState('');
-  const t = localeCatalog.ru;
   const online = useMemo(() => agents.filter(a => a.state === 'ready').length, []);
   async function openService(service) {
     if (!isAllowedServiceUrl(service.url)) {
-      setNotice('Открытие заблокировано: адрес не входит в список разрешённых сервисов.');
+      setNotice(t.blockedUrl);
       return;
     }
-    setNotice(`Открываем ${service.name} во встроенном защищённом браузере…`);
+    setNotice(t.openingService(service.name));
     try {
       await Browser.open({ url: service.url, presentationStyle: 'fullscreen' });
     } catch {
-      setNotice('Не удалось открыть сервис. Проверь соединение и повтори попытку.');
+      setNotice(t.openFailed);
     }
   }
 
-  const content = tab === 'services' ? (
-    <section className="services-view">
-      <div className="section-title">
-        <span className="kicker">ВСТРОЕННЫЕ СЕРВИСЫ</span>
-        <h2>Рабочие страницы внутри Project One</h2>
-        <p>Открываются только заранее разрешённые HTTPS-адреса. Пароли и данные входа приложение не перехватывает.</p>
-      </div>
+  function renderServices() {
+    return <section className="services-view">
+      <div className="section-title"><span className="kicker">{t.servicesKicker}</span><h2>{t.servicesTitle}</h2><p>{t.servicesDescription}</p></div>
       <div className="service-grid">
-        {services.map(service => (
-          <button className="service-card" key={service.id} onClick={() => openService(service)}>
-            <Globe2 size={28}/>
-            <div><b>{service.name}</b><span>{service.description}</span></div>
-            <small>{service.host}</small>
-          </button>
-        ))}
+        {services.map(service => <button className="service-card" key={service.id} onClick={() => openService(service)}>
+          <Globe2 size={28}/><div><b>{service.name}</b><span>{service.description}</span></div><small>{service.host}</small>
+        </button>)}
       </div>
       {notice && <div className="notice">{notice}</div>}
-    </section>
-  ) : (    <section className="dashboard">
+    </section>;
+  }
+
+  function renderHome() {
+    return <section className="dashboard">
       <div className="hero-card">
-        <div className="hero-copy"><span className="pill">{t.autoRouting}</span><h2>{t.hero}</h2>
-          <p>{t.heroDescription}</p></div>
+        <div className="hero-copy"><span className="pill">{t.autoRouting}</span><h2>{t.hero}</h2><p>{t.heroDescription}</p></div>
         <Gauge size={64}/>
-      </div>
-      <div className="grid">
+      </div>      <div className="grid">
         <section className="panel chat-panel">
           <div className="panel-head"><div><span className="kicker">{t.unifiedChat}</span><h3>{t.mainChat}</h3></div><Code2 size={20}/></div>
           <div className="messages">
@@ -74,7 +69,6 @@ function App() {
           </div>
           <div className="composer"><input value={text} onChange={e => setText(e.target.value)} placeholder={t.inputPlaceholder}/><button>{t.send}</button></div>
         </section>
-
         <section className="panel agents-panel">
           <div className="panel-head"><div><span className="kicker">{t.router}</span><h3>{t.agents}</h3></div><Bot size={20}/></div>
           <div className="agent-list">{agents.map((agent, i) => <div className="agent-row" key={agent.name}>
@@ -82,14 +76,15 @@ function App() {
             <div className={'agent-state ' + agent.state}>{t.states[agent.state]}</div>
           </div>)}</div>
         </section>
-
         <section className="panel terminal-panel">
-          <div className="panel-head"><div><span className="kicker">{t.codeWorkspace}</span><h3>Терминал Codex</h3></div><TerminalSquare size={20}/></div>
+          <div className="panel-head"><div><span className="kicker">{t.codeWorkspace}</span><h3>{t.terminalTitle}</h3></div><TerminalSquare size={20}/></div>
           <pre><span>$</span> codex{"\n"}<em>{t.workspaceReady}</em>{"\n"}<span>›</span> {t.waitingTask}</pre>
         </section>
       </div>
-    </section>
-  );
+    </section>;
+  }
+
+  const content = tab === 'chat' ? renderHome() : tab === 'services' ? renderServices() : <PlaceholderScreen id={tab}/>;
   return <div className="app-shell" lang="ru">
     <aside className="rail">
       <div className="brand">P1</div>
@@ -97,7 +92,6 @@ function App() {
         <Icon size={20}/><span>{t.nav[id]}</span>
       </button>)}
     </aside>
-
     <main className="main">
       <header className="topbar">
         <div><div className="eyebrow">{t.appSystem}</div><h1>Project One</h1></div>
