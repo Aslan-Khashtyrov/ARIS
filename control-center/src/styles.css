@@ -86,3 +86,19 @@ button{cursor:pointer}
 .route-card{padding:16px;display:grid;gap:8px}
 .route-card b{font-size:13px}
 @media(max-width:900px){.routing-grid{grid-template-columns:1fr}.agent-screen-row{grid-template-columns:1fr auto}.agent-screen-row small{grid-column:1/-1}}
+
+.bubble{display:grid;gap:5px}.bubble.me{margin-left:auto;background:#263454}.bubble.me b{color:#b8c8ff}.bubble.system b,.bubble.agent b{color:#dce6f7}
+.composer .secondary{background:#1a2233;color:#aebbd0;border:1px solid #2a354c}
+.route-grid,.status-grid,.budget-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.route-card,.status-card,.budget-card{padding:18px;display:grid;gap:8px}.route-card span,.status-card span,.budget-card small{color:#7f8aa1;font-size:12px}
+.agent-row.large{padding:17px 18px}.agent-state.configured{color:#69e0a4}.agent-state.planned{color:#e7c267}
+.form-panel{padding:20px;display:grid;gap:18px}.form-panel label,.budget-card{display:grid;gap:8px;color:#cbd5e5;font-size:13px}
+.form-panel input[type="text"],.form-panel input:not([type]),.budget-card input,.form-panel input[type="url"]{width:100%;border:1px solid #263149;background:#111827;color:#fff;border-radius:12px;padding:12px}
+.switch-line{grid-template-columns:auto 1fr!important;align-items:center;gap:10px!important}.switch-line input{width:18px;height:18px}
+.setting-row{display:grid;gap:5px;padding:14px 0;border-bottom:1px solid #202a3c}.setting-row:last-child{border-bottom:0}.setting-row span{color:#8490a5;font-size:12px;line-height:1.45}
+.terminal-preview{margin:0;background:#090d14;border-radius:13px;padding:16px;color:#9ce3b5;white-space:pre-wrap}
+.status-card.good b{color:#9ce3b5}.status-card.safe b{color:#8db2ff}
+.budget-card input{font-size:22px;font-weight:800}
+@media(max-width:700px){.route-grid,.status-grid,.budget-grid{grid-template-columns:1fr}.composer{display:grid;grid-template-columns:1fr 1fr}.composer input{grid-column:1/-1}}
+
+.action-button{justify-self:start;border:0;border-radius:12px;padding:11px 15px;background:#eef3fb;color:#0b0f18;font-weight:800}
