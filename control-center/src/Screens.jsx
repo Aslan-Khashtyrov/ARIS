@@ -85,7 +85,7 @@ function Budget({ t, label, value, onChange }) {
 
 export function SettingsScreen({ t, state, updateState }) {
   return <section className="services-view"><Header t={t} id="settings"/><div className="panel form-panel">
-    <label className="switch-line"><input type="checkbox" checked={state.safeMode} onChange={e => updateState({ safeMode: e.target.checked })}/><span>{state.safeMode ? t.safeModeOn : t.safeModeOff}</span></label>
+    <label className="switch-line"><input type="checkbox" checked={true} disabled/><span>{t.safeModeLocked}</span></label>
     <div className="setting-row language-row"><div><b>{t.languageTitle}</b><small>{t.languageHint}</small></div><select value={state.locale} onChange={e => updateState({ locale: e.target.value })}>{supportedLanguages.map(language => <option value={language.id} key={language.id}>{language.label}</option>)}</select></div>
     <div className="setting-row"><b>{t.realTradesLabel}</b><span>{t.realTradesValue}</span></div>
     <div className="setting-row"><b>{t.secretsLabel}</b><span>{t.secretsValue}</span></div>
@@ -99,7 +99,7 @@ export function SettingsScreen({ t, state, updateState }) {
     catch { setNotice(t.openFailed); }
   }
   return <section className="services-view"><div className="section-title"><span className="kicker">{t.servicesKicker}</span><h2>{t.servicesTitle}</h2><p>{t.servicesDescription}</p></div><div className="service-grid">
-    {services.map(service => <button className="service-card" key={service.id} onClick={() => openService(service)}><Globe2 size={28}/><div><b>{service.name}</b><span>{t.serviceDescriptions[service.id] || service.description}</span></div><small>{service.host}</small></button>)}
+    {services.map(service => <button className="service-card" key={service.id} onClick={() => openService(service)}><Globe2 size={28}/><div><b>{service.name}</b><span>{t.serviceDescriptions[service.id]}</span></div><small>{service.host}</small></button>)}
   </div>{notice && <div className="notice">{notice}</div>}</section>;
 }
 

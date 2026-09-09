@@ -4,6 +4,7 @@ import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
 import { loadState, saveState } from './storage.js';
+import { ErrorBoundary } from './ErrorBoundary.jsx';
 import { AgentsScreen, ArisScreen, ChatScreen, HomeScreen, LogsScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
 import './styles.css';
 
@@ -74,7 +75,7 @@ function App() {
 
   return <div className="app-shell" lang={state.locale} data-safe-mode={state.safeMode ? 'on' : 'off'}>
     <aside className="rail"><div className="brand">P1</div>{nav.map(([id, Icon]) => <button key={id} className={tab === id ? 'nav active' : 'nav'} onClick={() => setTab(id)}><Icon size={20}/><span>{t.nav[id]}</span></button>)}</aside>
-    <main className="main"><header className="topbar"><div><div className="eyebrow">{t.appSystem}</div><h1>Project One</h1></div><div className="status"><span className="dot"/> {configured} {t.agentsOnline}</div></header>{screens[tab]}</main>
+    <main className="main"><header className="topbar"><div><div className="eyebrow">{t.appSystem}</div><h1>Project One</h1></div><div className="status"><span className="dot"/> {configured} {t.agentsOnline}</div></header><ErrorBoundary t={t} resetKey={`${tab}:${state.locale}`}>{screens[tab]}</ErrorBoundary></main>
   </div>;
 }
 

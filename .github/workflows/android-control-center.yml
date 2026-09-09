@@ -41,11 +41,17 @@ jobs:
       - name: Run safety regression checks
         run: npm run test:safety
 
+      - name: Audit npm dependencies
+        run: npm audit --audit-level=high
+
       - name: Build web UI
         run: npm run build
 
       - name: Sync Capacitor
         run: npx cap sync android
+
+      - name: Run Android lint
+        run: cd android && ./gradlew lintDebug
 
       - name: Build debug APK
         run: cd android && ./gradlew assembleDebug

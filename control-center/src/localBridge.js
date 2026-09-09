@@ -1,4 +1,4 @@
-const LOOPBACK_HOSTS = new Set(['127.0.0.1', 'localhost', '[::1]']);
+const LOOPBACK_HOSTS = new Set(['127.0.0.1', 'localhost']);
 
 export function normalizeBridgeUrl(raw) {
   try {
@@ -21,7 +21,10 @@ export async function checkBridge(raw, timeoutMs = 2000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch(`${base}/health`, { method: 'GET', signal: controller.signal, cache: 'no-store' });
+    const response = await fetch(`${base}/health`, {
+      method: 'GET', signal: controller.signal, cache: 'no-store',
+      credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer',
+    });
     return { ok: response.ok, reason: response.ok ? 'ok' : 'http' };
   } catch {
     return { ok: false, reason: 'offline' };

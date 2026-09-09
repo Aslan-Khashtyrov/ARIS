@@ -1,6 +1,7 @@
 import { DEFAULT_LOCALE, isSupportedLocale } from './i18n.js';
 
 const KEY = 'project-one-state-v1';
+const MAX_STATE_CHARS = 512 * 1024;
 
 export const defaultState = {
   locale: DEFAULT_LOCALE,
@@ -17,13 +18,15 @@ const text = (value, max = 4000) => String(value ?? '').slice(0, max);
 const list = value => Array.isArray(value) ? value : [];
 
 function sanitize(saved = {}) {
+  if (!saved || typeof saved !== 'object' || Array.isArray(saved)) saved = {};
   return {
     ...defaultState,
     locale: isSupportedLocale(saved.locale) ? saved.locale : DEFAULT_LOCALE,
-    safeMode: saved.safeMode !== false,
+    safeMode: true,
     localBridgeEnabled: saved.localBridgeEnabled === true,
     bridgeUrl: text(saved.bridgeUrl || defaultState.bridgeUrl, 200),
-    monthlyBudget: finiteNonNegative(saved.monthlyBudget),    providerBudgets: {
+    monthlyBudget: finiteNonNegative(saved.monthlyBudget),
+    providerBudgets: {
       openai: finiteNonNegative(saved.providerBudgets?.openai),
       anthropic: finiteNonNegative(saved.providerBudgets?.anthropic),
       openrouter: finiteNonNegative(saved.providerBudgets?.openrouter),
@@ -35,7 +38,11 @@ function sanitize(saved = {}) {
 }
 
 export function loadState() {
-  try { return sanitize(JSON.parse(localStorage.getItem(KEY) || '{}')); }
+  try {
+    const raw = localStorage.getItem(KEY) || '{}';
+    if (raw.length > MAX_STATE_CHARS) return sanitize();
+    return sanitize(JSON.parse(raw));
+  }
   catch { return { ...defaultState, providerBudgets: { ...defaultState.providerBudgets } }; }
 }
 
