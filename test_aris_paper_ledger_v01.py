@@ -4,6 +4,15 @@ import unittest
 from aris_paper_ledger_v01 import validate_cycle
 
 
+def valid_leg():
+    return {
+        "within_top_of_book_capacity": True,
+        "within_capacity_buffer": True,
+        "minimum_order_met": True,
+        "quantity_step_verified": True,
+    }
+
+
 def valid_cycle():
     return {
         "profit_percent": 0.5,
@@ -11,14 +20,12 @@ def valid_cycle():
         "paper_end_units": 100.5,
         "executable": True,
         "capacity_verified": True,
+        "minimum_order_verified": True,
+        "quantity_step_verified": True,
         "quote_synchronized": True,
         "quotes_fresh": True,
         "contains_transfer": False,
-        "paper_legs": [
-            {"within_top_of_book_capacity": True, "within_capacity_buffer": True},
-            {"within_top_of_book_capacity": True, "within_capacity_buffer": True},
-            {"within_top_of_book_capacity": True, "within_capacity_buffer": True},
-        ],
+        "paper_legs": [valid_leg(), valid_leg(), valid_leg()],
     }
 
 
