@@ -9,6 +9,7 @@ import { checkBridge, normalizeBridgeUrl } from './localBridge.js';
 import { runSecurityDiagnostics } from './securityDiagnostics.js';
 import { deleteProviderSecret, listSecureProviders, secureProviderIds, storeProviderSecret, vaultAvailable } from './secureVault.js';
 import { nativeAiAvailable, nativeAiCapabilities } from './nativeAi.js';
+import { prepareExecutionCapsule } from './executorPolicy.js';
 
 
 export function HomeScreen({ t, state, configured, onNavigate }) {
@@ -165,6 +166,22 @@ export function SecurityScreen({ t, state }) {
   </section>;
 }
 
+
+export function WorkspaceScreen({ t, state }) {
+  const capsule = prepareExecutionCapsule();
+  return <section className="services-view">
+    <Header t={t} id="workspace"/>
+    <div className="panel executor-summary"><div><span className="kicker">{t.executorGuard}</span><h3>{t.executorReady}</h3><p>{t.executorDescription}</p></div><ShieldCheck size={34}/></div>
+    <div className="executor-grid">
+      <div className="panel executor-card"><b>{t.executorScope}</b><span>{capsule.workspace}</span></div>
+      <div className="panel executor-card"><b>{t.executorMode}</b><span>{t.executorGuarded}</span></div>
+      <div className="panel executor-card"><b>{t.executorTakeover}</b><span>{capsule.takeover ? t.executorAlways : t.executorUnavailable}</span></div>
+      <div className="panel executor-card"><b>{t.executorChannel}</b><span>{state.localBridgeEnabled ? t.executorBridgeEnabled : t.executorBridgeDisabled}</span></div>
+    </div>
+    <div className="panel executor-actions"><b>{t.executorAllowed}</b><div>{capsule.allowedActions.map(action => <span className="pill" key={action}>{action}</span>)}</div></div>
+    <div className="notice">{t.executorNotice}</div>
+  </section>;
+}
 export function TasksScreen({ t, state, addTask, toggleTask, deleteTask }) {
   const [draft, setDraft] = useState('');
   function submit() { if (!draft.trim()) return; addTask(draft.trim()); setDraft(''); }

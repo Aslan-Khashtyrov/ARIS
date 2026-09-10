@@ -6,6 +6,7 @@ import { defaultState, loadState, saveState } from '../src/storage.js';
 import { DEFAULT_LOCALE, getLocaleStrings, russianSource } from '../src/i18n.js';
 import { runSecurityDiagnostics } from '../src/securityDiagnostics.js';
 import { createBackup, parseBackup } from '../src/backup.js';
+import { executorDecision, prepareExecutionCapsule } from '../src/executorPolicy.js';
 import { argusDecision, argusAllowsAiProvider } from '../src/argus.js';
 
 let failed = 0;
@@ -68,6 +69,8 @@ const missionState = loadState();
 if (missionState.missions.length !== 50 || missionState.missions[0].text.length > 1600 || missionState.missions[0].agent.length > 80 || missionState.missions[0].status !== 'prepared') {
   console.error('FAIL STORAGE: поручения не ограничены или не санитизируются'); failed++;
 }
+const capsule = prepareExecutionCapsule();
+if (executorDecision(capsule, 'file.read').decision !== 'allow' || executorDecision(capsule, 'shell.arbitrary').decision !== 'deny' || executorDecision(capsule, 'finance.real_trade').decision !== 'deny') { console.error('FAIL EXECUTOR: Argus scope bypass'); failed++; }
 const diagnostics = runSecurityDiagnostics({ ...safeState, safeMode: true });
 if (!diagnostics.ok || diagnostics.passed !== diagnostics.total || diagnostics.total < 10) {
   console.error('FAIL SECURITY CENTER: базовые защитные проверки не проходят'); failed++;
@@ -115,7 +118,7 @@ const protectedWebJs = read('protectedWeb.js');
 if (!i18n.includes('export const russianSource') || !i18n.includes("export const DEFAULT_LOCALE = 'ru'")) {
   console.error('FAIL LANG: русский источник не объявлен основным'); failed++;
 }
-for (const id of ['home','chat','agents','terminal','services','aris','missions','tasks','security','logs','usage','settings']) {
+for (const id of ['home','chat','agents','terminal','services','aris','missions','workspace','tasks','security','logs','usage','settings']) {
   if (!app.includes(`${id}: <`)) { console.error(`FAIL NAV: экран ${id} не подключён`); failed++; }
 }
 if (/[А-Яа-яЁё]/.test(app) || /[А-Яа-яЁё]/.test(screens)) {

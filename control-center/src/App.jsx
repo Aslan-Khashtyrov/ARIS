@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText, Settings, ShieldCheck, TerminalSquare, WalletCards, Workflow } from 'lucide-react';
+import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText, Settings, ShieldCheck, TerminalSquare, WalletCards, Workflow, Wrench } from 'lucide-react';
 import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
@@ -7,12 +7,12 @@ import { chooseNativeProvider, nativeAiGenerate, nativeCouncilGenerate } from '.
 import { loadState, saveState } from './storage.js';
 import { downloadBackup, parseBackup } from './backup.js';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
-import { AgentsScreen, ArisScreen, ChatScreen, HomeScreen, LogsScreen, MissionsScreen, SecurityScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
+import { AgentsScreen, ArisScreen, ChatScreen, HomeScreen, LogsScreen, MissionsScreen, SecurityScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen, WorkspaceScreen } from './Screens.jsx';
 import './styles.css';
 
 const nav = [
   ['home', LayoutDashboard], ['chat', MessageSquare], ['agents', Bot], ['terminal', TerminalSquare],
-  ['services', Globe2], ['aris', Cpu], ['missions', Workflow], ['tasks', ListTodo], ['security', ShieldCheck], ['logs', ScrollText], ['usage', WalletCards], ['settings', Settings],
+  ['services', Globe2], ['aris', Cpu], ['missions', Workflow], ['workspace', Wrench], ['tasks', ListTodo], ['security', ShieldCheck], ['logs', ScrollText], ['usage', WalletCards], ['settings', Settings],
 ];
 
 function App() {
@@ -124,6 +124,7 @@ function App() {
     services: <ServicesScreen {...common} notice={notice} setNotice={setNotice}/>,
     aris: <ArisScreen {...common}/>,
     missions: <MissionsScreen {...common} state={state} addMission={addMission} deleteMission={deleteMission}/>,
+    workspace: <WorkspaceScreen {...common} state={state}/>,
     tasks: <TasksScreen {...common} state={state} addTask={addTask} toggleTask={toggleTask} deleteTask={deleteTask}/>,
     security: <SecurityScreen {...common} state={state}/>,
     logs: <LogsScreen {...common} state={state}/>,
