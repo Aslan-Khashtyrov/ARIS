@@ -2,9 +2,10 @@ import fs from 'node:fs';
 import { isAllowedServiceUrl } from '../src/services.js';
 import { checkBridge, normalizeBridgeUrl } from '../src/localBridge.js';
 import { chooseAgent } from '../src/router.js';
-import { loadState, saveState } from '../src/storage.js';
+import { defaultState, loadState, saveState } from '../src/storage.js';
 import { DEFAULT_LOCALE, getLocaleStrings, russianSource } from '../src/i18n.js';
 import { runSecurityDiagnostics } from '../src/securityDiagnostics.js';
+import { createBackup, parseBackup } from '../src/backup.js';
 
 let failed = 0;
 const urlCases = [
@@ -135,6 +136,12 @@ if (!networkSecurity.includes('<base-config cleartextTrafficPermitted="false"') 
 if (filePaths.includes('<external-path') || !filePaths.includes('path="shared/"')) {
   console.error('FAIL ANDROID: FileProvider имеет слишком широкий доступ'); failed++;
 }
+
+
+const backup = createBackup({ ...defaultState, localBridgeEnabled: true, bridgeUrl: 'http://localhost:9999', chatHistory: [{kind:'me',author:'Я',text:'ok'}] });
+const restored = parseBackup(backup);
+if (!restored || restored.localBridgeEnabled !== false || restored.bridgeUrl !== defaultState.bridgeUrl || restored.safeMode !== true) { console.error('FAIL BACKUP: unsafe restore'); failed++; }
+if (parseBackup('{bad json') !== null || parseBackup(JSON.stringify({format:'evil',version:1,state:{}})) !== null) { console.error('FAIL BACKUP: malformed import accepted'); failed++; }
 
 if (failed) process.exit(1);
 console.log('PASS: русский источник, смена языка, русский fallback, навигация, router, storage, paper-only, bridge и URL-защита проверены.');

@@ -86,13 +86,14 @@ function Budget({ t, label, value, onChange }) {
   return <label className="panel budget-card"><span>{label}</span><input type="number" min="0" step="1" value={value} onChange={e => onChange(e.target.value)}/><small>{t.budgetUnit}</small></label>;
 }
 
-export function SettingsScreen({ t, state, updateState }) {
+export function SettingsScreen({ t, state, updateState, onExport, onImport }) {
   return <section className="services-view"><Header t={t} id="settings"/><div className="panel form-panel">
     <label className="switch-line"><input type="checkbox" checked={true} disabled/><span>{t.safeModeLocked}</span></label>
     <div className="setting-row language-row"><div><b>{t.languageTitle}</b><small>{t.languageHint}</small></div><select value={state.locale} onChange={e => updateState({ locale: e.target.value })}>{supportedLanguages.map(language => <option value={language.id} key={language.id}>{language.label}</option>)}</select></div>
     <div className="setting-row"><b>{t.realTradesLabel}</b><span>{t.realTradesValue}</span></div>
     <div className="setting-row"><b>{t.secretsLabel}</b><span>{t.secretsValue}</span></div>
-    <div className="setting-row"><b>{t.versionLabel}</b><span>{t.versionValue}</span></div>
+    <div className="setting-row"><b>{t.backupTitle}</b><span>{t.backupHint}</span><div className="quick-actions"><button type="button" onClick={onExport}>{t.backupExport}</button><label className="import-button">{t.backupImport}<input type="file" accept="application/json,.json" onChange={async e => { const file=e.target.files?.[0]; if (!file) return; const ok=onImport(await file.text()); e.target.value=''; alert(ok ? t.backupImported : t.backupInvalid); }}/></label></div></div>
+      <div className="setting-row"><b>{t.versionLabel}</b><span>{t.versionValue}</span></div>
   </div></section>;
 }export function ServicesScreen({ t, notice, setNotice }) {
   async function openService(service) {

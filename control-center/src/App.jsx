@@ -4,6 +4,7 @@ import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
 import { loadState, saveState } from './storage.js';
+import { downloadBackup, parseBackup } from './backup.js';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
 import { AgentsScreen, ArisScreen, ChatScreen, HomeScreen, LogsScreen, MissionsScreen, SecurityScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
 import './styles.css';
@@ -83,7 +84,7 @@ function App() {
     security: <SecurityScreen {...common} state={state}/>,
     logs: <LogsScreen {...common} state={state}/>,
     usage: <UsageScreen {...common} state={state} updateState={updateState}/>,
-    settings: <SettingsScreen {...common} state={state} updateState={updateState}/>,
+    settings: <SettingsScreen {...common} state={state} updateState={updateState} onExport={() => downloadBackup(state)} onImport={(raw) => { const restored = parseBackup(raw); if (!restored) return false; updateState(restored); return true; }}/>,
   };
 
   return <div className="app-shell" lang={state.locale} data-safe-mode={state.safeMode ? 'on' : 'off'}>
