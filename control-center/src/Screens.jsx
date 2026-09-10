@@ -26,13 +26,13 @@ export function HomeScreen({ t, state, configured, onNavigate }) {
   </section>;
 }
 
-export function ChatScreen({ t, text, setText, history, onSend, onRunLiveAi, liveAiBusy, onClear }) {
+export function ChatScreen({ t, text, setText, history, onSend, onRunLiveAi, liveAiBusy, onRunCouncil, councilBusy, onClear }) {
   return <section className="dashboard">
     <div className="hero-card"><div className="hero-copy"><span className="pill">{t.autoRouting}</span><h2>{t.hero}</h2><p>{t.heroDescription}</p></div><Gauge size={64}/></div>
     <div className="grid"><section className="panel chat-panel">
       <div className="panel-head"><div><span className="kicker">{t.unifiedChat}</span><h3>{t.mainChat}</h3></div><Code2 size={20}/></div>
       <div className="messages">{history.length ? history.map((item, i) => <div className={'bubble ' + item.kind} key={i}><b>{item.author}</b><span>{item.text}</span></div>) : <div className="bubble system"><span>{t.readyMessage}</span></div>}</div>
-      <div className="composer"><input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === 'Enter' && onSend()} placeholder={t.inputPlaceholder}/><button onClick={onSend}>{t.send}</button><button className="secondary" disabled={liveAiBusy} onClick={onRunLiveAi}>{liveAiBusy ? t.liveAiRunning : t.runLiveAi}</button><button className="secondary" onClick={onClear}>{t.clear}</button></div>
+      <div className="composer"><input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === 'Enter' && onSend()} placeholder={t.inputPlaceholder}/><button onClick={onSend}>{t.send}</button><button className="secondary" disabled={liveAiBusy || councilBusy} onClick={onRunLiveAi}>{liveAiBusy ? t.liveAiRunning : t.runLiveAi}</button><button className="secondary" disabled={councilBusy || liveAiBusy} onClick={onRunCouncil}>{councilBusy ? t.councilRunning : t.runCouncil}</button><button className="secondary" onClick={onClear}>{t.clear}</button></div>
     </section>
     <AgentsCompact t={t}/><TerminalCompact t={t}/></div>
   </section>;

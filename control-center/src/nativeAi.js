@@ -23,3 +23,19 @@ export async function chooseNativeProvider(preferred = ['google', 'xai', 'mistra
   const provider = preferred.find(id => capabilities?.[id] === true) || null;
   return provider ? { provider, model: nativeAiDefaults[provider], capabilities } : { provider: null, model: null, capabilities };
 }
+
+export async function nativeCouncilPlan(preferred = ['google', 'xai', 'mistral']) {
+  const capabilities = await nativeAiCapabilities();
+  const available = preferred.filter(id => capabilities?.[id] === true);
+  return { primary: available[0] ? { provider: available[0], model: nativeAiDefaults[available[0]] } : null, reviewer: available[1] ? { provider: available[1], model: nativeAiDefaults[available[1]] } : null, capabilities };
+}
+
+export async function nativeCouncilGenerate(prompt, preferred) {
+  const plan = await nativeCouncilPlan(preferred);
+  if (!plan.primary) throw new Error('native_ai_unavailable');
+  const primary = await nativeAiGenerate({ ...plan.primary, prompt });
+  if (!plan.reviewer) return { plan, primary, review: null };
+  const reviewPrompt = `Независимо проверь ответ другого ИИ. Укажи конкретные ошибки, риски и затем дай улучшенный итог.\n\nЗАДАЧА:\n${prompt}\n\nОТВЕТ ДЛЯ ПРОВЕРКИ:\n${primary.text || ''}`;
+  const review = await nativeAiGenerate({ ...plan.reviewer, prompt: reviewPrompt });
+  return { plan, primary, review };
+}

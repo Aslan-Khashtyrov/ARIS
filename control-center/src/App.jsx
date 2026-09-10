@@ -3,7 +3,7 @@ import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText,
 import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
-import { chooseNativeProvider, nativeAiGenerate } from './nativeAi.js';
+import { chooseNativeProvider, nativeAiGenerate, nativeCouncilGenerate } from './nativeAi.js';
 import { loadState, saveState } from './storage.js';
 import { downloadBackup, parseBackup } from './backup.js';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
@@ -20,6 +20,7 @@ function App() {
   const [text, setText] = useState('');
   const [notice, setNotice] = useState('');
   const [liveAiBusy, setLiveAiBusy] = useState(false);
+  const [councilBusy, setCouncilBusy] = useState(false);
   const [state, setState] = useState(() => loadState());
   const t = useMemo(() => getLocaleStrings(state.locale), [state.locale]);
   const configured = useMemo(() => configuredAgentCount(), []);
@@ -64,6 +65,21 @@ function App() {
     }
   }
 
+  async function runNativeCouncil() {
+    const value = text.trim();
+    if (!value || councilBusy || liveAiBusy) return false;
+    setCouncilBusy(true);
+    try {
+      const result = await nativeCouncilGenerate(value);
+      const messages = [{ kind: 'me', author: t.you, text: value }, { kind: 'agent', author: result.plan.primary.provider.toUpperCase(), text: result.primary.text || t.liveAiEmpty }];
+      if (result.review) messages.push({ kind: 'agent', author: `${result.plan.reviewer.provider.toUpperCase()} · ${t.councilReviewer}`, text: result.review.text || t.liveAiEmpty });
+      updateState(current => ({ chatHistory: [...current.chatHistory, ...messages].slice(-100), logs: appendLog(current.logs, t.logCouncilCompleted(result.review ? 2 : 1)) }));
+      setText(''); return true;
+    } catch {
+      updateState(current => ({ logs: appendLog(current.logs, t.logCouncilFailed) })); return false;
+    } finally { setCouncilBusy(false); }
+  }
+
   function sendMessage() {
     const value = text.trim();
     if (!value) return;
@@ -102,7 +118,7 @@ function App() {
   const common = { t };
   const screens = {
     home: <HomeScreen {...common} state={state} configured={configured} onNavigate={setTab}/>,
-    chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onRunLiveAi={runLiveAi} liveAiBusy={liveAiBusy} onClear={() => updateState({ chatHistory: [] })}/>,
+    chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onRunLiveAi={runLiveAi} liveAiBusy={liveAiBusy} onRunCouncil={runNativeCouncil} councilBusy={councilBusy} onClear={() => updateState({ chatHistory: [] })}/>,
     agents: <AgentsScreen {...common}/>,
     terminal: <TerminalScreen {...common} state={state} updateState={updateState}/>,
     services: <ServicesScreen {...common} notice={notice} setNotice={setNotice}/>,
