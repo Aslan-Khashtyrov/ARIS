@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Bot, CheckCircle2, Code2, Gauge, Globe2, ShieldCheck, TerminalSquare, Workflow, XCircle } from 'lucide-react';
-import { Browser } from '@capacitor/browser';
 import { supportedLanguages } from './i18n.js';
 import { agentRegistry, routingPolicy } from './agents.js';
 import { councilPreview } from './router.js';
 import { isAllowedServiceUrl, services } from './services.js';
+import { openProtectedService } from './protectedWeb.js';
 import { checkBridge, normalizeBridgeUrl } from './localBridge.js';
 import { runSecurityDiagnostics } from './securityDiagnostics.js';
 import { deleteProviderSecret, listSecureProviders, secureProviderIds, storeProviderSecret, vaultAvailable } from './secureVault.js';
@@ -129,8 +129,7 @@ export function ServicesScreen({ t, notice, setNotice }) {
   async function openService(service) {
     if (!isAllowedServiceUrl(service.url)) return setNotice(t.blockedUrl);
     setNotice(t.openingService(service.name));
-    try { await Browser.open({ url: service.url, presentationStyle: 'fullscreen' }); }
-    catch { setNotice(t.openFailed); }
+    if (!await openProtectedService(service)) setNotice(t.openFailed);
   }
   return <section className="services-view"><div className="section-title"><span className="kicker">{t.servicesKicker}</span><h2>{t.servicesTitle}</h2><p>{t.servicesDescription}</p></div><div className="service-grid">
     {services.map(service => <button className="service-card" key={service.id} onClick={() => openService(service)}><Globe2 size={28}/><div><b>{service.name}</b><span>{t.serviceDescriptions[service.id]}</span></div><small>{service.host}</small></button>)}

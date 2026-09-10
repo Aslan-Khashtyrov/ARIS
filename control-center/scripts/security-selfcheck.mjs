@@ -102,6 +102,9 @@ const manifest = fs.readFileSync(new URL('../android/app/src/main/AndroidManifes
 const networkSecurity = fs.readFileSync(new URL('../android/app/src/main/res/xml/network_security_config.xml', import.meta.url), 'utf8');
 const filePaths = fs.readFileSync(new URL('../android/app/src/main/res/xml/file_paths.xml', import.meta.url), 'utf8');
 const vaultNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/SecureVaultPlugin.java', import.meta.url), 'utf8');
+const protectedWebNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/ProtectedWebActivity.java', import.meta.url), 'utf8');
+const protectedWebPlugin = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/ProtectedWebPlugin.java', import.meta.url), 'utf8');
+const protectedWebJs = read('protectedWeb.js');
 
 if (!i18n.includes('export const russianSource') || !i18n.includes("export const DEFAULT_LOCALE = 'ru'")) {
   console.error('FAIL LANG: русский источник не объявлен основным'); failed++;
@@ -144,6 +147,10 @@ if (filePaths.includes('<external-path') || !filePaths.includes('path="shared/"'
 }
 if (!vaultNative.includes('AndroidKeyStore') || !vaultNative.includes('AES/GCM/NoPadding') || vaultNative.includes('getSecret(PluginCall') || vaultNative.includes('@PluginMethod\n    public void getSecret')) { console.error('FAIL VAULT: защищённое хранилище ослаблено или секрет читается обратно в JS'); failed++; }
 if (!vaultNative.includes('MAX_SECRET_CHARS') || !vaultNative.includes('^[a-z0-9_-]{1,32}$')) { console.error('FAIL VAULT: входные данные vault не ограничены'); failed++; }
+if (!manifest.includes('android:name=".ProtectedWebActivity"') || !manifest.includes('android:exported="false"')) { console.error('FAIL PROTECTED WEB: защищённая Activity отсутствует или экспортирована'); failed++; }
+if (!protectedWebNative.includes('MIXED_CONTENT_NEVER_ALLOW') || !protectedWebNative.includes('setAllowFileAccess(false)') || !protectedWebNative.includes('setAllowContentAccess(false)') || !protectedWebNative.includes('setAcceptThirdPartyCookies(webView, false)') || !protectedWebNative.includes('setWebContentsDebuggingEnabled(false)')) { console.error('FAIL PROTECTED WEB: WebView hardening неполный'); failed++; }
+if (protectedWebNative.includes('addJavascriptInterface') || !protectedWebNative.includes('"https".equalsIgnoreCase(uri.getScheme())') || !protectedWebNative.includes('uri.getUserInfo() != null') || !protectedWebNative.includes('uri.getPort() != -1')) { console.error('FAIL PROTECTED WEB: навигация или JS bridge небезопасны'); failed++; }
+if (!protectedWebPlugin.includes('Arrays.asList("github", "pocketoption")') || !protectedWebJs.includes("new Set(['github', 'pocketoption'])")) { console.error('FAIL PROTECTED WEB: allowlist сервисов отсутствует'); failed++; }
 
 
 const backup = createBackup({ ...defaultState, localBridgeEnabled: true, bridgeUrl: 'http://localhost:9999', chatHistory: [{kind:'me',author:'Я',text:'ok'}] });
@@ -158,6 +165,7 @@ if (secretBackup.includes('SHOULD_NOT_LEAK') || secretBackup.includes('NOPE') ||
 const mainActivity = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/MainActivity.java', import.meta.url), 'utf8');
 const secureJs = read('secureVault.js');
 if (!mainActivity.includes('registerPlugin(SecureVaultPlugin.class)')) { console.error('FAIL VAULT: нативный плагин не зарегистрирован'); failed++; }
+if (!mainActivity.includes('registerPlugin(ProtectedWebPlugin.class)')) { console.error('FAIL PROTECTED WEB: нативный плагин не зарегистрирован'); failed++; }
 if (secureJs.includes('.getSecret(') || secureJs.includes('.readSecret(') || secureJs.includes('localStorage')) { console.error('FAIL VAULT: секрет может читаться обратно или сохраняться в localStorage'); failed++; }
 
 if (failed) process.exit(1);

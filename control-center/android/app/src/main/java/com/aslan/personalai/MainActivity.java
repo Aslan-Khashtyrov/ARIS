@@ -7,6 +7,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(SecureVaultPlugin.class);
+        registerPlugin(ProtectedWebPlugin.class);
         super.onCreate(savedInstanceState);
     }
 }
