@@ -8,6 +8,7 @@ import { openProtectedService } from './protectedWeb.js';
 import { checkBridge, normalizeBridgeUrl } from './localBridge.js';
 import { runSecurityDiagnostics } from './securityDiagnostics.js';
 import { deleteProviderSecret, listSecureProviders, secureProviderIds, storeProviderSecret, vaultAvailable } from './secureVault.js';
+import { nativeAiAvailable, nativeAiCapabilities } from './nativeAi.js';
 
 
 export function HomeScreen({ t, state, configured, onNavigate }) {
@@ -47,9 +48,11 @@ function AgentsCompact({ t }) {
 }
 
 export function AgentsScreen({ t }) {
+  const [nativeCaps, setNativeCaps] = useState({});
+  useEffect(() => { if (nativeAiAvailable()) nativeAiCapabilities().then(setNativeCaps).catch(() => setNativeCaps({})); }, []);
   const examples = [[t.routeLabels.coding, councilPreview('android code', t)], [t.routeLabels.reasoning, councilPreview('explain idea', t)], [t.routeLabels.review, councilPreview('security review', t)]];
   return <section className="services-view"><Header t={t} id="agents"/><div className="panel council-panel"><span className="kicker">{t.councilKicker}</span><h3>{t.councilTitle}</h3><p>{t.councilDescription}</p><div className="council-grid">{examples.map(([label, plan]) => <div className="council-card" key={label}><b>{label}</b><span>{t.councilPrimary}: {plan.primary.name}</span><span>{t.councilReviewer}: {plan.reviewer?.name || t.councilNone}</span><span>{t.councilArbiter}: {plan.arbiter?.name || t.councilNone}</span></div>)}</div></div><div className="panel"><div className="agent-list">
-    {agentRegistry.map(agent => <div className="agent-row large" key={agent.id}><div className="rank">{agent.priority}</div><div className="agent-meta"><b>{agent.name}</b><span>{t.roles[agent.roleKey]}</span></div><div className={'agent-state ' + agent.mode}>{t.modes[agent.mode]}</div></div>)}
+    {agentRegistry.map(agent => { const provider = agent.id === 'gemini' ? 'google' : agent.id === 'grok' ? 'xai' : agent.id === 'mistral' ? 'mistral' : null; const ready = provider ? nativeCaps[provider] === true : false; return <div className="agent-row large" key={agent.id}><div className="rank">{agent.priority}</div><div className="agent-meta"><b>{agent.name}</b><span>{t.roles[agent.roleKey]}</span></div><div className={'agent-state ' + (ready ? 'configured' : agent.mode)}>{ready ? t.nativeReady : t.modes[agent.mode]}</div></div>; })}
   </div></div><div className="route-grid">
     {Object.entries(routingPolicy).map(([key, chain]) => <div className="panel route-card" key={key}><b>{t.routeLabels[key]}</b><span>{chain.join(' → ')}</span></div>)}
   </div></section>;

@@ -65,7 +65,7 @@ export const russianSource = {
   liveAiEmpty: 'Провайдер вернул пустой ответ.', logLiveAiUnavailable: 'Живой ИИ не запущен: нет настроенного нативного провайдера.', logLiveAiCompleted: provider => `Живой запрос выполнен через ${provider}.`, logLiveAiFailed: provider => `Живой запрос через ${provider} завершился ошибкой.`, logCouncilCompleted: count => `Совет ИИ завершён: ${count} API-вызов(а).`, logCouncilFailed: 'Совет ИИ завершился ошибкой.',
   logChatRouted: agent => `Задача маршрутизирована к ${agent}.`, logTaskAdded: 'Добавлена локальная задача.',
   logTaskChanged: 'Статус локальной задачи изменён.', logTaskDeleted: 'Локальная задача удалена.',
-  backupTitle: 'Резервная копия', backupHint: 'Экспортирует локальные данные без секретов и всегда сбрасывает bridge в безопасное состояние.', backupExport: 'Экспорт', backupImport: 'Восстановить', backupImported: 'Резервная копия восстановлена безопасно', backupInvalid: 'Файл резервной копии отклонён', versionLabel: 'Версия оболочки', versionValue: '1.6 — контроль вызовов ИИ',
+  backupTitle: 'Резервная копия', backupHint: 'Экспортирует локальные данные без секретов и всегда сбрасывает bridge в безопасное состояние.', backupExport: 'Экспорт', backupImport: 'Восстановить', backupImported: 'Резервная копия восстановлена безопасно', backupInvalid: 'Файл резервной копии отклонён', versionLabel: 'Версия оболочки', versionValue: '1.7 — статус провайдеров',
   serviceDescriptions: { github: 'Репозитории, задачи и сборки проекта', pocketoption: 'Терминал наблюдения и демо-режим' },
   missionsKicker: 'ПОРУЧЕНИЯ', missionsTitle: 'Одна задача — один маршрут', missionsDescription: 'Project One подбирает подходящего агента и готовит поручение. Выполнение не имитируется: запуск появится только после безопасного подключения агента.',
   missionsNew: 'Новое поручение', missionsHint: 'Опиши результат своими словами — система сама выберет маршрут.', missionsPlaceholder: 'Например: проверь проект на уязвимости и подготовь исправления', missionsPrepare: 'Подготовить',
@@ -96,7 +96,7 @@ export const russianSource = {
 };Object.assign(translations.en, {
   nav: { home: 'Home', chat: 'Chat', agents: 'Agents', terminal: 'Terminal', services: 'Services', aris: 'ARIS', missions: 'Missions', tasks: 'Tasks', security: 'Security', logs: 'Log', usage: 'Usage', settings: 'Settings' },
   roles: { codex: 'Code and terminal', gpt: 'Analysis and planning', claude: 'Review and long context', kimi: 'Long context and research', gemini: 'Multimodal analysis', mistral: 'Fast code and fallback', grok: 'Alternative analysis and code', hermes: 'Fallback operator' },
-  modes: { configured: 'configured', planned: 'planned' },
+  modes: { configured: 'configured', planned: 'planned' }, nativeReady: 'key connected',
   screens: {
     agents: { kicker: 'AGENT MANAGEMENT', title: 'Agents', description: 'Priorities, roles and fallback chain without fake online statuses.' },
     terminal: { kicker: 'TERMINAL', title: 'Codex Terminal', description: 'Interface for the future local bridge without direct arbitrary shell execution from the app.' },
@@ -127,7 +127,7 @@ export const russianSource = {
   logsTitle: 'Log', logsKicker: 'EVENT LOG', logsDescription: 'Local app activity history without secrets or token contents.', noLogs: 'No events yet.',
   liveAiEmpty: 'The provider returned an empty response.', logLiveAiUnavailable: 'Live AI was not started: no configured native provider.', logLiveAiCompleted: provider => `Live request completed via ${provider}.`, logLiveAiFailed: provider => `Live request via ${provider} failed.`, logCouncilCompleted: count => `AI Council completed with ${count} API call(s).`, logCouncilFailed: 'AI Council failed.',
   logChatRouted: agent => `Task routed to ${agent}.`, logTaskAdded: 'Local task added.', logTaskChanged: 'Local task status changed.', logTaskDeleted: 'Local task deleted.',
-  backupTitle: 'Backup', backupHint: 'Exports local data without secrets and always restores the bridge in a safe state.', backupExport: 'Export', backupImport: 'Restore', backupImported: 'Backup restored safely', backupInvalid: 'Backup file rejected', versionLabel: 'Shell version', versionValue: '1.6 — AI call guard',
+  backupTitle: 'Backup', backupHint: 'Exports local data without secrets and always restores the bridge in a safe state.', backupExport: 'Export', backupImport: 'Restore', backupImported: 'Backup restored safely', backupInvalid: 'Backup file rejected', versionLabel: 'Shell version', versionValue: '1.7 — provider status',
   serviceDescriptions: { github: 'Project repositories, issues and builds', pocketoption: 'Observation terminal and demo mode' },
   missionsKicker: 'MISSIONS', missionsTitle: 'One task — one route', missionsDescription: 'Project One selects a suitable agent and prepares the mission. Execution is never faked and only starts after a secure agent connection exists.',
   missionsNew: 'New mission', missionsHint: 'Describe the result in your own words and the system will choose the route.', missionsPlaceholder: 'Example: review the project for vulnerabilities and prepare fixes', missionsPrepare: 'Prepare',

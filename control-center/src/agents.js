@@ -10,7 +10,7 @@ export const agentRegistry = [
 ];
 
 export const routingPolicy = {
-  coding: ['codex', 'gpt', 'claude', 'gemini', 'mistral', 'grok', 'hermes'],
+  coding: ['codex', 'gpt', 'claude', 'kimi', 'gemini', 'mistral', 'grok', 'hermes'],
   reasoning: ['gpt', 'gemini', 'kimi', 'claude', 'mistral', 'grok', 'codex', 'hermes'],
   review: ['claude', 'gpt', 'gemini', 'mistral', 'kimi', 'grok', 'codex', 'hermes'],
   fallback: ['hermes'],

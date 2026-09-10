@@ -116,6 +116,8 @@ for (const id of ['home','chat','agents','terminal','services','aris','missions'
 if (/[А-Яа-яЁё]/.test(app) || /[А-Яа-яЁё]/.test(screens)) {
   console.error('FAIL LANG: пользовательский русский текст найден вне русского источника'); failed++;
 }
+if (!screens.includes('nativeAiCapabilities') || !screens.includes('nativeReady')) { console.error('FAIL AGENTS STATUS: статус нативных провайдеров не отображается'); failed++; }
+if (!read('agents.js').includes("coding: ['codex', 'gpt', 'claude', 'kimi'")) { console.error('FAIL ROUTER: Kimi выпал из coding-цепочки'); failed++; }
 if (!screens.includes('supportedLanguages.map') || !screens.includes('state.locale')) {
   console.error('FAIL LANG: выбор языка в настройках не подключён'); failed++;
 }
