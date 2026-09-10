@@ -71,8 +71,8 @@ export const russianSource = {
   missionsNew: 'Новое поручение', missionsHint: 'Опиши результат своими словами — система сама выберет маршрут.', missionsPlaceholder: 'Например: проверь проект на уязвимости и подготовь исправления', missionsPrepare: 'Подготовить',
   missionsPrepared: 'ПОДГОТОВЛЕНО', missionsAgent: 'Назначен агент', missionsExecutionPending: 'Ожидает безопасного канала выполнения', noMissions: 'Поручений пока нет.',
   logMissionPrepared: agent => `Подготовлено поручение для ${agent}.`, logMissionDeleted: 'Поручение удалено.',
-  securityKicker: 'ЦЕНТР БЕЗОПАСНОСТИ', securityTitle: 'Защита Project One', securityDescription: 'Локальная самопроверка критических защитных инвариантов приложения без передачи данных наружу.',
-  securityStatus: 'Текущий статус', securityProtected: 'Базовая защита в норме', securityAttention: 'Требуется внимание', securityChecksPassed: 'проверок пройдено', securityRun: 'Проверить сейчас', securityOk: 'Защита активна', securityFailed: 'Проверка не пройдена',
+  securityKicker: 'АРГУС · СТРАЖ', securityTitle: 'Аргус', securityDescription: 'Встроенный страж Project One: локально проверяет критические защитные инварианты без передачи данных наружу.',
+  securityStatus: 'Статус Аргуса', securityProtected: 'Аргус на страже', securityAttention: 'Требуется внимание', securityChecksPassed: 'проверок пройдено', securityRun: 'Проверить сейчас', securityOk: 'Защита активна', securityFailed: 'Проверка не пройдена',
   securityNote: 'Эта проверка не заменяет внешний аудит и adversarial-тесты, но быстро ловит ослабление ключевых локальных ограничений.',
   securityChecks: { safeMode: 'Безопасный режим закреплён', serviceUserinfo: 'Подмена адреса через userinfo блокируется', servicePath: 'Произвольные пути сервисов блокируются', bridgeRemote: 'Удалённый bridge запрещён', bridgeCredentials: 'Логин и пароль в bridge запрещены', bridgeObfuscated: 'Скрытые формы localhost в bridge запрещены', paperOnly: 'ARIS остаётся paper-only' },
 });const translations = {
@@ -133,8 +133,8 @@ export const russianSource = {
   missionsNew: 'New mission', missionsHint: 'Describe the result in your own words and the system will choose the route.', missionsPlaceholder: 'Example: review the project for vulnerabilities and prepare fixes', missionsPrepare: 'Prepare',
   missionsPrepared: 'PREPARED', missionsAgent: 'Assigned agent', missionsExecutionPending: 'Waiting for a secure execution channel', noMissions: 'No missions yet.',
   logMissionPrepared: agent => `Mission prepared for ${agent}.`, logMissionDeleted: 'Mission deleted.',
-  securityKicker: 'SECURITY CENTER', securityTitle: 'Project One protection', securityDescription: 'Local self-check of critical security invariants without sending data outside the app.',
-  securityStatus: 'Current status', securityProtected: 'Baseline protection is healthy', securityAttention: 'Attention required', securityChecksPassed: 'checks passed', securityRun: 'Check now', securityOk: 'Protection active', securityFailed: 'Check failed',
+  securityKicker: 'ARGUS · GUARDIAN', securityTitle: 'Argus', securityDescription: 'Project One built-in guardian: locally checks critical security invariants without sending data outside the app.',
+  securityStatus: 'Argus status', securityProtected: 'Argus is guarding', securityAttention: 'Attention required', securityChecksPassed: 'checks passed', securityRun: 'Check now', securityOk: 'Protection active', securityFailed: 'Check failed',
   securityNote: 'This check does not replace external audits or adversarial testing, but it quickly detects weakened local safeguards.',
   securityChecks: { safeMode: 'Safe mode is locked', serviceUserinfo: 'Service userinfo spoofing is blocked', servicePath: 'Arbitrary service paths are blocked', bridgeRemote: 'Remote bridge is forbidden', bridgeCredentials: 'Bridge credentials are forbidden', bridgeObfuscated: 'Obfuscated localhost forms are blocked', paperOnly: 'ARIS remains paper-only' },
 });
