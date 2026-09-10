@@ -2,7 +2,7 @@ import { argusAllowsAiProvider } from './argus.js';
 import { Capacitor, registerPlugin } from '@capacitor/core';
 
 const NativeAi = registerPlugin('NativeAi');
-export const nativeAiProviders = ['mistral', 'xai', 'google'];
+export const nativeAiProviders = ['mistral', 'xai', 'google', 'openrouter'];
 export const nativeAiAvailable = () => Capacitor.getPlatform() === 'android' && Capacitor.isNativePlatform();
 export async function nativeAiCapabilities() {
   if (!nativeAiAvailable()) return Object.fromEntries(nativeAiProviders.map(id => [id, false]));
@@ -17,15 +17,16 @@ export const nativeAiDefaults = Object.freeze({
   google: 'gemini-2.5-flash',
   mistral: 'mistral-small-latest',
   xai: 'grok-4.6',
+  openrouter: 'openrouter/auto',
 });
 
-export async function chooseNativeProvider(preferred = ['google', 'xai', 'mistral']) {
+export async function chooseNativeProvider(preferred = ['google', 'openrouter', 'xai', 'mistral']) {
   const capabilities = await nativeAiCapabilities();
   const provider = preferred.find(id => capabilities?.[id] === true) || null;
   return provider ? { provider, model: nativeAiDefaults[provider], capabilities } : { provider: null, model: null, capabilities };
 }
 
-export async function nativeCouncilPlan(preferred = ['google', 'xai', 'mistral']) {
+export async function nativeCouncilPlan(preferred = ['google', 'openrouter', 'xai', 'mistral']) {
   const capabilities = await nativeAiCapabilities();
   const available = preferred.filter(id => capabilities?.[id] === true);
   return { primary: available[0] ? { provider: available[0], model: nativeAiDefaults[available[0]] } : null, reviewer: available[1] ? { provider: available[1], model: nativeAiDefaults[available[1]] } : null, capabilities };

@@ -30,7 +30,7 @@ public class NativeAiPlugin extends Plugin {
     private static final String KEYSTORE = "AndroidKeyStore";
     private static final String KEY_ALIAS = "project_one_provider_vault_v1";
     private static final String PREFS = "project_one_secure_vault_v1";
-    private static final Pattern MODEL = Pattern.compile("^[A-Za-z0-9._-]{1,80}$");
+    private static final Pattern MODEL = Pattern.compile("^[A-Za-z0-9._\\/-]{1,80}$");
     private static final int MAX_PROMPT = 16000;
     private static final int MAX_RESPONSE = 1000000;
     private static final int MAX_OUTPUT_TOKENS = 4096;
@@ -42,6 +42,7 @@ public class NativeAiPlugin extends Plugin {
         out.put("mistral", has("mistral"));
         out.put("xai", has("xai"));
         out.put("google", has("google"));
+        out.put("openrouter", has("openrouter"));
         call.resolve(out);
     }
 
@@ -50,7 +51,7 @@ public class NativeAiPlugin extends Plugin {
         String provider = call.getString("provider", "");
         String model = call.getString("model", "");
         String prompt = call.getString("prompt", "");
-        if (!(provider.equals("mistral") || provider.equals("xai") || provider.equals("google")) || !MODEL.matcher(model).matches() || prompt.isEmpty() || prompt.length() > MAX_PROMPT) {
+        if (!(provider.equals("mistral") || provider.equals("xai") || provider.equals("google") || provider.equals("openrouter")) || !MODEL.matcher(model).matches() || prompt.isEmpty() || prompt.length() > MAX_PROMPT) {
             call.reject("invalid_input"); return;
         }
         if (!allowedModel(provider, model)) { call.reject("model_not_allowed"); return; }
@@ -64,6 +65,7 @@ public class NativeAiPlugin extends Plugin {
         if (provider.equals("google")) return model.equals("gemini-2.5-flash");
         if (provider.equals("mistral")) return model.equals("mistral-small-latest");
         if (provider.equals("xai")) return model.equals("grok-4.6");
+        if (provider.equals("openrouter")) return model.equals("openrouter/auto");
         return false;
     }
 
@@ -96,7 +98,7 @@ public class NativeAiPlugin extends Plugin {
                 contents.put(user); body.put("contents", contents);
                 body.put("generationConfig", new JSONObject().put("maxOutputTokens", MAX_OUTPUT_TOKENS));
             } else {
-                endpoint = provider.equals("mistral") ? "https://api.mistral.ai/v1/chat/completions" : "https://api.x.ai/v1/chat/completions";
+                endpoint = provider.equals("mistral") ? "https://api.mistral.ai/v1/chat/completions" : provider.equals("openrouter") ? "https://openrouter.ai/api/v1/chat/completions" : "https://api.x.ai/v1/chat/completions";
                 body.put("model", model);
                 body.put("messages", new JSONArray().put(new JSONObject().put("role", "user").put("content", prompt)));
                 body.put("max_tokens", MAX_OUTPUT_TOKENS);

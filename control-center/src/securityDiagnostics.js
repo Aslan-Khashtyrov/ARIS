@@ -13,7 +13,7 @@ export function runSecurityDiagnostics(state) {
     { id: 'paperOnly', ok: true },
     { id: 'argusSecrets', ok: argusDecision('secret.export').decision === 'deny' && argusDecision('secret.log').decision === 'deny' },
     { id: 'argusFinance', ok: argusDecision('finance.real_trade').decision === 'deny' && argusDecision('finance.withdraw').decision === 'deny' },
-    { id: 'argusProviders', ok: argusPolicy.trustedAiProviders.length === 3 && argusAllowsAiProvider('google') && !argusAllowsAiProvider('unknown') },
+    { id: 'argusProviders', ok: argusPolicy.trustedAiProviders.length === 4 && argusAllowsAiProvider('google') && argusAllowsAiProvider('openrouter') && !argusAllowsAiProvider('unknown') },
   ];
   return { checks, passed: checks.filter(item => item.ok).length, total: checks.length, ok: checks.every(item => item.ok) };
 }

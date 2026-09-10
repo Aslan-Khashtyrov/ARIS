@@ -1,4 +1,4 @@
-const TRUSTED_AI_PROVIDERS = Object.freeze(['google', 'mistral', 'xai']);
+const TRUSTED_AI_PROVIDERS = Object.freeze(['google', 'mistral', 'xai', 'openrouter']);
 const HARD_BLOCKS = Object.freeze([
   'secret.export', 'secret.log', 'finance.real_trade', 'finance.transfer',
   'finance.deposit', 'finance.withdraw', 'bridge.remote', 'shell.arbitrary', 'network.unknown',
