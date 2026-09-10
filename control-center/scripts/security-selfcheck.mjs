@@ -62,7 +62,7 @@ if (missionState.missions.length !== 50 || missionState.missions[0].text.length 
   console.error('FAIL STORAGE: поручения не ограничены или не санитизируются'); failed++;
 }
 const diagnostics = runSecurityDiagnostics({ ...safeState, safeMode: true });
-if (!diagnostics.ok || diagnostics.passed !== diagnostics.total || diagnostics.total < 6) {
+if (!diagnostics.ok || diagnostics.passed !== diagnostics.total || diagnostics.total < 7) {
   console.error('FAIL SECURITY CENTER: базовые защитные проверки не проходят'); failed++;
 }
 

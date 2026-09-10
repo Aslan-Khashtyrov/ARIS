@@ -58,7 +58,7 @@ export const russianSource = {
   logsTitle: 'Журнал', logsKicker: 'ЖУРНАЛ СОБЫТИЙ', logsDescription: 'Локальная история действий приложения без секретов и содержимого токенов.', noLogs: 'Событий пока нет.',
   logChatRouted: agent => `Задача маршрутизирована к ${agent}.`, logTaskAdded: 'Добавлена локальная задача.',
   logTaskChanged: 'Статус локальной задачи изменён.', logTaskDeleted: 'Локальная задача удалена.',
-  versionLabel: 'Версия оболочки', versionValue: 'MVP 0.5 — командный центр',
+  versionLabel: 'Версия оболочки', versionValue: 'MVP 0.6 — командный центр',
   serviceDescriptions: { github: 'Репозитории, задачи и сборки проекта', pocketoption: 'Терминал наблюдения и демо-режим' },
   missionsKicker: 'ПОРУЧЕНИЯ', missionsTitle: 'Одна задача — один маршрут', missionsDescription: 'Project One подбирает подходящего агента и готовит поручение. Выполнение не имитируется: запуск появится только после безопасного подключения агента.',
   missionsNew: 'Новое поручение', missionsHint: 'Опиши результат своими словами — система сама выберет маршрут.', missionsPlaceholder: 'Например: проверь проект на уязвимости и подготовь исправления', missionsPrepare: 'Подготовить',
@@ -67,7 +67,7 @@ export const russianSource = {
   securityKicker: 'ЦЕНТР БЕЗОПАСНОСТИ', securityTitle: 'Защита Project One', securityDescription: 'Локальная самопроверка критических защитных инвариантов приложения без передачи данных наружу.',
   securityStatus: 'Текущий статус', securityProtected: 'Базовая защита в норме', securityAttention: 'Требуется внимание', securityChecksPassed: 'проверок пройдено', securityRun: 'Проверить сейчас', securityOk: 'Защита активна', securityFailed: 'Проверка не пройдена',
   securityNote: 'Эта проверка не заменяет внешний аудит и adversarial-тесты, но быстро ловит ослабление ключевых локальных ограничений.',
-  securityChecks: { safeMode: 'Безопасный режим закреплён', serviceUserinfo: 'Подмена адреса через userinfo блокируется', servicePath: 'Произвольные пути сервисов блокируются', bridgeRemote: 'Удалённый bridge запрещён', bridgeCredentials: 'Логин и пароль в bridge запрещены', paperOnly: 'ARIS остаётся paper-only' },
+  securityChecks: { safeMode: 'Безопасный режим закреплён', serviceUserinfo: 'Подмена адреса через userinfo блокируется', servicePath: 'Произвольные пути сервисов блокируются', bridgeRemote: 'Удалённый bridge запрещён', bridgeCredentials: 'Логин и пароль в bridge запрещены', bridgeObfuscated: 'Скрытые формы localhost в bridge запрещены', paperOnly: 'ARIS остаётся paper-only' },
 });const translations = {
   en: {
     appSystem: 'PERSONAL AI SYSTEM', agentsOnline: 'agents configured', autoRouting: 'AUTO ROUTING',
@@ -113,7 +113,7 @@ export const russianSource = {
   taskPlaceholder: 'New task…', addTask: 'Add', noTasks: 'No tasks yet.', delete: 'Delete',
   logsTitle: 'Log', logsKicker: 'EVENT LOG', logsDescription: 'Local app activity history without secrets or token contents.', noLogs: 'No events yet.',
   logChatRouted: agent => `Task routed to ${agent}.`, logTaskAdded: 'Local task added.', logTaskChanged: 'Local task status changed.', logTaskDeleted: 'Local task deleted.',
-  versionLabel: 'Shell version', versionValue: 'MVP 0.5 — command center',
+  versionLabel: 'Shell version', versionValue: 'MVP 0.6 — command center',
   serviceDescriptions: { github: 'Project repositories, issues and builds', pocketoption: 'Observation terminal and demo mode' },
   missionsKicker: 'MISSIONS', missionsTitle: 'One task — one route', missionsDescription: 'Project One selects a suitable agent and prepares the mission. Execution is never faked and only starts after a secure agent connection exists.',
   missionsNew: 'New mission', missionsHint: 'Describe the result in your own words and the system will choose the route.', missionsPlaceholder: 'Example: review the project for vulnerabilities and prepare fixes', missionsPrepare: 'Prepare',
@@ -122,7 +122,7 @@ export const russianSource = {
   securityKicker: 'SECURITY CENTER', securityTitle: 'Project One protection', securityDescription: 'Local self-check of critical security invariants without sending data outside the app.',
   securityStatus: 'Current status', securityProtected: 'Baseline protection is healthy', securityAttention: 'Attention required', securityChecksPassed: 'checks passed', securityRun: 'Check now', securityOk: 'Protection active', securityFailed: 'Check failed',
   securityNote: 'This check does not replace external audits or adversarial testing, but it quickly detects weakened local safeguards.',
-  securityChecks: { safeMode: 'Safe mode is locked', serviceUserinfo: 'Service userinfo spoofing is blocked', servicePath: 'Arbitrary service paths are blocked', bridgeRemote: 'Remote bridge is forbidden', bridgeCredentials: 'Bridge credentials are forbidden', paperOnly: 'ARIS remains paper-only' },
+  securityChecks: { safeMode: 'Safe mode is locked', serviceUserinfo: 'Service userinfo spoofing is blocked', servicePath: 'Arbitrary service paths are blocked', bridgeRemote: 'Remote bridge is forbidden', bridgeCredentials: 'Bridge credentials are forbidden', bridgeObfuscated: 'Obfuscated localhost forms are blocked', paperOnly: 'ARIS remains paper-only' },
 });
 
 export const supportedLanguages = [

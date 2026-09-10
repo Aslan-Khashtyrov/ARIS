@@ -8,6 +8,7 @@ export function runSecurityDiagnostics(state) {
     { id: 'servicePath', ok: !isAllowedServiceUrl('https://github.com/evil/arbitrary/path?x=1#y') },
     { id: 'bridgeRemote', ok: !normalizeBridgeUrl('https://evil.example:8765') },
     { id: 'bridgeCredentials', ok: !normalizeBridgeUrl('http://user:pass@127.0.0.1:8765') },
+    { id: 'bridgeObfuscated', ok: !normalizeBridgeUrl('http://0x7f000001:8765') && !normalizeBridgeUrl('http://2130706433:8765') },
     { id: 'paperOnly', ok: true },
   ];
   return { checks, passed: checks.filter(item => item.ok).length, total: checks.length, ok: checks.every(item => item.ok) };

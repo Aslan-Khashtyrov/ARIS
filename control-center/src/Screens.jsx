@@ -10,6 +10,7 @@ import { runSecurityDiagnostics } from './securityDiagnostics.js';
 
 export function HomeScreen({ t, state, configured, onNavigate }) {
   const completed = state.tasks.filter(task => task.done).length;
+  const security = runSecurityDiagnostics(state);
   return <section className="dashboard">
     <div className="hero-card home-hero"><div className="hero-copy"><span className="pill">{t.homeKicker}</span><h2>{t.homeTitle}</h2><p>{t.homeDescription}</p></div><div className="shield-mark">P1</div></div>
     <div className="metric-grid">
@@ -18,6 +19,7 @@ export function HomeScreen({ t, state, configured, onNavigate }) {
       <button className="panel metric-card" onClick={() => onNavigate('tasks')}><span>{t.homeTasks}</span><b>{completed}/{state.tasks.length}</b><small>{t.homeTasksHint}</small></button>
       <button className="panel metric-card" onClick={() => onNavigate('terminal')}><span>{t.homeBridge}</span><b>{state.localBridgeEnabled ? t.homeAllowed : t.homeDisabled}</b><small>{t.homeBridgeHint}</small></button>
     </div>
+    <button className={'panel security-strip ' + (security.ok ? 'secure' : 'warning')} onClick={() => onNavigate('security')}><ShieldCheck size={22}/><div><b>{security.ok ? t.securityProtected : t.securityAttention}</b><span>{security.passed}/{security.total} {t.securityChecksPassed}</span></div><span className="security-open">{t.homeSecurityOpen}</span></button>
     <div className="panel quick-panel"><div><span className="kicker">{t.homeQuick}</span><h3>{t.homeQuickTitle}</h3></div><div className="quick-actions"><button onClick={() => onNavigate('chat')}>{t.homeOpenChat}</button><button onClick={() => onNavigate('missions')}>{t.homeOpenMissions}</button><button onClick={() => onNavigate('security')}>{t.homeOpenSecurity}</button><button onClick={() => onNavigate('services')}>{t.homeOpenServices}</button><button onClick={() => onNavigate('settings')}>{t.homeOpenSettings}</button></div></div>
   </section>;
 }
