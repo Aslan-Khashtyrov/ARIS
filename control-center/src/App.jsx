@@ -39,6 +39,19 @@ function App() {
     return [...logs, entry].slice(-200);
   }
 
+  async function runLocal(agent) {
+    const value = text.trim();
+    if (!value || liveAiBusy || !state.localBridgeEnabled) return false;
+    setLiveAiBusy(true);
+    try {
+      const result = await runLocalAgent(state.bridgeUrl, agent, value);
+      if (!result.ok) throw new Error(result.reason);
+      updateState(current => ({ chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: agent === 'codex' ? 'Codex' : 'Hermes', text: result.text || t.liveAiEmpty }].slice(-100), logs: appendLog(current.logs, t.logLocalAgentCompleted(agent)) }));
+      setText(''); return true;
+    } catch { updateState(current => ({ logs: appendLog(current.logs, t.logLocalAgentFailed(agent)) })); return false; }
+    finally { setLiveAiBusy(false); }
+  }
+
   async function runLiveAi() {
     const value = text.trim();
     if (!value || liveAiBusy) return false;
@@ -118,7 +131,7 @@ function App() {
   const common = { t };
   const screens = {
     home: <HomeScreen {...common} state={state} configured={configured} onNavigate={setTab}/>,
-    chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onRunLiveAi={runLiveAi} liveAiBusy={liveAiBusy} onRunCouncil={runNativeCouncil} councilBusy={councilBusy} onClear={() => updateState({ chatHistory: [] })}/>,
+    chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onRunLiveAi={runLiveAi} onRunCodex={() => runLocal('codex')} onRunHermes={() => runLocal('hermes')} liveAiBusy={liveAiBusy} onRunCouncil={runNativeCouncil} councilBusy={councilBusy} onClear={() => updateState({ chatHistory: [] })}/>,
     agents: <AgentsScreen {...common}/>,
     terminal: <TerminalScreen {...common} state={state} updateState={updateState}/>,
     services: <ServicesScreen {...common} notice={notice} setNotice={setNotice}/>,

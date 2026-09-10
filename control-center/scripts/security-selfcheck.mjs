@@ -42,6 +42,10 @@ const bridgeHealth = await checkBridge('http://127.0.0.1:8765');
 if (!bridgeHealth.ok || bridgeFetch?.url !== 'http://127.0.0.1:8765/health' || bridgeFetch?.options?.redirect !== 'error' || bridgeFetch?.options?.credentials !== 'omit' || bridgeFetch?.options?.referrerPolicy !== 'no-referrer') {
   console.error('FAIL BRIDGE: health-check может следовать редиректам или передавать лишние данные'); failed++;
 }
+const bridgeSource = fs.readFileSync(new URL('../src/localBridge.js', import.meta.url), 'utf8');
+const bridgeServer = fs.readFileSync(new URL('../tools/argus_agent_bridge.py', import.meta.url), 'utf8');
+if (!bridgeSource.includes("['/health', '/v1/agent']") || !bridgeSource.includes("['codex', 'hermes']")) { console.error('FAIL AGENT BRIDGE: endpoint/agent allowlist weakened'); failed++; }
+if (!bridgeServer.includes('127.0.0.1') || !bridgeServer.includes('read-only') || !bridgeServer.includes('argus_blocked') || bridgeServer.includes('danger-full-access')) { console.error('FAIL AGENT BRIDGE: local/read-only guard weakened'); failed++; }
 if (!fs.readFileSync(new URL('../src/agents.js', import.meta.url), 'utf8').includes("id: 'kimi'")) { console.error('FAIL AGENTS: Kimi не зарегистрирован'); failed++; }
 for (const [prompt, expected] of [['собери android код','codex'], ['проведи аудит безопасности','gpt'], ['проверь код приложения на уязвимости и сделай security review','gpt'], ['объясни идею','gpt']]) {
   const agent = chooseAgent(prompt);

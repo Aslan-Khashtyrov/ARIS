@@ -20,17 +20,33 @@ export function normalizeBridgeUrl(raw) {
   }
 }
 
+export async function bridgeRequest(raw, path, body = null, timeoutMs = 120000) {
+  const base = normalizeBridgeUrl(raw);
+  if (!base || !['/health', '/v1/agent'].includes(path)) return { ok: false, reason: 'invalid' };
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(`${base}${path}`, { method: body ? 'POST' : 'GET', signal: controller.signal, cache: 'no-store', credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer', headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined });
+    const data = typeof response.json === 'function' ? await response.json().catch(() => ({})) : {};
+    return { ok: response.ok, reason: response.ok ? 'ok' : (data.error || 'http'), ...data };
+  } catch { return { ok: false, reason: 'offline' }; } finally { clearTimeout(timer); }
+}
+
+export async function runLocalAgent(raw, agent, prompt) {
+  if (!['codex', 'hermes'].includes(agent)) return { ok: false, reason: 'agent_blocked' };
+  const value = String(prompt || '').trim();
+  if (!value || value.length > 16000) return { ok: false, reason: 'prompt_invalid' };
+  return bridgeRequest(raw, '/v1/agent', { agent, prompt: value });
+}
+
 export async function checkBridge(raw, timeoutMs = 2000) {
   const base = normalizeBridgeUrl(raw);
   if (!base) return { ok: false, reason: 'invalid' };
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch(`${base}/health`, {
-      method: 'GET', signal: controller.signal, cache: 'no-store',
-      credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer',
-    });
-    return { ok: response.ok, reason: response.ok ? 'ok' : 'http' };
+    const result = await bridgeRequest(base, '/health', null, timeoutMs);
+    return { ok: result.ok, reason: result.reason };
   } catch {
     return { ok: false, reason: 'offline' };
   } finally {
