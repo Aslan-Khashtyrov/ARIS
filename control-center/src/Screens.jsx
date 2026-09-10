@@ -79,7 +79,8 @@ export function UsageScreen({ t, state, updateState }) {
     <Budget t={t} label={t.usageOpenAI} value={budgets.openai} onChange={v => setBudget('openai', v)}/>
     <Budget t={t} label={t.usageAnthropic} value={budgets.anthropic} onChange={v => setBudget('anthropic', v)}/>
     <Budget t={t} label={t.usageOpenRouter} value={budgets.openrouter} onChange={v => setBudget('openrouter', v)}/>
-  </div><div className="notice">{t.localBudgetNote}</div></section>;
+    <Budget t={t} label={t.usageKimi} value={budgets.kimi} onChange={v => setBudget('kimi', v)}/>
+  </div><div className="panel budget-summary"><b>{t.budgetSummary}</b><span>{Object.values(budgets).reduce((sum, value) => sum + (Number(value) || 0), 0)} / {Number(state.monthlyBudget) || 0} ₽</span><progress max={Math.max(Number(state.monthlyBudget) || 0, 1)} value={Math.min(Object.values(budgets).reduce((sum, value) => sum + (Number(value) || 0), 0), Math.max(Number(state.monthlyBudget) || 0, 1))}/></div><div className="notice">{t.localBudgetNote}</div></section>;
 }
 
 function Budget({ t, label, value, onChange }) {

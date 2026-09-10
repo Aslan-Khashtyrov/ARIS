@@ -9,7 +9,7 @@ export const defaultState = {
   localBridgeEnabled: false,
   bridgeUrl: 'http://127.0.0.1:8765',
   monthlyBudget: 0,
-  providerBudgets: { openai: 0, anthropic: 0, openrouter: 0 },
+  providerBudgets: { openai: 0, anthropic: 0, openrouter: 0, kimi: 0 },
   chatHistory: [], missions: [], tasks: [], logs: [],
 };
 
@@ -30,6 +30,7 @@ function sanitize(saved = {}) {
       openai: finiteNonNegative(saved.providerBudgets?.openai),
       anthropic: finiteNonNegative(saved.providerBudgets?.anthropic),
       openrouter: finiteNonNegative(saved.providerBudgets?.openrouter),
+      kimi: finiteNonNegative(saved.providerBudgets?.kimi),
     },
     chatHistory: list(saved.chatHistory).slice(-100).map(item => ({ kind: item?.kind === 'me' ? 'me' : 'agent', author: text(item?.author, 80), text: text(item?.text) })),
     missions: list(saved.missions).slice(-50).map(item => ({ id: text(item?.id, 120), text: text(item?.text, 1600), agent: text(item?.agent, 80), status: 'prepared', createdAt: text(item?.createdAt, 80) })),

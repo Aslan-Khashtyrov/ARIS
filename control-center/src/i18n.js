@@ -44,7 +44,7 @@ export const russianSource = {
   bridgeInvalid: 'Разрешены только локальные адреса localhost / 127.0.0.1 без логина, пароля, параметров и фрагментов.',
   bridgeAllowedUnchecked: 'Локальный мост разрешён, соединение ещё не проверено.', bridgeDisabled: 'Локальный мост отключён.',
 });Object.assign(russianSource, {
-  usageMonthly: 'Месячный бюджет', usageOpenAI: 'OpenAI', usageAnthropic: 'Anthropic', usageOpenRouter: 'OpenRouter',
+  usageMonthly: 'Месячный бюджет', usageOpenAI: 'OpenAI', usageAnthropic: 'Anthropic', usageOpenRouter: 'OpenRouter', usageKimi: 'Kimi', budgetSummary: 'Распределено по провайдерам',
   localBudgetNote: 'Это локальные ориентиры. Project One не списывает деньги и не включает автопополнение.',
   budgetUnit: '₽ / условный лимит', you: 'Ты',
   languageLabel: 'Язык интерфейса', languageTitle: 'Языки', languageHint: 'Русский — родной и исходный язык. Остальные языки являются переводами с русского.',
@@ -101,7 +101,7 @@ export const russianSource = {
   bridgeAddress: 'Bridge address', bridgeEnable: 'Allow local bridge', bridgeWarning: 'The bridge gets no rights to money, secrets, or automatic risky actions.',
   checkBridge: 'Check connection', bridgeChecking: 'Checking local bridge…', bridgeOk: 'Local bridge is responding.', bridgeOffline: 'Local bridge is offline.',
   bridgeAllowedUnchecked: 'Local bridge is allowed but not checked yet.', bridgeDisabled: 'Local bridge is disabled.',
-  usageMonthly: 'Monthly budget', localBudgetNote: 'These are local references. Project One does not charge money or enable auto-reload.',
+  usageMonthly: 'Monthly budget', usageOpenAI: 'OpenAI', usageAnthropic: 'Anthropic', usageOpenRouter: 'OpenRouter', usageKimi: 'Kimi', budgetSummary: 'Allocated to providers', localBudgetNote: 'These are local references. Project One does not charge money or enable auto-reload.',
   budgetUnit: '₽ / reference limit', languageLabel: 'Interface language', languageTitle: 'Languages',
   languageHint: 'Russian is the native source language. Other languages are translations from Russian.',
   realTradesLabel: 'Real trades', realTradesValue: 'Unavailable without a separate implementation and separate explicit approval.',
