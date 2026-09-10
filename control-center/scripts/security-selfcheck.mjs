@@ -39,6 +39,7 @@ const bridgeHealth = await checkBridge('http://127.0.0.1:8765');
 if (!bridgeHealth.ok || bridgeFetch?.url !== 'http://127.0.0.1:8765/health' || bridgeFetch?.options?.redirect !== 'error' || bridgeFetch?.options?.credentials !== 'omit' || bridgeFetch?.options?.referrerPolicy !== 'no-referrer') {
   console.error('FAIL BRIDGE: health-check может следовать редиректам или передавать лишние данные'); failed++;
 }
+if (!fs.readFileSync(new URL('../src/agents.js', import.meta.url), 'utf8').includes("id: 'kimi'")) { console.error('FAIL AGENTS: Kimi не зарегистрирован'); failed++; }
 for (const [prompt, expected] of [['собери android код','codex'], ['проведи аудит безопасности','gpt'], ['проверь код приложения на уязвимости и сделай security review','gpt'], ['объясни идею','gpt']]) {
   const agent = chooseAgent(prompt);
   if (agent?.id !== expected) { console.error(`FAIL ROUTER: ${prompt} -> ${agent?.id}`); failed++; }

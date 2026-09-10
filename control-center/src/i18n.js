@@ -27,7 +27,7 @@ export const russianSource = {
   recoveryKicker: 'ВОССТАНОВЛЕНИЕ', recoveryTitle: 'Экран временно недоступен', recoveryDescription: 'Project One изолировал ошибку, чтобы остальная часть приложения продолжила работать.', recoveryRetry: 'Повторить',
 };Object.assign(russianSource, {
   nav: { home: 'Главная', chat: 'Чат', agents: 'Агенты', terminal: 'Терминал', services: 'Сервисы', aris: 'ARIS', missions: 'Поручения', tasks: 'Задачи', security: 'Защита', logs: 'Журнал', usage: 'Расходы', settings: 'Настройки' },
-  roles: { codex: 'Код и терминал', gpt: 'Анализ и планирование', claude: 'Проверка и длинный контекст', hermes: 'Резервный оператор' },
+  roles: { codex: 'Код и терминал', gpt: 'Анализ и планирование', claude: 'Проверка и длинный контекст', kimi: 'Длинный контекст и исследование', hermes: 'Резервный оператор' },
   modes: { configured: 'настроен', planned: 'запланирован' },
   screens: {
     agents: { kicker: 'УПРАВЛЕНИЕ АГЕНТАМИ', title: 'Агенты', description: 'Приоритеты, роли и резервная цепочка без ложных статусов онлайн.' },
@@ -88,7 +88,7 @@ export const russianSource = {
   },
 };Object.assign(translations.en, {
   nav: { home: 'Home', chat: 'Chat', agents: 'Agents', terminal: 'Terminal', services: 'Services', aris: 'ARIS', missions: 'Missions', tasks: 'Tasks', security: 'Security', logs: 'Log', usage: 'Usage', settings: 'Settings' },
-  roles: { codex: 'Code and terminal', gpt: 'Analysis and planning', claude: 'Review and long context', hermes: 'Fallback operator' },
+  roles: { codex: 'Code and terminal', gpt: 'Analysis and planning', claude: 'Review and long context', kimi: 'Long context and research', hermes: 'Fallback operator' },
   modes: { configured: 'configured', planned: 'planned' },
   screens: {
     agents: { kicker: 'AGENT MANAGEMENT', title: 'Agents', description: 'Priorities, roles and fallback chain without fake online statuses.' },
