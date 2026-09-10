@@ -3,6 +3,7 @@ import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText,
 import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
+import { runLocalAgent } from './localBridge.js';
 import { chooseLiveAgent, nativeAiGenerate, nativeCouncilGenerate } from './nativeAi.js';
 import { loadState, saveState } from './storage.js';
 import { downloadBackup, parseBackup } from './backup.js';
