@@ -3,7 +3,7 @@ import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText,
 import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
-import { chooseNativeProvider, nativeAiGenerate, nativeCouncilGenerate } from './nativeAi.js';
+import { chooseLiveAgent, nativeAiGenerate, nativeCouncilGenerate } from './nativeAi.js';
 import { loadState, saveState } from './storage.js';
 import { downloadBackup, parseBackup } from './backup.js';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
@@ -43,7 +43,7 @@ function App() {
     const value = text.trim();
     if (!value || liveAiBusy) return false;
     setLiveAiBusy(true);
-    const selected = await chooseNativeProvider();
+    const selected = await chooseLiveAgent(value);
     if (!selected.provider) {
       updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiUnavailable) }));
       setLiveAiBusy(false);
@@ -52,7 +52,7 @@ function App() {
     try {
       const result = await nativeAiGenerate({ provider: selected.provider, model: selected.model, prompt: value });
       updateState(current => ({
-        chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: selected.provider.toUpperCase(), text: result.text || t.liveAiEmpty }].slice(-100),
+        chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: selected.agent.name, text: result.text || t.liveAiEmpty }].slice(-100),
         logs: appendLog(current.logs, t.logLiveAiCompleted(selected.provider)),
       }));
       setText('');
@@ -71,8 +71,8 @@ function App() {
     setCouncilBusy(true);
     try {
       const result = await nativeCouncilGenerate(value);
-      const messages = [{ kind: 'me', author: t.you, text: value }, { kind: 'agent', author: result.plan.primary.provider.toUpperCase(), text: result.primary.text || t.liveAiEmpty }];
-      if (result.review) messages.push({ kind: 'agent', author: `${result.plan.reviewer.provider.toUpperCase()} · ${t.councilReviewer}`, text: result.review.text || t.liveAiEmpty });
+      const messages = [{ kind: 'me', author: t.you, text: value }, { kind: 'agent', author: result.plan.primary.agent.name, text: result.primary.text || t.liveAiEmpty }];
+      if (result.review) messages.push({ kind: 'agent', author: `${result.plan.reviewer.agent.name} · ${t.councilReviewer}`, text: result.review.text || t.liveAiEmpty });
       updateState(current => ({ chatHistory: [...current.chatHistory, ...messages].slice(-100), logs: appendLog(current.logs, t.logCouncilCompleted(result.review ? 2 : 1)) }));
       setText(''); return true;
     } catch {

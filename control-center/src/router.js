@@ -9,7 +9,7 @@ function firstAvailable(chain) {
     .find(agent => agent?.enabled && agent.mode === 'configured');
 }
 
-function routeKind(text) {
+export function routeKind(text) {
   const normalized = String(text || '').trim();
   return reviewHints.test(normalized) ? 'review' : codeHints.test(normalized) ? 'coding' : 'reasoning';
 }

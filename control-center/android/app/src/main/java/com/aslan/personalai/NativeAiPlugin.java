@@ -65,7 +65,7 @@ public class NativeAiPlugin extends Plugin {
         if (provider.equals("google")) return model.equals("gemini-2.5-flash");
         if (provider.equals("mistral")) return model.equals("mistral-small-latest");
         if (provider.equals("xai")) return model.equals("grok-4.6");
-        if (provider.equals("openrouter")) return model.equals("openrouter/auto");
+        if (provider.equals("openrouter")) return model.equals("openrouter/auto") || model.equals("openai/gpt-5.6-sol") || model.equals("anthropic/claude-opus-4.8") || model.equals("moonshotai/kimi-k2.6");
         return false;
     }
 

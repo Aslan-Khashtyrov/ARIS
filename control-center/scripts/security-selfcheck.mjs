@@ -127,6 +127,7 @@ if (/[А-Яа-яЁё]/.test(app) || /[А-Яа-яЁё]/.test(screens)) {
 if (!screens.includes('nativeAiCapabilities') || !screens.includes('nativeReady')) { console.error('FAIL AGENTS STATUS: статус нативных провайдеров не отображается'); failed++; }
 if (!read('agents.js').includes("coding: ['codex', 'gpt', 'claude', 'kimi'")) { console.error('FAIL ROUTER: Kimi выпал из coding-цепочки'); failed++; }
 if (!read('nativeAi.js').includes("'openrouter'") || !nativeAiNative.includes('https://openrouter.ai/api/v1/chat/completions') || !nativeAiNative.includes('openrouter/auto')) { console.error('FAIL OPENROUTER: нативный безопасный канал не подключён'); failed++; }
+if (!nativeAiNative.includes('openai/gpt-5.6-sol') || !nativeAiNative.includes('anthropic/claude-opus-4.8') || !nativeAiNative.includes('moonshotai/kimi-k2.6') || !read('nativeAi.js').includes('nativeRouteForAgent')) { console.error('FAIL AGENT ROUTES: GPT/Claude/Kimi не закреплены за защищённым OpenRouter шлюзом'); failed++; }
 if (!screens.includes('supportedLanguages.map') || !screens.includes('state.locale')) {
   console.error('FAIL LANG: выбор языка в настройках не подключён'); failed++;
 }
