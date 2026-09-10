@@ -2,7 +2,12 @@ const LOOPBACK_HOSTS = new Set(['127.0.0.1', 'localhost']);
 
 export function normalizeBridgeUrl(raw) {
   try {
-    const url = new URL(String(raw || '').trim());
+    const input = String(raw || '').trim();
+    const literal = input.match(/^(https?):\/\/([^\/:?#]+)(?::(\d+))?\/?$/i);
+    if (!literal) return null;
+    const literalHost = literal[2].toLowerCase();
+    if (!LOOPBACK_HOSTS.has(literalHost)) return null;
+    const url = new URL(input);
     if (!['http:', 'https:'].includes(url.protocol)) return null;
     if (!LOOPBACK_HOSTS.has(url.hostname)) return null;
     if (url.username || url.password || url.search || url.hash) return null;

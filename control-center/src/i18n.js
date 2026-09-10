@@ -23,10 +23,10 @@ export const russianSource = {
   homeKicker: 'ЦЕНТР УПРАВЛЕНИЯ', homeTitle: 'Project One под контролем.', homeDescription: 'Главный экран показывает состояние ключевых модулей и даёт быстрый доступ без лишнего шума.',
   homeAgents: 'ИИ-агенты', homeAgentsHint: 'настроено для маршрутизации', homeAris: 'ARIS', homeSafe: 'БЕЗОПАСНО', homeTasks: 'Задачи', homeTasksHint: 'выполнено локально',
   homeBridge: 'Локальный мост', homeAllowed: 'РАЗРЕШЁН', homeDisabled: 'ВЫКЛЮЧЕН', homeBridgeHint: 'только loopback', homeQuick: 'БЫСТРЫЙ ДОСТУП', homeQuickTitle: 'Что открыть?',
-  homeOpenChat: 'Открыть чат', homeOpenServices: 'Сервисы', homeOpenSettings: 'Настройки',
+  homeOpenChat: 'Открыть чат', homeOpenMissions: 'Поручения', homeOpenSecurity: 'Проверить защиту', homeOpenServices: 'Сервисы', homeOpenSettings: 'Настройки',
   recoveryKicker: 'ВОССТАНОВЛЕНИЕ', recoveryTitle: 'Экран временно недоступен', recoveryDescription: 'Project One изолировал ошибку, чтобы остальная часть приложения продолжила работать.', recoveryRetry: 'Повторить',
 };Object.assign(russianSource, {
-  nav: { home: 'Главная', chat: 'Чат', agents: 'Агенты', terminal: 'Терминал', services: 'Сервисы', aris: 'ARIS', tasks: 'Задачи', logs: 'Журнал', usage: 'Расходы', settings: 'Настройки' },
+  nav: { home: 'Главная', chat: 'Чат', agents: 'Агенты', terminal: 'Терминал', services: 'Сервисы', aris: 'ARIS', missions: 'Поручения', tasks: 'Задачи', security: 'Защита', logs: 'Журнал', usage: 'Расходы', settings: 'Настройки' },
   roles: { codex: 'Код и терминал', gpt: 'Анализ и планирование', claude: 'Проверка и длинный контекст', hermes: 'Резервный оператор' },
   modes: { configured: 'настроен', planned: 'запланирован' },
   screens: {
@@ -58,8 +58,16 @@ export const russianSource = {
   logsTitle: 'Журнал', logsKicker: 'ЖУРНАЛ СОБЫТИЙ', logsDescription: 'Локальная история действий приложения без секретов и содержимого токенов.', noLogs: 'Событий пока нет.',
   logChatRouted: agent => `Задача маршрутизирована к ${agent}.`, logTaskAdded: 'Добавлена локальная задача.',
   logTaskChanged: 'Статус локальной задачи изменён.', logTaskDeleted: 'Локальная задача удалена.',
-  versionLabel: 'Версия оболочки', versionValue: 'MVP 0.4 — усиленная тестовая версия',
+  versionLabel: 'Версия оболочки', versionValue: 'MVP 0.5 — командный центр',
   serviceDescriptions: { github: 'Репозитории, задачи и сборки проекта', pocketoption: 'Терминал наблюдения и демо-режим' },
+  missionsKicker: 'ПОРУЧЕНИЯ', missionsTitle: 'Одна задача — один маршрут', missionsDescription: 'Project One подбирает подходящего агента и готовит поручение. Выполнение не имитируется: запуск появится только после безопасного подключения агента.',
+  missionsNew: 'Новое поручение', missionsHint: 'Опиши результат своими словами — система сама выберет маршрут.', missionsPlaceholder: 'Например: проверь проект на уязвимости и подготовь исправления', missionsPrepare: 'Подготовить',
+  missionsPrepared: 'ПОДГОТОВЛЕНО', missionsAgent: 'Назначен агент', missionsExecutionPending: 'Ожидает безопасного канала выполнения', noMissions: 'Поручений пока нет.',
+  logMissionPrepared: agent => `Подготовлено поручение для ${agent}.`, logMissionDeleted: 'Поручение удалено.',
+  securityKicker: 'ЦЕНТР БЕЗОПАСНОСТИ', securityTitle: 'Защита Project One', securityDescription: 'Локальная самопроверка критических защитных инвариантов приложения без передачи данных наружу.',
+  securityStatus: 'Текущий статус', securityProtected: 'Базовая защита в норме', securityAttention: 'Требуется внимание', securityChecksPassed: 'проверок пройдено', securityRun: 'Проверить сейчас', securityOk: 'Защита активна', securityFailed: 'Проверка не пройдена',
+  securityNote: 'Эта проверка не заменяет внешний аудит и adversarial-тесты, но быстро ловит ослабление ключевых локальных ограничений.',
+  securityChecks: { safeMode: 'Безопасный режим закреплён', serviceUserinfo: 'Подмена адреса через userinfo блокируется', servicePath: 'Произвольные пути сервисов блокируются', bridgeRemote: 'Удалённый bridge запрещён', bridgeCredentials: 'Логин и пароль в bridge запрещены', paperOnly: 'ARIS остаётся paper-only' },
 });const translations = {
   en: {
     appSystem: 'PERSONAL AI SYSTEM', agentsOnline: 'agents configured', autoRouting: 'AUTO ROUTING',
@@ -75,11 +83,11 @@ export const russianSource = {
     homeKicker: 'CONTROL CENTER', homeTitle: 'Project One under control.', homeDescription: 'The home screen shows key module state and gives fast access without clutter.',
     homeAgents: 'AI agents', homeAgentsHint: 'configured for routing', homeAris: 'ARIS', homeSafe: 'SAFE', homeTasks: 'Tasks', homeTasksHint: 'completed locally',
     homeBridge: 'Local bridge', homeAllowed: 'ALLOWED', homeDisabled: 'OFF', homeBridgeHint: 'loopback only', homeQuick: 'QUICK ACCESS', homeQuickTitle: 'What do you want to open?',
-    homeOpenChat: 'Open chat', homeOpenServices: 'Services', homeOpenSettings: 'Settings',
+    homeOpenChat: 'Open chat', homeOpenMissions: 'Missions', homeOpenSecurity: 'Check security', homeOpenServices: 'Services', homeOpenSettings: 'Settings',
     recoveryKicker: 'RECOVERY', recoveryTitle: 'This screen is temporarily unavailable', recoveryDescription: 'Project One isolated the error so the rest of the app can keep working.', recoveryRetry: 'Retry',
   },
 };Object.assign(translations.en, {
-  nav: { home: 'Home', chat: 'Chat', agents: 'Agents', terminal: 'Terminal', services: 'Services', aris: 'ARIS', tasks: 'Tasks', logs: 'Log', usage: 'Usage', settings: 'Settings' },
+  nav: { home: 'Home', chat: 'Chat', agents: 'Agents', terminal: 'Terminal', services: 'Services', aris: 'ARIS', missions: 'Missions', tasks: 'Tasks', security: 'Security', logs: 'Log', usage: 'Usage', settings: 'Settings' },
   roles: { codex: 'Code and terminal', gpt: 'Analysis and planning', claude: 'Review and long context', hermes: 'Fallback operator' },
   modes: { configured: 'configured', planned: 'planned' },
   screens: {
@@ -105,8 +113,16 @@ export const russianSource = {
   taskPlaceholder: 'New task…', addTask: 'Add', noTasks: 'No tasks yet.', delete: 'Delete',
   logsTitle: 'Log', logsKicker: 'EVENT LOG', logsDescription: 'Local app activity history without secrets or token contents.', noLogs: 'No events yet.',
   logChatRouted: agent => `Task routed to ${agent}.`, logTaskAdded: 'Local task added.', logTaskChanged: 'Local task status changed.', logTaskDeleted: 'Local task deleted.',
-  versionLabel: 'Shell version', versionValue: 'MVP 0.4 — hardened test build',
+  versionLabel: 'Shell version', versionValue: 'MVP 0.5 — command center',
   serviceDescriptions: { github: 'Project repositories, issues and builds', pocketoption: 'Observation terminal and demo mode' },
+  missionsKicker: 'MISSIONS', missionsTitle: 'One task — one route', missionsDescription: 'Project One selects a suitable agent and prepares the mission. Execution is never faked and only starts after a secure agent connection exists.',
+  missionsNew: 'New mission', missionsHint: 'Describe the result in your own words and the system will choose the route.', missionsPlaceholder: 'Example: review the project for vulnerabilities and prepare fixes', missionsPrepare: 'Prepare',
+  missionsPrepared: 'PREPARED', missionsAgent: 'Assigned agent', missionsExecutionPending: 'Waiting for a secure execution channel', noMissions: 'No missions yet.',
+  logMissionPrepared: agent => `Mission prepared for ${agent}.`, logMissionDeleted: 'Mission deleted.',
+  securityKicker: 'SECURITY CENTER', securityTitle: 'Project One protection', securityDescription: 'Local self-check of critical security invariants without sending data outside the app.',
+  securityStatus: 'Current status', securityProtected: 'Baseline protection is healthy', securityAttention: 'Attention required', securityChecksPassed: 'checks passed', securityRun: 'Check now', securityOk: 'Protection active', securityFailed: 'Check failed',
+  securityNote: 'This check does not replace external audits or adversarial testing, but it quickly detects weakened local safeguards.',
+  securityChecks: { safeMode: 'Safe mode is locked', serviceUserinfo: 'Service userinfo spoofing is blocked', servicePath: 'Arbitrary service paths are blocked', bridgeRemote: 'Remote bridge is forbidden', bridgeCredentials: 'Bridge credentials are forbidden', paperOnly: 'ARIS remains paper-only' },
 });
 
 export const supportedLanguages = [

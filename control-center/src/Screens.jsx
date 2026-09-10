@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Bot, Code2, Gauge, Globe2, TerminalSquare } from 'lucide-react';
+import { Bot, CheckCircle2, Code2, Gauge, Globe2, ShieldCheck, TerminalSquare, Workflow, XCircle } from 'lucide-react';
 import { Browser } from '@capacitor/browser';
 import { supportedLanguages } from './i18n.js';
 import { agentRegistry, routingPolicy } from './agents.js';
 import { isAllowedServiceUrl, services } from './services.js';
 import { checkBridge, normalizeBridgeUrl } from './localBridge.js';
+import { runSecurityDiagnostics } from './securityDiagnostics.js';
 
 
 export function HomeScreen({ t, state, configured, onNavigate }) {
@@ -17,7 +18,7 @@ export function HomeScreen({ t, state, configured, onNavigate }) {
       <button className="panel metric-card" onClick={() => onNavigate('tasks')}><span>{t.homeTasks}</span><b>{completed}/{state.tasks.length}</b><small>{t.homeTasksHint}</small></button>
       <button className="panel metric-card" onClick={() => onNavigate('terminal')}><span>{t.homeBridge}</span><b>{state.localBridgeEnabled ? t.homeAllowed : t.homeDisabled}</b><small>{t.homeBridgeHint}</small></button>
     </div>
-    <div className="panel quick-panel"><div><span className="kicker">{t.homeQuick}</span><h3>{t.homeQuickTitle}</h3></div><div className="quick-actions"><button onClick={() => onNavigate('chat')}>{t.homeOpenChat}</button><button onClick={() => onNavigate('services')}>{t.homeOpenServices}</button><button onClick={() => onNavigate('settings')}>{t.homeOpenSettings}</button></div></div>
+    <div className="panel quick-panel"><div><span className="kicker">{t.homeQuick}</span><h3>{t.homeQuickTitle}</h3></div><div className="quick-actions"><button onClick={() => onNavigate('chat')}>{t.homeOpenChat}</button><button onClick={() => onNavigate('missions')}>{t.homeOpenMissions}</button><button onClick={() => onNavigate('security')}>{t.homeOpenSecurity}</button><button onClick={() => onNavigate('services')}>{t.homeOpenServices}</button><button onClick={() => onNavigate('settings')}>{t.homeOpenSettings}</button></div></div>
   </section>;
 }
 
@@ -106,6 +107,27 @@ export function SettingsScreen({ t, state, updateState }) {
 function Header({ t, id }) {
   const screen = t.screens[id];
   return <div className="section-title"><span className="kicker">{screen.kicker}</span><h2>{screen.title}</h2><p>{screen.description}</p></div>;
+}
+
+export function MissionsScreen({ t, state, addMission, deleteMission }) {
+  const [draft, setDraft] = useState('');
+  function submit() { const value = draft.trim(); if (!value) return; addMission(value); setDraft(''); }
+  return <section className="services-view">
+    <div className="section-title"><span className="kicker">{t.missionsKicker}</span><h2>{t.missionsTitle}</h2><p>{t.missionsDescription}</p></div>
+    <div className="panel mission-compose"><div className="mission-icon"><Workflow size={26}/></div><div><b>{t.missionsNew}</b><span>{t.missionsHint}</span></div><div className="composer mission-input"><input value={draft} onChange={e => setDraft(e.target.value)} onKeyDown={e => e.key === 'Enter' && submit()} placeholder={t.missionsPlaceholder}/><button onClick={submit}>{t.missionsPrepare}</button></div></div>
+    <div className="mission-list">{state.missions.length ? [...state.missions].reverse().map(item => <article className="panel mission-card" key={item.id}><div className="mission-card-head"><div><span className="pill">{t.missionsPrepared}</span><h3>{item.text}</h3></div><button className="small" onClick={() => deleteMission(item.id)}>{t.delete}</button></div><div className="mission-meta"><span>{t.missionsAgent}: <b>{item.agent}</b></span><span>{t.missionsExecutionPending}</span></div></article>) : <div className="panel empty-state">{t.noMissions}</div>}</div>
+  </section>;
+}
+
+export function SecurityScreen({ t, state }) {
+  const [result, setResult] = useState(() => runSecurityDiagnostics(state));
+  const run = () => setResult(runSecurityDiagnostics(state));
+  return <section className="services-view">
+    <div className="section-title"><span className="kicker">{t.securityKicker}</span><h2>{t.securityTitle}</h2><p>{t.securityDescription}</p></div>
+    <div className={'panel security-summary ' + (result.ok ? 'secure' : 'warning')}><div className="security-orb"><ShieldCheck size={30}/></div><div><span>{t.securityStatus}</span><h3>{result.ok ? t.securityProtected : t.securityAttention}</h3><small>{result.passed}/{result.total} {t.securityChecksPassed}</small></div><button className="action-button" onClick={run}>{t.securityRun}</button></div>
+    <div className="security-grid">{result.checks.map(check => <div className="panel security-check" key={check.id}>{check.ok ? <CheckCircle2 size={21}/> : <XCircle size={21}/>}<div><b>{t.securityChecks[check.id]}</b><span>{check.ok ? t.securityOk : t.securityFailed}</span></div></div>)}</div>
+    <div className="notice">{t.securityNote}</div>
+  </section>;
 }
 
 export function TasksScreen({ t, state, addTask, toggleTask, deleteTask }) {

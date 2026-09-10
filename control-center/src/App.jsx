@@ -1,16 +1,16 @@
 import { useMemo, useState } from 'react';
-import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText, Settings, TerminalSquare, WalletCards } from 'lucide-react';
+import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText, Settings, ShieldCheck, TerminalSquare, WalletCards, Workflow } from 'lucide-react';
 import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
 import { loadState, saveState } from './storage.js';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
-import { AgentsScreen, ArisScreen, ChatScreen, HomeScreen, LogsScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
+import { AgentsScreen, ArisScreen, ChatScreen, HomeScreen, LogsScreen, MissionsScreen, SecurityScreen, ServicesScreen, SettingsScreen, TasksScreen, TerminalScreen, UsageScreen } from './Screens.jsx';
 import './styles.css';
 
 const nav = [
   ['home', LayoutDashboard], ['chat', MessageSquare], ['agents', Bot], ['terminal', TerminalSquare],
-  ['services', Globe2], ['aris', Cpu], ['tasks', ListTodo], ['logs', ScrollText], ['usage', WalletCards], ['settings', Settings],
+  ['services', Globe2], ['aris', Cpu], ['missions', Workflow], ['tasks', ListTodo], ['security', ShieldCheck], ['logs', ScrollText], ['usage', WalletCards], ['settings', Settings],
 ];
 
 function App() {
@@ -49,6 +49,17 @@ function App() {
     setText('');
   }
 
+  function addMission(textValue) {
+    const value = String(textValue || '').trim();
+    if (!value) return;
+    const route = routingPreview(value, t);
+    const mission = { id: `${Date.now()}-${Math.random()}`, text: value, agent: route.agent.name, status: 'prepared', createdAt: new Date().toISOString() };
+    updateState(current => ({ missions: [...current.missions, mission].slice(-50), logs: appendLog(current.logs, t.logMissionPrepared(route.agent.name)) }));
+  }
+  function deleteMission(id) {
+    updateState(current => ({ missions: current.missions.filter(item => item.id !== id), logs: appendLog(current.logs, t.logMissionDeleted) }));
+  }
+
   function addTask(textValue) {
     const task = { id: `${Date.now()}-${Math.random()}`, text: textValue, done: false };
     updateState(current => ({ tasks: [...current.tasks, task].slice(-100), logs: appendLog(current.logs, t.logTaskAdded) }));
@@ -67,7 +78,9 @@ function App() {
     terminal: <TerminalScreen {...common} state={state} updateState={updateState}/>,
     services: <ServicesScreen {...common} notice={notice} setNotice={setNotice}/>,
     aris: <ArisScreen {...common}/>,
+    missions: <MissionsScreen {...common} state={state} addMission={addMission} deleteMission={deleteMission}/>,
     tasks: <TasksScreen {...common} state={state} addTask={addTask} toggleTask={toggleTask} deleteTask={deleteTask}/>,
+    security: <SecurityScreen {...common} state={state}/>,
     logs: <LogsScreen {...common} state={state}/>,
     usage: <UsageScreen {...common} state={state} updateState={updateState}/>,
     settings: <SettingsScreen {...common} state={state} updateState={updateState}/>,

@@ -10,7 +10,7 @@ export const defaultState = {
   bridgeUrl: 'http://127.0.0.1:8765',
   monthlyBudget: 0,
   providerBudgets: { openai: 0, anthropic: 0, openrouter: 0 },
-  chatHistory: [], tasks: [], logs: [],
+  chatHistory: [], missions: [], tasks: [], logs: [],
 };
 
 const finiteNonNegative = value => Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
@@ -32,6 +32,7 @@ function sanitize(saved = {}) {
       openrouter: finiteNonNegative(saved.providerBudgets?.openrouter),
     },
     chatHistory: list(saved.chatHistory).slice(-100).map(item => ({ kind: item?.kind === 'me' ? 'me' : 'agent', author: text(item?.author, 80), text: text(item?.text) })),
+    missions: list(saved.missions).slice(-50).map(item => ({ id: text(item?.id, 120), text: text(item?.text, 1600), agent: text(item?.agent, 80), status: 'prepared', createdAt: text(item?.createdAt, 80) })),
     tasks: list(saved.tasks).slice(-100).map(item => ({ id: text(item?.id, 120), text: text(item?.text, 1000), done: item?.done === true })),
     logs: list(saved.logs).slice(-200).map(item => ({ id: text(item?.id, 120), time: text(item?.time, 80), text: text(item?.text, 1000) })),
   };

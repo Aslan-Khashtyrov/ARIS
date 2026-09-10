@@ -4,6 +4,7 @@ import { checkBridge, normalizeBridgeUrl } from '../src/localBridge.js';
 import { chooseAgent } from '../src/router.js';
 import { loadState, saveState } from '../src/storage.js';
 import { DEFAULT_LOCALE, getLocaleStrings, russianSource } from '../src/i18n.js';
+import { runSecurityDiagnostics } from '../src/securityDiagnostics.js';
 
 let failed = 0;
 const urlCases = [
@@ -26,7 +27,7 @@ const bridgeCases = [
   ['http://127.0.0.1:8765', true], ['http://localhost:8765', true],
   ['https://evil.example:8765', false], ['http://0.0.0.0:8765', false],
   ['http://user:pass@127.0.0.1:8765', false], ['javascript:alert(1)', false],
-  ['http://[::1]:8765', false],
+  ['http://[::1]:8765', false], ['http://0x7f000001:8765', false], ['http://2130706433:8765', false], ['http://localhost.:8765', false],
 ];
 for (const [url, expected] of bridgeCases) {
   if (Boolean(normalizeBridgeUrl(url)) !== expected) { console.error(`FAIL BRIDGE: ${url}`); failed++; }
@@ -54,6 +55,15 @@ if (safeState.locale !== DEFAULT_LOCALE || safeState.safeMode !== true || safeSt
   console.error('FAIL STORAGE: сохранённое состояние не санитизируется'); failed++;
 }
 if (!saveState(safeState)) { console.error('FAIL STORAGE: безопасное состояние не сохраняется'); failed++; }
+localStorage.value = JSON.stringify({ missions: Array.from({ length: 70 }, (_, i) => ({ id: `m${i}`, text: 'X'.repeat(3000), agent: 'A'.repeat(200), status: 'running', createdAt: 'Z'.repeat(200) })) });
+const missionState = loadState();
+if (missionState.missions.length !== 50 || missionState.missions[0].text.length > 1600 || missionState.missions[0].agent.length > 80 || missionState.missions[0].status !== 'prepared') {
+  console.error('FAIL STORAGE: поручения не ограничены или не санитизируются'); failed++;
+}
+const diagnostics = runSecurityDiagnostics({ ...safeState, safeMode: true });
+if (!diagnostics.ok || diagnostics.passed !== diagnostics.total || diagnostics.total < 6) {
+  console.error('FAIL SECURITY CENTER: базовые защитные проверки не проходят'); failed++;
+}
 
 localStorage.value = JSON.stringify({ safeMode: false, locale: 'en' });
 if (loadState().safeMode !== true) { console.error('FAIL STORAGE: safe mode можно отключить через сохранённое состояние'); failed++; }
@@ -88,7 +98,7 @@ const filePaths = fs.readFileSync(new URL('../android/app/src/main/res/xml/file_
 if (!i18n.includes('export const russianSource') || !i18n.includes("export const DEFAULT_LOCALE = 'ru'")) {
   console.error('FAIL LANG: русский источник не объявлен основным'); failed++;
 }
-for (const id of ['home','chat','agents','terminal','services','aris','tasks','logs','usage','settings']) {
+for (const id of ['home','chat','agents','terminal','services','aris','missions','tasks','security','logs','usage','settings']) {
   if (!app.includes(`${id}: <`)) { console.error(`FAIL NAV: экран ${id} не подключён`); failed++; }
 }
 if (/[А-Яа-яЁё]/.test(app) || /[А-Яа-яЁё]/.test(screens)) {
