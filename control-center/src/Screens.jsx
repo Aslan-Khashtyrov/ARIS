@@ -48,13 +48,35 @@ function AgentsCompact({ t }) {
   return <section className="panel terminal-panel"><div className="panel-head"><div><span className="kicker">{t.codeWorkspace}</span><h3>{t.terminalTitle}</h3></div><TerminalSquare size={20}/></div><pre><span>$</span> bridge status{"\n"}<em>{t.workspaceReady}</em>{"\n"}<span>›</span> {t.waitingTask}</pre></section>;
 }
 
-export function AgentsScreen({ t }) {
+export function AgentsScreen({ t, state, updateState }) {
   const [nativeCaps, setNativeCaps] = useState({});
-  useEffect(() => { if (nativeAiAvailable()) nativeAiCapabilities().then(setNativeCaps).catch(() => setNativeCaps({})); }, []);
+  const [bridgeCaps, setBridgeCaps] = useState({ ok: false, agents: [] });
+  const [checking, setChecking] = useState(true);
+  async function refreshAgentStatus() {
+    setChecking(true);
+    const [caps, bridge] = await Promise.all([
+      nativeAiAvailable() ? nativeAiCapabilities().catch(() => ({})) : Promise.resolve({}),
+      state.localBridgeEnabled ? checkBridge(state.bridgeUrl).catch(() => ({ ok: false })) : Promise.resolve({ ok: false }),
+    ]);
+    setNativeCaps(caps || {});
+    setBridgeCaps({ ok: bridge?.ok === true, agents: Array.isArray(bridge?.agents) ? bridge.agents : [] });
+    setChecking(false);
+  }
+  useEffect(() => { refreshAgentStatus(); }, [state.localBridgeEnabled, state.bridgeUrl]);
+  function statusFor(agent) {
+    if (checking) return { key: 'checking', cls: 'planned' };
+    if (agent.id === 'codex' || agent.id === 'hermes') {
+      if (!state.localBridgeEnabled) return { key: 'bridgeOff', cls: 'planned' };
+      return bridgeCaps.ok && bridgeCaps.agents.includes(agent.id) ? { key: 'ready', cls: 'configured' } : { key: 'unavailable', cls: 'planned' };
+    }
+    const route = nativeRouteForAgent(agent.id);
+    if (!route) return { key: 'unavailable', cls: 'planned' };
+    return nativeCaps[route.provider] === true ? { key: 'ready', cls: 'configured' } : { key: 'noKey', cls: 'planned' };
+  }
   const examples = [[t.routeLabels.coding, councilPreview('android code', t)], [t.routeLabels.reasoning, councilPreview('explain idea', t)], [t.routeLabels.review, councilPreview('security review', t)]];
   return <section className="services-view"><Header t={t} id="agents"/><div className="panel council-panel"><span className="kicker">{t.councilKicker}</span><h3>{t.councilTitle}</h3><p>{t.councilDescription}</p><div className="council-grid">{examples.map(([label, plan]) => <div className="council-card" key={label}><b>{label}</b><span>{t.councilPrimary}: {plan.primary.name}</span><span>{t.councilReviewer}: {plan.reviewer?.name || t.councilNone}</span><span>{t.councilArbiter}: {plan.arbiter?.name || t.councilNone}</span></div>)}</div></div><div className="panel"><div className="agent-list">
-    {agentRegistry.map(agent => { const route = nativeRouteForAgent(agent.id); const ready = route ? nativeCaps[route.provider] === true : false; return <div className="agent-row large" key={agent.id}><div className="rank">{agent.priority}</div><div className="agent-meta"><b>{agent.name}</b><span>{t.roles[agent.roleKey]}</span></div><div className={'agent-state ' + (ready ? 'configured' : agent.mode)}>{ready ? t.nativeReady : t.modes[agent.mode]}</div></div>; })}
-  </div></div><div className="route-grid">
+    {agentRegistry.map(agent => { const status = statusFor(agent); return <div className="agent-row large" key={agent.id}><div className="rank">{agent.priority}</div><div className="agent-meta"><b>{agent.name}</b><span>{t.roles[agent.roleKey]}</span></div><div className={'agent-state ' + status.cls}>{t.agentStatuses[status.key]}</div></div>; })}
+  </div><div className="quick-actions"><button type="button" onClick={refreshAgentStatus}>{t.refreshAgents}</button>{!state.localBridgeEnabled && <button type="button" className="secondary" onClick={() => updateState({ localBridgeEnabled: true })}>{t.enableBridgeHere}</button>}</div></div><div className="route-grid">
     {Object.entries(routingPolicy).map(([key, chain]) => <div className="panel route-card" key={key}><b>{t.routeLabels[key]}</b><span>{chain.join(' → ')}</span></div>)}
   </div></section>;
 }

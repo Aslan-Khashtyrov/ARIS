@@ -46,7 +46,7 @@ export async function checkBridge(raw, timeoutMs = 2000) {
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const result = await bridgeRequest(base, '/health', null, timeoutMs);
-    return { ok: result.ok, reason: result.reason };
+    return { ok: result.ok, reason: result.reason, agents: Array.isArray(result.agents) ? result.agents : [], mode: result.mode || null };
   } catch {
     return { ok: false, reason: 'offline' };
   } finally {

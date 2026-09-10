@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText, Settings, ShieldCheck, TerminalSquare, WalletCards, Workflow, Wrench } from 'lucide-react';
 import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
-import { routingPreview } from './router.js';
+import { routeKind, routingPreview } from './router.js';
 import { runLocalAgent } from './localBridge.js';
 import { chooseLiveAgent, nativeAiGenerate, nativeCouncilGenerate } from './nativeAi.js';
 import { loadState, saveState } from './storage.js';
@@ -57,26 +57,36 @@ function App() {
     const value = text.trim();
     if (!value || liveAiBusy) return false;
     setLiveAiBusy(true);
-    const selected = await chooseLiveAgent(value);
-    if (!selected.provider) {
-      updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiUnavailable) }));
-      setLiveAiBusy(false);
-      return false;
-    }
+    const kind = routeKind(value);
+    const localFirst = state.localBridgeEnabled && kind === 'coding';
     try {
-      const result = await nativeAiGenerate({ provider: selected.provider, model: selected.model, prompt: value });
-      updateState(current => ({
-        chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: selected.agent.name, text: result.text || t.liveAiEmpty }].slice(-100),
-        logs: appendLog(current.logs, t.logLiveAiCompleted(selected.provider)),
-      }));
-      setText('');
-      return true;
-    } catch {
-      updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiFailed(selected.provider)) }));
+      if (localFirst) {
+        const local = await runLocalAgent(state.bridgeUrl, 'codex', value);
+        if (local.ok) {
+          updateState(current => ({ chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: 'Codex', text: local.text || t.liveAiEmpty }].slice(-100), logs: appendLog(current.logs, t.logLocalAgentCompleted('codex')) }));
+          setText(''); return true;
+        }
+      }
+      const selected = await chooseLiveAgent(value);
+      if (selected.provider) {
+        try {
+          const result = await nativeAiGenerate({ provider: selected.provider, model: selected.model, prompt: value });
+          updateState(current => ({ chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: selected.agent.name, text: result.text || t.liveAiEmpty }].slice(-100), logs: appendLog(current.logs, t.logLiveAiCompleted(selected.provider)) }));
+          setText(''); return true;
+        } catch {
+          updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiFailed(selected.provider)) }));
+        }
+      }
+      if (state.localBridgeEnabled) {
+        const fallback = await runLocalAgent(state.bridgeUrl, 'hermes', value);
+        if (fallback.ok) {
+          updateState(current => ({ chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: 'Hermes', text: fallback.text || t.liveAiEmpty }].slice(-100), logs: appendLog(current.logs, t.logLocalAgentCompleted('hermes')) }));
+          setText(''); return true;
+        }
+      }
+      updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiUnavailable) }));
       return false;
-    } finally {
-      setLiveAiBusy(false);
-    }
+    } finally { setLiveAiBusy(false); }
   }
 
   async function runNativeCouncil() {
@@ -133,7 +143,7 @@ function App() {
   const screens = {
     home: <HomeScreen {...common} state={state} configured={configured} onNavigate={setTab}/>,
     chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onRunLiveAi={runLiveAi} onRunCodex={() => runLocal('codex')} onRunHermes={() => runLocal('hermes')} liveAiBusy={liveAiBusy} onRunCouncil={runNativeCouncil} councilBusy={councilBusy} onClear={() => updateState({ chatHistory: [] })}/>,
-    agents: <AgentsScreen {...common}/>,
+    agents: <AgentsScreen {...common} state={state} updateState={updateState}/>,
     terminal: <TerminalScreen {...common} state={state} updateState={updateState}/>,
     services: <ServicesScreen {...common} notice={notice} setNotice={setNotice}/>,
     aris: <ArisScreen {...common}/>,

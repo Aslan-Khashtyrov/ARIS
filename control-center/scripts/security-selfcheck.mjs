@@ -129,7 +129,7 @@ for (const id of ['home','chat','agents','terminal','services','aris','missions'
 if (/[А-Яа-яЁё]/.test(app) || /[А-Яа-яЁё]/.test(screens)) {
   console.error('FAIL LANG: пользовательский русский текст найден вне русского источника'); failed++;
 }
-if (!screens.includes('nativeAiCapabilities') || !screens.includes('nativeReady')) { console.error('FAIL AGENTS STATUS: статус нативных провайдеров не отображается'); failed++; }
+if (!screens.includes('nativeAiCapabilities') || !screens.includes('statusFor(agent)') || !screens.includes('bridgeOff') || !screens.includes('noKey')) { console.error('FAIL AGENTS STATUS: живые статусы bridge/API не отображаются'); failed++; }
 if (!read('agents.js').includes("coding: ['codex', 'gpt', 'claude', 'kimi'")) { console.error('FAIL ROUTER: Kimi выпал из coding-цепочки'); failed++; }
 if (!read('nativeAi.js').includes("'openrouter'") || !nativeAiNative.includes('https://openrouter.ai/api/v1/chat/completions') || !nativeAiNative.includes('openrouter/auto')) { console.error('FAIL OPENROUTER: нативный безопасный канал не подключён'); failed++; }
 if (!nativeAiNative.includes('openai/gpt-5.6-sol') || !nativeAiNative.includes('anthropic/claude-opus-4.8') || !nativeAiNative.includes('moonshotai/kimi-k2.6') || !read('nativeAi.js').includes('nativeRouteForAgent')) { console.error('FAIL AGENT ROUTES: GPT/Claude/Kimi не закреплены за защищённым OpenRouter шлюзом'); failed++; }
@@ -146,6 +146,7 @@ if (!screens.includes('real_trading=false')) {
   console.error('FAIL ARIS: paper-only индикатор потерян'); failed++;
 }
 if (!app.includes('async function runLiveAi()') || !app.includes('liveAiBusy') || !screens.includes('liveAiBusy || councilBusy')) { console.error('FAIL LIVE AI: явный запуск или защита от повторного запуска потеряны'); failed++; }
+if (!app.includes("runLocalAgent(state.bridgeUrl, 'codex', value)") || !app.includes("runLocalAgent(state.bridgeUrl, 'hermes', value)") || !app.includes("kind === 'coding'")) { console.error('FAIL LIVE AI FALLBACK: Codex/Hermes fallback потерян'); failed++; }
 const sendStart = app.indexOf('function sendMessage()'); const sendEnd = app.indexOf('function addMission', sendStart); const sendBlock = app.slice(sendStart, sendEnd); if (sendBlock.includes('nativeAiGenerate(')) { console.error('FAIL LIVE AI: обычная подготовка задачи не должна автоматически тратить API-вызов'); failed++; }
 
 if (html.includes("style-src 'self' 'unsafe-inline'") || !html.includes("base-uri 'none'") || !html.includes("form-action 'none'")) {
