@@ -27,7 +27,7 @@ export const russianSource = {
   recoveryKicker: 'ВОССТАНОВЛЕНИЕ', recoveryTitle: 'Экран временно недоступен', recoveryDescription: 'Project One изолировал ошибку, чтобы остальная часть приложения продолжила работать.', recoveryRetry: 'Повторить',
 };Object.assign(russianSource, {
   nav: { home: 'Главная', chat: 'Чат', agents: 'Агенты', terminal: 'Терминал', services: 'Сервисы', aris: 'ARIS', missions: 'Поручения', tasks: 'Задачи', security: 'Защита', logs: 'Журнал', usage: 'Расходы', settings: 'Настройки' },
-  roles: { codex: 'Код и терминал', gpt: 'Анализ и планирование', claude: 'Проверка и длинный контекст', kimi: 'Длинный контекст и исследование', hermes: 'Резервный оператор' },
+  roles: { codex: 'Код и терминал', gpt: 'Анализ и планирование', claude: 'Проверка и длинный контекст', kimi: 'Длинный контекст и исследование', gemini: 'Мультимодальность и анализ', mistral: 'Быстрый код и резерв', grok: 'Альтернативный анализ и код', hermes: 'Резервный оператор' },
   modes: { configured: 'настроен', planned: 'запланирован' },
   screens: {
     agents: { kicker: 'УПРАВЛЕНИЕ АГЕНТАМИ', title: 'Агенты', description: 'Приоритеты, роли и резервная цепочка без ложных статусов онлайн.' },
@@ -44,7 +44,7 @@ export const russianSource = {
   bridgeInvalid: 'Разрешены только локальные адреса localhost / 127.0.0.1 без логина, пароля, параметров и фрагментов.',
   bridgeAllowedUnchecked: 'Локальный мост разрешён, соединение ещё не проверено.', bridgeDisabled: 'Локальный мост отключён.',
 });Object.assign(russianSource, {
-  usageMonthly: 'Месячный бюджет', usageOpenAI: 'OpenAI', usageAnthropic: 'Anthropic', usageOpenRouter: 'OpenRouter', usageKimi: 'Kimi', budgetSummary: 'Распределено по провайдерам',
+  usageMonthly: 'Месячный бюджет', usageOpenAI: 'OpenAI', usageAnthropic: 'Anthropic', usageOpenRouter: 'OpenRouter', usageKimi: 'Kimi', usageGoogle: 'Google Gemini', usageMistral: 'Mistral', usageXai: 'xAI / Grok', budgetSummary: 'Распределено по провайдерам',
   localBudgetNote: 'Это локальные ориентиры. Project One не списывает деньги и не включает автопополнение.',
   budgetUnit: '₽ / условный лимит', you: 'Ты',
   languageLabel: 'Язык интерфейса', languageTitle: 'Языки', languageHint: 'Русский — родной и исходный язык. Остальные языки являются переводами с русского.',
@@ -88,7 +88,7 @@ export const russianSource = {
   },
 };Object.assign(translations.en, {
   nav: { home: 'Home', chat: 'Chat', agents: 'Agents', terminal: 'Terminal', services: 'Services', aris: 'ARIS', missions: 'Missions', tasks: 'Tasks', security: 'Security', logs: 'Log', usage: 'Usage', settings: 'Settings' },
-  roles: { codex: 'Code and terminal', gpt: 'Analysis and planning', claude: 'Review and long context', kimi: 'Long context and research', hermes: 'Fallback operator' },
+  roles: { codex: 'Code and terminal', gpt: 'Analysis and planning', claude: 'Review and long context', kimi: 'Long context and research', gemini: 'Multimodal analysis', mistral: 'Fast code and fallback', grok: 'Alternative analysis and code', hermes: 'Fallback operator' },
   modes: { configured: 'configured', planned: 'planned' },
   screens: {
     agents: { kicker: 'AGENT MANAGEMENT', title: 'Agents', description: 'Priorities, roles and fallback chain without fake online statuses.' },
@@ -101,7 +101,7 @@ export const russianSource = {
   bridgeAddress: 'Bridge address', bridgeEnable: 'Allow local bridge', bridgeWarning: 'The bridge gets no rights to money, secrets, or automatic risky actions.',
   checkBridge: 'Check connection', bridgeChecking: 'Checking local bridge…', bridgeOk: 'Local bridge is responding.', bridgeOffline: 'Local bridge is offline.',
   bridgeAllowedUnchecked: 'Local bridge is allowed but not checked yet.', bridgeDisabled: 'Local bridge is disabled.',
-  usageMonthly: 'Monthly budget', usageOpenAI: 'OpenAI', usageAnthropic: 'Anthropic', usageOpenRouter: 'OpenRouter', usageKimi: 'Kimi', budgetSummary: 'Allocated to providers', localBudgetNote: 'These are local references. Project One does not charge money or enable auto-reload.',
+  usageMonthly: 'Monthly budget', usageOpenAI: 'OpenAI', usageAnthropic: 'Anthropic', usageOpenRouter: 'OpenRouter', usageKimi: 'Kimi', usageGoogle: 'Google Gemini', usageMistral: 'Mistral', usageXai: 'xAI / Grok', budgetSummary: 'Allocated to providers', localBudgetNote: 'These are local references. Project One does not charge money or enable auto-reload.',
   budgetUnit: '₽ / reference limit', languageLabel: 'Interface language', languageTitle: 'Languages',
   languageHint: 'Russian is the native source language. Other languages are translations from Russian.',
   realTradesLabel: 'Real trades', realTradesValue: 'Unavailable without a separate implementation and separate explicit approval.',
