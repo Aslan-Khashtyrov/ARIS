@@ -128,6 +128,8 @@ if (services.includes('description:') || screens.includes('service.description')
 if (!screens.includes('real_trading=false')) {
   console.error('FAIL ARIS: paper-only индикатор потерян'); failed++;
 }
+if (!app.includes('async function runLiveAi()') || !app.includes('liveAiBusy') || !screens.includes('disabled={liveAiBusy}')) { console.error('FAIL LIVE AI: явный запуск или защита от повторного запуска потеряны'); failed++; }
+const sendStart = app.indexOf('function sendMessage()'); const sendEnd = app.indexOf('function addMission', sendStart); const sendBlock = app.slice(sendStart, sendEnd); if (sendBlock.includes('nativeAiGenerate(')) { console.error('FAIL LIVE AI: обычная подготовка задачи не должна автоматически тратить API-вызов'); failed++; }
 
 if (html.includes("style-src 'self' 'unsafe-inline'") || !html.includes("base-uri 'none'") || !html.includes("form-action 'none'")) {
   console.error('FAIL CSP: политика контента ослаблена'); failed++;

@@ -3,6 +3,7 @@ import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText,
 import { getLocaleStrings } from './i18n.js';
 import { configuredAgentCount } from './agents.js';
 import { routingPreview } from './router.js';
+import { chooseNativeProvider, nativeAiGenerate } from './nativeAi.js';
 import { loadState, saveState } from './storage.js';
 import { downloadBackup, parseBackup } from './backup.js';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
@@ -18,6 +19,7 @@ function App() {
   const [tab, setTab] = useState('home');
   const [text, setText] = useState('');
   const [notice, setNotice] = useState('');
+  const [liveAiBusy, setLiveAiBusy] = useState(false);
   const [state, setState] = useState(() => loadState());
   const t = useMemo(() => getLocaleStrings(state.locale), [state.locale]);
   const configured = useMemo(() => configuredAgentCount(), []);
@@ -34,6 +36,32 @@ function App() {
     const locale = state.locale === 'ru' ? 'ru-RU' : 'en-US';
     const entry = { id: `${Date.now()}-${Math.random()}`, time: new Date().toLocaleString(locale), text: textValue };
     return [...logs, entry].slice(-200);
+  }
+
+  async function runLiveAi() {
+    const value = text.trim();
+    if (!value || liveAiBusy) return false;
+    setLiveAiBusy(true);
+    const selected = await chooseNativeProvider();
+    if (!selected.provider) {
+      updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiUnavailable) }));
+      setLiveAiBusy(false);
+      return false;
+    }
+    try {
+      const result = await nativeAiGenerate({ provider: selected.provider, model: selected.model, prompt: value });
+      updateState(current => ({
+        chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: selected.provider.toUpperCase(), text: result.text || t.liveAiEmpty }].slice(-100),
+        logs: appendLog(current.logs, t.logLiveAiCompleted(selected.provider)),
+      }));
+      setText('');
+      return true;
+    } catch {
+      updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiFailed(selected.provider)) }));
+      return false;
+    } finally {
+      setLiveAiBusy(false);
+    }
   }
 
   function sendMessage() {
@@ -74,7 +102,7 @@ function App() {
   const common = { t };
   const screens = {
     home: <HomeScreen {...common} state={state} configured={configured} onNavigate={setTab}/>,
-    chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onClear={() => updateState({ chatHistory: [] })}/>,
+    chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onRunLiveAi={runLiveAi} liveAiBusy={liveAiBusy} onClear={() => updateState({ chatHistory: [] })}/>,
     agents: <AgentsScreen {...common}/>,
     terminal: <TerminalScreen {...common} state={state} updateState={updateState}/>,
     services: <ServicesScreen {...common} notice={notice} setNotice={setNotice}/>,
