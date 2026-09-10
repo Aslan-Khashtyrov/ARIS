@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bot, CheckCircle2, Code2, Gauge, Globe2, ShieldCheck, TerminalSquare, Workflow, XCircle } from 'lucide-react';
 import { Browser } from '@capacitor/browser';
 import { supportedLanguages } from './i18n.js';
@@ -7,6 +7,7 @@ import { councilPreview } from './router.js';
 import { isAllowedServiceUrl, services } from './services.js';
 import { checkBridge, normalizeBridgeUrl } from './localBridge.js';
 import { runSecurityDiagnostics } from './securityDiagnostics.js';
+import { deleteProviderSecret, listSecureProviders, secureProviderIds, storeProviderSecret, vaultAvailable } from './secureVault.js';
 
 
 export function HomeScreen({ t, state, configured, onNavigate }) {
@@ -98,10 +99,33 @@ export function SettingsScreen({ t, state, updateState, onExport, onImport }) {
     <div className="setting-row language-row"><div><b>{t.languageTitle}</b><small>{t.languageHint}</small></div><select value={state.locale} onChange={e => updateState({ locale: e.target.value })}>{supportedLanguages.map(language => <option value={language.id} key={language.id}>{language.label}</option>)}</select></div>
     <div className="setting-row"><b>{t.realTradesLabel}</b><span>{t.realTradesValue}</span></div>
     <div className="setting-row"><b>{t.secretsLabel}</b><span>{t.secretsValue}</span></div>
+    <SecureVault t={t}/>
     <div className="setting-row"><b>{t.backupTitle}</b><span>{t.backupHint}</span><div className="quick-actions"><button type="button" onClick={onExport}>{t.backupExport}</button><label className="import-button">{t.backupImport}<input type="file" accept="application/json,.json" onChange={async e => { const file=e.target.files?.[0]; if (!file) return; const ok=onImport(await file.text()); e.target.value=''; alert(ok ? t.backupImported : t.backupInvalid); }}/></label></div></div>
       <div className="setting-row"><b>{t.versionLabel}</b><span>{t.versionValue}</span></div>
   </div></section>;
-}export function ServicesScreen({ t, notice, setNotice }) {
+}
+function SecureVault({ t }) {
+  const [present, setPresent] = useState({});
+  const [drafts, setDrafts] = useState({});
+  const supported = vaultAvailable();
+  async function refresh() {
+    if (!supported) return setPresent({});
+    const providers = await listSecureProviders();
+    setPresent(Object.fromEntries(secureProviderIds.map(id => [id, providers.includes(id)])));
+  }
+  useEffect(() => { refresh(); }, [supported]);
+  async function save(id) {
+    const value = drafts[id] || '';
+    if (!value) return;
+    if (await storeProviderSecret(id, value)) { setDrafts(current => ({ ...current, [id]: '' })); await refresh(); }
+  }
+  async function remove(id) { if (await deleteProviderSecret(id)) await refresh(); }
+  return <div className="setting-row secure-vault"><div><b>{t.vaultTitle}</b><span>{t.vaultHint}</span></div>{!supported ? <div className="notice">{t.vaultAndroidOnly}</div> : <div className="vault-grid">{secureProviderIds.map(id => <div className="vault-row" key={id}><div><b>{t.secretProviders[id]}</b><small>{present[id] ? t.vaultStored : t.vaultNotStored}</small></div><input type="password" autoComplete="off" spellCheck="false" value={drafts[id] || ''} onChange={e => setDrafts(current => ({ ...current, [id]: e.target.value }))} placeholder={t.vaultPlaceholder}/><button type="button" onClick={() => save(id)}>{t.vaultSave}</button>{present[id] && <button type="button" className="secondary" onClick={() => remove(id)}>{t.vaultDelete}</button>}</div>)}</div>}</div>;
+}
+
+
+
+export function ServicesScreen({ t, notice, setNotice }) {
   async function openService(service) {
     if (!isAllowedServiceUrl(service.url)) return setNotice(t.blockedUrl);
     setNotice(t.openingService(service.name));

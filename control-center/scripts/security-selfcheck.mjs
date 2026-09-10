@@ -101,6 +101,7 @@ const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const manifest = fs.readFileSync(new URL('../android/app/src/main/AndroidManifest.xml', import.meta.url), 'utf8');
 const networkSecurity = fs.readFileSync(new URL('../android/app/src/main/res/xml/network_security_config.xml', import.meta.url), 'utf8');
 const filePaths = fs.readFileSync(new URL('../android/app/src/main/res/xml/file_paths.xml', import.meta.url), 'utf8');
+const vaultNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/SecureVaultPlugin.java', import.meta.url), 'utf8');
 
 if (!i18n.includes('export const russianSource') || !i18n.includes("export const DEFAULT_LOCALE = 'ru'")) {
   console.error('FAIL LANG: русский источник не объявлен основным'); failed++;
@@ -141,12 +142,23 @@ if (!networkSecurity.includes('<base-config cleartextTrafficPermitted="false"') 
 if (filePaths.includes('<external-path') || !filePaths.includes('path="shared/"')) {
   console.error('FAIL ANDROID: FileProvider имеет слишком широкий доступ'); failed++;
 }
+if (!vaultNative.includes('AndroidKeyStore') || !vaultNative.includes('AES/GCM/NoPadding') || vaultNative.includes('getSecret(PluginCall') || vaultNative.includes('@PluginMethod\n    public void getSecret')) { console.error('FAIL VAULT: защищённое хранилище ослаблено или секрет читается обратно в JS'); failed++; }
+if (!vaultNative.includes('MAX_SECRET_CHARS') || !vaultNative.includes('^[a-z0-9_-]{1,32}$')) { console.error('FAIL VAULT: входные данные vault не ограничены'); failed++; }
 
 
 const backup = createBackup({ ...defaultState, localBridgeEnabled: true, bridgeUrl: 'http://localhost:9999', chatHistory: [{kind:'me',author:'Я',text:'ok'}] });
 const restored = parseBackup(backup);
 if (!restored || restored.localBridgeEnabled !== false || restored.bridgeUrl !== defaultState.bridgeUrl || restored.safeMode !== true) { console.error('FAIL BACKUP: unsafe restore'); failed++; }
 if (parseBackup('{bad json') !== null || parseBackup(JSON.stringify({format:'evil',version:1,state:{}})) !== null) { console.error('FAIL BACKUP: malformed import accepted'); failed++; }
+const secretBackup = createBackup({ ...defaultState, apiKey: 'SHOULD_NOT_LEAK', credentials: { token: 'NOPE' } });
+if (secretBackup.includes('SHOULD_NOT_LEAK') || secretBackup.includes('NOPE') || secretBackup.includes('apiKey') || secretBackup.includes('credentials')) { console.error('FAIL BACKUP: неизвестные/секретные поля попали в экспорт'); failed++; }
+
+
+
+const mainActivity = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/MainActivity.java', import.meta.url), 'utf8');
+const secureJs = read('secureVault.js');
+if (!mainActivity.includes('registerPlugin(SecureVaultPlugin.class)')) { console.error('FAIL VAULT: нативный плагин не зарегистрирован'); failed++; }
+if (secureJs.includes('.getSecret(') || secureJs.includes('.readSecret(') || secureJs.includes('localStorage')) { console.error('FAIL VAULT: секрет может читаться обратно или сохраняться в localStorage'); failed++; }
 
 if (failed) process.exit(1);
 console.log('PASS: русский источник, смена языка, русский fallback, навигация, router, storage, paper-only, bridge и URL-защита проверены.');
