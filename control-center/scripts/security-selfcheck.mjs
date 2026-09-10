@@ -168,6 +168,8 @@ if (secretBackup.includes('SHOULD_NOT_LEAK') || secretBackup.includes('NOPE') ||
 const mainActivity = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/MainActivity.java', import.meta.url), 'utf8');
 const secureJs = read('secureVault.js');
 if (!mainActivity.includes('registerPlugin(SecureVaultPlugin.class)')) { console.error('FAIL VAULT: нативный плагин не зарегистрирован'); failed++; }
+if (!nativeAiNative.includes('allowedModel(provider, model)') || !nativeAiNative.includes('gemini-2.5-flash') || !nativeAiNative.includes('mistral-small-latest') || !nativeAiNative.includes('grok-4.6')) { console.error('FAIL NATIVE AI: модельный allowlist потерян'); failed++; }
+if (!nativeAiNative.includes('AtomicBoolean') || !nativeAiNative.includes('request_already_in_flight') || !nativeAiNative.includes('MAX_OUTPUT_TOKENS = 4096')) { console.error('FAIL NATIVE AI: защита от параллельных/безлимитных вызовов потеряна'); failed++; }
 if (!mainActivity.includes('registerPlugin(ProtectedWebPlugin.class)')) { console.error('FAIL PROTECTED WEB: нативный плагин не зарегистрирован'); failed++; }
 if (secureJs.includes('.getSecret(') || secureJs.includes('.readSecret(') || secureJs.includes('localStorage')) { console.error('FAIL VAULT: секрет может читаться обратно или сохраняться в localStorage'); failed++; }
 

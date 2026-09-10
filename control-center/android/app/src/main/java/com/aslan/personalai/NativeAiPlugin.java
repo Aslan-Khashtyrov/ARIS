@@ -18,6 +18,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.util.regex.Pattern;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
@@ -32,6 +33,8 @@ public class NativeAiPlugin extends Plugin {
     private static final Pattern MODEL = Pattern.compile("^[A-Za-z0-9._-]{1,80}$");
     private static final int MAX_PROMPT = 16000;
     private static final int MAX_RESPONSE = 1000000;
+    private static final int MAX_OUTPUT_TOKENS = 4096;
+    private final AtomicBoolean requestInFlight = new AtomicBoolean(false);
 
     @PluginMethod
     public void capabilities(PluginCall call) {
@@ -50,8 +53,18 @@ public class NativeAiPlugin extends Plugin {
         if (!(provider.equals("mistral") || provider.equals("xai") || provider.equals("google")) || !MODEL.matcher(model).matches() || prompt.isEmpty() || prompt.length() > MAX_PROMPT) {
             call.reject("invalid_input"); return;
         }
+        if (!allowedModel(provider, model)) { call.reject("model_not_allowed"); return; }
         if (!has(provider)) { call.reject("provider_not_configured"); return; }
+        if (!requestInFlight.compareAndSet(false, true)) { call.reject("request_already_in_flight"); return; }
         getBridge().executeOnMainThread(() -> new Thread(() -> request(call, provider, model, prompt)).start());
+    }
+
+
+    private boolean allowedModel(String provider, String model) {
+        if (provider.equals("google")) return model.equals("gemini-2.5-flash");
+        if (provider.equals("mistral")) return model.equals("mistral-small-latest");
+        if (provider.equals("xai")) return model.equals("grok-4.6");
+        return false;
     }
 
     private boolean has(String provider) { return prefs().contains(provider); }
@@ -81,10 +94,12 @@ public class NativeAiPlugin extends Plugin {
                 JSONObject user = new JSONObject(); user.put("role", "user");
                 user.put("parts", new JSONArray().put(new JSONObject().put("text", prompt)));
                 contents.put(user); body.put("contents", contents);
+                body.put("generationConfig", new JSONObject().put("maxOutputTokens", MAX_OUTPUT_TOKENS));
             } else {
                 endpoint = provider.equals("mistral") ? "https://api.mistral.ai/v1/chat/completions" : "https://api.x.ai/v1/chat/completions";
                 body.put("model", model);
                 body.put("messages", new JSONArray().put(new JSONObject().put("role", "user").put("content", prompt)));
+                body.put("max_tokens", MAX_OUTPUT_TOKENS);
             }
             conn = (HttpURLConnection) new URL(endpoint).openConnection();
             conn.setRequestMethod("POST"); conn.setConnectTimeout(15000); conn.setReadTimeout(60000);
@@ -105,7 +120,7 @@ public class NativeAiPlugin extends Plugin {
             else text = json.getJSONArray("choices").getJSONObject(0).getJSONObject("message").optString("content", "");
             JSObject result = new JSObject(); result.put("provider", provider); result.put("model", model); result.put("text", text); call.resolve(result);
         } catch (Exception error) { call.reject("provider_request_failed"); }
-        finally { if (conn != null) conn.disconnect(); }
+        finally { if (conn != null) conn.disconnect(); requestInFlight.set(false); }
     }
 
     private String readLimited(InputStream stream) throws Exception {
