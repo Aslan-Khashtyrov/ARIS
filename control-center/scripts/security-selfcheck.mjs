@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { isAllowedServiceUrl } from '../src/services.js';
 import { checkBridge, normalizeBridgeUrl } from '../src/localBridge.js';
-import { chooseAgent } from '../src/router.js';
+import { chooseAgent, councilPreview } from '../src/router.js';
 import { defaultState, loadState, saveState } from '../src/storage.js';
 import { DEFAULT_LOCALE, getLocaleStrings, russianSource } from '../src/i18n.js';
 import { runSecurityDiagnostics } from '../src/securityDiagnostics.js';
@@ -45,6 +45,11 @@ for (const [prompt, expected] of [['собери android код','codex'], ['п�
   const agent = chooseAgent(prompt);
   if (agent?.id !== expected) { console.error(`FAIL ROUTER: ${prompt} -> ${agent?.id}`); failed++; }
 }
+
+const codingCouncil = councilPreview('android code');
+if (codingCouncil.primary?.id !== 'codex' || codingCouncil.reviewer?.id !== 'gpt' || codingCouncil.arbiter?.id !== 'hermes') { console.error('FAIL COUNCIL: coding roles'); failed++; }
+const reviewCouncil = councilPreview('security review');
+if (!reviewCouncil.primary || !reviewCouncil.reviewer || reviewCouncil.primary.id === reviewCouncil.reviewer.id) { console.error('FAIL COUNCIL: independent review'); failed++; }
 
 globalThis.localStorage = {
   value: '',

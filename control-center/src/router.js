@@ -9,13 +9,27 @@ function firstAvailable(chain) {
     .find(agent => agent?.enabled && agent.mode === 'configured');
 }
 
-export function chooseAgent(text) {
+function routeKind(text) {
   const normalized = String(text || '').trim();
-  const route = reviewHints.test(normalized) ? 'review' : codeHints.test(normalized) ? 'coding' : 'reasoning';
+  return reviewHints.test(normalized) ? 'review' : codeHints.test(normalized) ? 'coding' : 'reasoning';
+}
+
+export function chooseAgent(text) {
+  const route = routeKind(text);
   return firstAvailable(routingPolicy[route]) || firstAvailable(routingPolicy.fallback) || agentRegistry.find(agent => agent.enabled) || agentRegistry[0];
 }
 
+export function councilPreview(text, strings = russianSource) {
+  const route = routeKind(text);
+  const chain = [...routingPolicy[route], ...routingPolicy.fallback];
+  const available = chain.map(id => agentRegistry.find(agent => agent.id === id)).filter((agent, index, list) => agent?.enabled && agent.mode === 'configured' && list.findIndex(item => item?.id === agent.id) === index);
+  const primary = available[0] || chooseAgent(text);
+  const reviewer = available.find(agent => agent.id !== primary.id) || null;
+  const arbiter = available.find(agent => agent.id !== primary.id && agent.id !== reviewer?.id) || null;
+  return { route, primary, reviewer, arbiter, message: strings.councilPrepared(primary.name, reviewer?.name, arbiter?.name) };
+}
+
 export function routingPreview(text, strings = russianSource) {
-  const agent = chooseAgent(text);
-  return { agent, message: strings.routingPrepared(agent.name) };
+  const council = councilPreview(text, strings);
+  return { agent: council.primary, council, message: council.message };
 }

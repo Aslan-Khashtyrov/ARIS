@@ -3,6 +3,7 @@ import { Bot, CheckCircle2, Code2, Gauge, Globe2, ShieldCheck, TerminalSquare, W
 import { Browser } from '@capacitor/browser';
 import { supportedLanguages } from './i18n.js';
 import { agentRegistry, routingPolicy } from './agents.js';
+import { councilPreview } from './router.js';
 import { isAllowedServiceUrl, services } from './services.js';
 import { checkBridge, normalizeBridgeUrl } from './localBridge.js';
 import { runSecurityDiagnostics } from './securityDiagnostics.js';
@@ -45,7 +46,8 @@ function AgentsCompact({ t }) {
 }
 
 export function AgentsScreen({ t }) {
-  return <section className="services-view"><Header t={t} id="agents"/><div className="panel"><div className="agent-list">
+  const examples = [[t.routeLabels.coding, councilPreview('android code', t)], [t.routeLabels.reasoning, councilPreview('explain idea', t)], [t.routeLabels.review, councilPreview('security review', t)]];
+  return <section className="services-view"><Header t={t} id="agents"/><div className="panel council-panel"><span className="kicker">{t.councilKicker}</span><h3>{t.councilTitle}</h3><p>{t.councilDescription}</p><div className="council-grid">{examples.map(([label, plan]) => <div className="council-card" key={label}><b>{label}</b><span>{t.councilPrimary}: {plan.primary.name}</span><span>{t.councilReviewer}: {plan.reviewer?.name || t.councilNone}</span><span>{t.councilArbiter}: {plan.arbiter?.name || t.councilNone}</span></div>)}</div></div><div className="panel"><div className="agent-list">
     {agentRegistry.map(agent => <div className="agent-row large" key={agent.id}><div className="rank">{agent.priority}</div><div className="agent-meta"><b>{agent.name}</b><span>{t.roles[agent.roleKey]}</span></div><div className={'agent-state ' + agent.mode}>{t.modes[agent.mode]}</div></div>)}
   </div></div><div className="route-grid">
     {Object.entries(routingPolicy).map(([key, chain]) => <div className="panel route-card" key={key}><b>{t.routeLabels[key]}</b><span>{chain.join(' → ')}</span></div>)}
