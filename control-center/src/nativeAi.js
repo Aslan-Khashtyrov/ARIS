@@ -1,3 +1,4 @@
+import { argusAllowsAiProvider } from './argus.js';
 import { Capacitor, registerPlugin } from '@capacitor/core';
 
 const NativeAi = registerPlugin('NativeAi');
@@ -8,7 +9,7 @@ export async function nativeAiCapabilities() {
   try { return await NativeAi.capabilities(); } catch { return Object.fromEntries(nativeAiProviders.map(id => [id, false])); }
 }
 export async function nativeAiGenerate({ provider, model, prompt }) {
-  if (!nativeAiAvailable() || !nativeAiProviders.includes(provider)) throw new Error('native_ai_unavailable');
+  if (!nativeAiAvailable() || !nativeAiProviders.includes(provider) || !argusAllowsAiProvider(provider)) throw new Error('argus_blocked');
   return NativeAi.generate({ provider, model, prompt });
 }
 

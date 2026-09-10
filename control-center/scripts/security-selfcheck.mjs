@@ -6,6 +6,7 @@ import { defaultState, loadState, saveState } from '../src/storage.js';
 import { DEFAULT_LOCALE, getLocaleStrings, russianSource } from '../src/i18n.js';
 import { runSecurityDiagnostics } from '../src/securityDiagnostics.js';
 import { createBackup, parseBackup } from '../src/backup.js';
+import { argusDecision, argusAllowsAiProvider } from '../src/argus.js';
 
 let failed = 0;
 const urlCases = [
@@ -68,7 +69,7 @@ if (missionState.missions.length !== 50 || missionState.missions[0].text.length 
   console.error('FAIL STORAGE: поручения не ограничены или не санитизируются'); failed++;
 }
 const diagnostics = runSecurityDiagnostics({ ...safeState, safeMode: true });
-if (!diagnostics.ok || diagnostics.passed !== diagnostics.total || diagnostics.total < 7) {
+if (!diagnostics.ok || diagnostics.passed !== diagnostics.total || diagnostics.total < 10) {
   console.error('FAIL SECURITY CENTER: базовые защитные проверки не проходят'); failed++;
 }
 
@@ -91,6 +92,9 @@ for (const locale of ['zz', 'constructor', '__proto__', 'toString']) {
   const unknown = getLocaleStrings(locale);
   if (unknown !== russianSource || unknown.hero !== russianSource.hero) { console.error(`FAIL LANG: неизвестный язык ${locale} не откатывается на русский`); failed++; }
 }
+
+if (argusDecision('secret.export').decision !== 'deny' || argusDecision('finance.real_trade').decision !== 'deny' || argusDecision('process.control').decision !== 'confirm' || !argusAllowsAiProvider('google') || argusAllowsAiProvider('evil')) { console.error('FAIL ARGUS: политика защитника ослаблена'); failed++; }
+
 const root = new URL('../src/', import.meta.url);
 const read = name => fs.readFileSync(new URL(name, root), 'utf8');
 const i18n = read('i18n.js');
@@ -101,6 +105,7 @@ const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const manifest = fs.readFileSync(new URL('../android/app/src/main/AndroidManifest.xml', import.meta.url), 'utf8');
 const networkSecurity = fs.readFileSync(new URL('../android/app/src/main/res/xml/network_security_config.xml', import.meta.url), 'utf8');
 const filePaths = fs.readFileSync(new URL('../android/app/src/main/res/xml/file_paths.xml', import.meta.url), 'utf8');
+const argus = read('argus.js');
 const vaultNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/SecureVaultPlugin.java', import.meta.url), 'utf8');
 const nativeAiNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/NativeAiPlugin.java', import.meta.url), 'utf8');
 const protectedWebNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/ProtectedWebActivity.java', import.meta.url), 'utf8');
@@ -136,6 +141,9 @@ const sendStart = app.indexOf('function sendMessage()'); const sendEnd = app.ind
 if (html.includes("style-src 'self' 'unsafe-inline'") || !html.includes("base-uri 'none'") || !html.includes("form-action 'none'")) {
   console.error('FAIL CSP: политика контента ослаблена'); failed++;
 }
+
+if (!argus.includes("'secret.export'") || !argus.includes("'finance.real_trade'") || !argus.includes("'network.unknown'")) { console.error('FAIL ARGUS: hard-block policy missing'); failed++; }
+if (!vaultNative.includes('ALLOWED_PROVIDERS.contains')) { console.error('FAIL VAULT: native provider allowlist missing'); failed++; }
 
 if (!manifest.includes('android:allowBackup="false"') || !manifest.includes('android:networkSecurityConfig="@xml/network_security_config"')) {
   console.error('FAIL ANDROID: backup или network security настроены небезопасно'); failed++;

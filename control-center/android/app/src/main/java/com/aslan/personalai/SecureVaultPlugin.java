@@ -14,6 +14,8 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -26,6 +28,7 @@ public class SecureVaultPlugin extends Plugin {
     private static final String KEY_ALIAS = "project_one_provider_vault_v1";
     private static final String PREFS = "project_one_secure_vault_v1";
     private static final Pattern PROVIDER = Pattern.compile("^[a-z0-9_-]{1,32}$");
+    private static final Set<String> ALLOWED_PROVIDERS = new HashSet<>(Arrays.asList("openai", "anthropic", "openrouter", "kimi", "google", "mistral", "xai"));
     private static final int MAX_SECRET_CHARS = 8192;
 
     private SharedPreferences prefs() {
@@ -34,7 +37,7 @@ public class SecureVaultPlugin extends Plugin {
 
     private String provider(PluginCall call) {
         String value = call.getString("provider", "");
-        return PROVIDER.matcher(value).matches() ? value : null;
+        return PROVIDER.matcher(value).matches() && ALLOWED_PROVIDERS.contains(value) ? value : null;
     }
 
     private SecretKey masterKey() throws Exception {
@@ -87,7 +90,7 @@ public class SecureVaultPlugin extends Plugin {
     public void listProviders(PluginCall call) {
         Set<String> keys = prefs().getAll().keySet();
         JSArray providers = new JSArray();
-        for (String key : keys) if (PROVIDER.matcher(key).matches()) providers.put(key);
+        for (String key : keys) if (PROVIDER.matcher(key).matches() && ALLOWED_PROVIDERS.contains(key)) providers.put(key);
         JSObject result = new JSObject(); result.put("providers", providers); call.resolve(result);
     }
 }

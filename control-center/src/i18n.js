@@ -74,7 +74,7 @@ export const russianSource = {
   securityKicker: 'АРГУС · СТРАЖ', securityTitle: 'Аргус', securityDescription: 'Встроенный страж Project One: локально проверяет критические защитные инварианты без передачи данных наружу.',
   securityStatus: 'Статус Аргуса', securityProtected: 'Аргус на страже', securityAttention: 'Требуется внимание', securityChecksPassed: 'проверок пройдено', securityRun: 'Проверить сейчас', securityOk: 'Защита активна', securityFailed: 'Проверка не пройдена',
   securityNote: 'Эта проверка не заменяет внешний аудит и adversarial-тесты, но быстро ловит ослабление ключевых локальных ограничений.',
-  securityChecks: { safeMode: 'Безопасный режим закреплён', serviceUserinfo: 'Подмена адреса через userinfo блокируется', servicePath: 'Произвольные пути сервисов блокируются', bridgeRemote: 'Удалённый bridge запрещён', bridgeCredentials: 'Логин и пароль в bridge запрещены', bridgeObfuscated: 'Скрытые формы localhost в bridge запрещены', paperOnly: 'ARIS остаётся paper-only' },
+  securityChecks: { safeMode: 'Безопасный режим закреплён', serviceUserinfo: 'Подмена адреса через userinfo блокируется', servicePath: 'Произвольные пути сервисов блокируются', bridgeRemote: 'Удалённый bridge запрещён', bridgeCredentials: 'Логин и пароль в bridge запрещены', bridgeObfuscated: 'Скрытые формы localhost в bridge запрещены', paperOnly: 'ARIS остаётся paper-only', argusSecrets: 'Аргус блокирует экспорт и логирование секретов', argusFinance: 'Аргус блокирует реальные финансовые действия', argusProviders: 'Аргус пропускает только доверенные AI-провайдеры' },
 });const translations = {
   en: {
     appSystem: 'PERSONAL AI SYSTEM', agentsOnline: 'agents configured', autoRouting: 'AUTO ROUTING',
@@ -136,7 +136,7 @@ export const russianSource = {
   securityKicker: 'ARGUS · GUARDIAN', securityTitle: 'Argus', securityDescription: 'Project One built-in guardian: locally checks critical security invariants without sending data outside the app.',
   securityStatus: 'Argus status', securityProtected: 'Argus is guarding', securityAttention: 'Attention required', securityChecksPassed: 'checks passed', securityRun: 'Check now', securityOk: 'Protection active', securityFailed: 'Check failed',
   securityNote: 'This check does not replace external audits or adversarial testing, but it quickly detects weakened local safeguards.',
-  securityChecks: { safeMode: 'Safe mode is locked', serviceUserinfo: 'Service userinfo spoofing is blocked', servicePath: 'Arbitrary service paths are blocked', bridgeRemote: 'Remote bridge is forbidden', bridgeCredentials: 'Bridge credentials are forbidden', bridgeObfuscated: 'Obfuscated localhost forms are blocked', paperOnly: 'ARIS remains paper-only' },
+  securityChecks: { safeMode: 'Safe mode is locked', serviceUserinfo: 'Service userinfo spoofing is blocked', servicePath: 'Arbitrary service paths are blocked', bridgeRemote: 'Remote bridge is forbidden', bridgeCredentials: 'Bridge credentials are forbidden', bridgeObfuscated: 'Obfuscated localhost forms are blocked', paperOnly: 'ARIS remains paper-only', argusSecrets: 'Argus blocks secret export and logging', argusFinance: 'Argus blocks real financial actions', argusProviders: 'Argus allows only trusted AI providers' },
 });
 
 export const supportedLanguages = [
