@@ -8,6 +8,7 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(SecureVaultPlugin.class);
         registerPlugin(ProtectedWebPlugin.class);
+        registerPlugin(NativeAiPlugin.class);
         super.onCreate(savedInstanceState);
     }
 }

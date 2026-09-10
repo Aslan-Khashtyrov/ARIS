@@ -102,6 +102,7 @@ const manifest = fs.readFileSync(new URL('../android/app/src/main/AndroidManifes
 const networkSecurity = fs.readFileSync(new URL('../android/app/src/main/res/xml/network_security_config.xml', import.meta.url), 'utf8');
 const filePaths = fs.readFileSync(new URL('../android/app/src/main/res/xml/file_paths.xml', import.meta.url), 'utf8');
 const vaultNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/SecureVaultPlugin.java', import.meta.url), 'utf8');
+const nativeAiNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/NativeAiPlugin.java', import.meta.url), 'utf8');
 const protectedWebNative = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/ProtectedWebActivity.java', import.meta.url), 'utf8');
 const protectedWebPlugin = fs.readFileSync(new URL('../android/app/src/main/java/com/aslan/personalai/ProtectedWebPlugin.java', import.meta.url), 'utf8');
 const protectedWebJs = read('protectedWeb.js');
@@ -167,6 +168,10 @@ const secureJs = read('secureVault.js');
 if (!mainActivity.includes('registerPlugin(SecureVaultPlugin.class)')) { console.error('FAIL VAULT: нативный плагин не зарегистрирован'); failed++; }
 if (!mainActivity.includes('registerPlugin(ProtectedWebPlugin.class)')) { console.error('FAIL PROTECTED WEB: нативный плагин не зарегистрирован'); failed++; }
 if (secureJs.includes('.getSecret(') || secureJs.includes('.readSecret(') || secureJs.includes('localStorage')) { console.error('FAIL VAULT: секрет может читаться обратно или сохраняться в localStorage'); failed++; }
+
+if (!nativeAiNative.includes('https://api.mistral.ai/v1/chat/completions') || !nativeAiNative.includes('https://api.x.ai/v1/chat/completions') || !nativeAiNative.includes('https://generativelanguage.googleapis.com/v1beta/models/')) { console.error('FAIL NATIVE AI: endpoint allowlist incomplete'); failed++; }
+if (!nativeAiNative.includes('setInstanceFollowRedirects(false)') || !nativeAiNative.includes('MAX_PROMPT') || !nativeAiNative.includes('MAX_RESPONSE')) { console.error('FAIL NATIVE AI: transport limits weakened'); failed++; }
+if (nativeAiNative.includes('result.put("secret"') || nativeAiNative.includes('call.resolve(apiKey)') || !mainActivity.includes('registerPlugin(NativeAiPlugin.class)')) { console.error('FAIL NATIVE AI: secret exposure or plugin wiring issue'); failed++; }
 
 if (failed) process.exit(1);
 console.log('PASS: русский источник, смена языка, русский fallback, навигация, router, storage, paper-only, bridge и URL-защита проверены.');
