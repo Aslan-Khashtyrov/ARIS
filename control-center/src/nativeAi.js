@@ -33,17 +33,25 @@ const liveAgentRoutes = Object.freeze({
 
 export function nativeRouteForAgent(agentId) { return liveAgentRoutes[agentId] || null; }
 
-export async function chooseLiveAgent(text) {
+export async function chooseLiveAgents(text) {
   const capabilities = await nativeAiCapabilities();
   const kind = routeKind(text);
   const chain = [...(routingPolicy[kind] || []), ...(routingPolicy.fallback || [])];
+  const available = [];
   for (const id of chain) {
+    if (available.some(item => item.agent.id === id)) continue;
     const route = nativeRouteForAgent(id);
     if (!route || capabilities?.[route.provider] !== true || !argusAllowsAiProvider(route.provider)) continue;
     const agent = agentRegistry.find(item => item.id === id);
-    if (agent) return { agent, ...route, capabilities };
+    if (agent) available.push({ agent, ...route });
   }
-  return { agent: null, provider: null, model: null, capabilities };
+  return { agents: available, capabilities };
+}
+
+export async function chooseLiveAgent(text) {
+  const result = await chooseLiveAgents(text);
+  const first = result.agents[0];
+  return first ? { ...first, capabilities: result.capabilities } : { agent: null, provider: null, model: null, capabilities: result.capabilities };
 }
 
 export async function chooseNativeProvider(preferred = ['google', 'openrouter', 'xai', 'mistral']) {

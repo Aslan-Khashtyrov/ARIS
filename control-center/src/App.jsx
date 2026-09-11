@@ -81,14 +81,14 @@ function App() {
           setText(''); return true;
         }
       }
-      const selected = await chooseLiveAgent(value);
-      if (selected.provider) {
+      const selected = await chooseLiveAgents(value);
+      for (const candidate of selected.agents) {
         try {
-          const result = await nativeAiGenerate({ provider: selected.provider, model: selected.model, prompt: value });
-          updateState(current => ({ chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: selected.agent.name, text: result.text || t.liveAiEmpty }].slice(-100), logs: appendLog(current.logs, t.logLiveAiCompleted(selected.provider)) }));
+          const result = await nativeAiGenerate({ provider: candidate.provider, model: candidate.model, prompt: value });
+          updateState(current => ({ chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: candidate.agent.name, text: result.text || t.liveAiEmpty }].slice(-100), logs: appendLog(current.logs, t.logLiveAiCompleted(candidate.provider)) }));
           setText(''); return true;
         } catch {
-          updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiFailed(selected.provider)) }));
+          updateState(current => ({ logs: appendLog(current.logs, t.logAgentFallback(candidate.agent.name)) }));
         }
       }
       if (state.localBridgeEnabled) {
