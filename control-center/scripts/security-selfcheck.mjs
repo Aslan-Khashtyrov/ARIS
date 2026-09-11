@@ -106,7 +106,7 @@ const root = new URL('../src/', import.meta.url);
 const read = name => fs.readFileSync(new URL(name, root), 'utf8');
 const i18n = read('i18n.js');
 const app = read('App.jsx');
-if (!app.includes("import { runLocalAgent } from './localBridge.js';")) { console.error('FAIL AGENT BRIDGE: App не импортирует локальный агентный клиент'); failed++; }
+if (!app.includes("from './localBridge.js'") || !app.includes('runLocalAgent')) { console.error('FAIL AGENT BRIDGE: App не импортирует локальный агентный клиент'); failed++; }
 const screens = read('Screens.jsx');
 const services = read('services.js');
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');

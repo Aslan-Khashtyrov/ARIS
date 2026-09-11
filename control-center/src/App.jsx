@@ -1,10 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Bot, Cpu, Globe2, LayoutDashboard, ListTodo, MessageSquare, ScrollText, Settings, ShieldCheck, TerminalSquare, WalletCards, Workflow, Wrench } from 'lucide-react';
 import { getLocaleStrings } from './i18n.js';
-import { configuredAgentCount } from './agents.js';
 import { routeKind, routingPreview } from './router.js';
-import { runLocalAgent } from './localBridge.js';
-import { chooseLiveAgent, nativeAiGenerate, nativeCouncilGenerate } from './nativeAi.js';
+import { checkBridge, runLocalAgent } from './localBridge.js';
+import { chooseLiveAgent, nativeAiCapabilities, nativeAiGenerate, nativeCouncilGenerate, nativeRouteForAgent } from './nativeAi.js';
 import { loadState, saveState } from './storage.js';
 import { downloadBackup, parseBackup } from './backup.js';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
@@ -23,8 +22,23 @@ function App() {
   const [liveAiBusy, setLiveAiBusy] = useState(false);
   const [councilBusy, setCouncilBusy] = useState(false);
   const [state, setState] = useState(() => loadState());
+  const [readyAgents, setReadyAgents] = useState(0);
   const t = useMemo(() => getLocaleStrings(state.locale), [state.locale]);
-  const configured = useMemo(() => configuredAgentCount(), []);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const nativeCaps = await nativeAiCapabilities().catch(() => ({}));
+      const bridge = state.localBridgeEnabled ? await checkBridge(state.bridgeUrl).catch(() => ({ ok: false, agents: [] })) : { ok: false, agents: [] };
+      const count = agentRegistry.filter(agent => {
+        if (agent.id === 'codex' || agent.id === 'hermes') return bridge.ok && Array.isArray(bridge.agents) && bridge.agents.includes(agent.id);
+        const route = nativeRouteForAgent(agent.id);
+        return Boolean(route && nativeCaps?.[route.provider] === true);
+      }).length;
+      if (active) setReadyAgents(count);
+    })();
+    return () => { active = false; };
+  }, [state.localBridgeEnabled, state.bridgeUrl]);
 
   function updateState(patchOrUpdater) {
     setState(current => {
@@ -131,7 +145,7 @@ function App() {
 
   const common = { t };
   const screens = {
-    home: <HomeScreen {...common} state={state} configured={configured} onNavigate={setTab}/>,
+    home: <HomeScreen {...common} state={state} configured={readyAgents} onNavigate={setTab}/>,
     chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={runLiveAi} onRunLiveAi={runLiveAi} onRunCodex={() => runLocal('codex')} onRunHermes={() => runLocal('hermes')} liveAiBusy={liveAiBusy} onRunCouncil={runNativeCouncil} councilBusy={councilBusy} onClear={() => updateState({ chatHistory: [] })}/>,
     agents: <AgentsScreen {...common} state={state} updateState={updateState}/>,
     terminal: <TerminalScreen {...common} state={state} updateState={updateState}/>,
