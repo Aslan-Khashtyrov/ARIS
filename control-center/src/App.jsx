@@ -84,7 +84,11 @@ function App() {
           setText(''); return true;
         }
       }
-      updateState(current => ({ logs: appendLog(current.logs, t.logLiveAiUnavailable) }));
+      updateState(current => ({
+        chatHistory: [...current.chatHistory, { kind: 'me', author: t.you, text: value }, { kind: 'agent', author: 'Project One', text: t.noLiveAgent }].slice(-100),
+        logs: appendLog(current.logs, t.logLiveAiUnavailable),
+      }));
+      setText('');
       return false;
     } finally { setLiveAiBusy(false); }
   }
@@ -102,20 +106,6 @@ function App() {
     } catch {
       updateState(current => ({ logs: appendLog(current.logs, t.logCouncilFailed) })); return false;
     } finally { setCouncilBusy(false); }
-  }
-
-  function sendMessage() {
-    const value = text.trim();
-    if (!value) return;
-    const route = routingPreview(value, t);
-    updateState(current => ({
-      chatHistory: [...current.chatHistory,
-        { kind: 'me', author: t.you, text: value },
-        { kind: 'agent', author: route.agent.name, text: route.message },
-      ].slice(-100),
-      logs: appendLog(current.logs, t.logChatRouted(route.agent.name)),
-    }));
-    setText('');
   }
 
   function addMission(textValue) {
@@ -142,7 +132,7 @@ function App() {
   const common = { t };
   const screens = {
     home: <HomeScreen {...common} state={state} configured={configured} onNavigate={setTab}/>,
-    chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={sendMessage} onRunLiveAi={runLiveAi} onRunCodex={() => runLocal('codex')} onRunHermes={() => runLocal('hermes')} liveAiBusy={liveAiBusy} onRunCouncil={runNativeCouncil} councilBusy={councilBusy} onClear={() => updateState({ chatHistory: [] })}/>,
+    chat: <ChatScreen {...common} text={text} setText={setText} history={state.chatHistory} onSend={runLiveAi} onRunLiveAi={runLiveAi} onRunCodex={() => runLocal('codex')} onRunHermes={() => runLocal('hermes')} liveAiBusy={liveAiBusy} onRunCouncil={runNativeCouncil} councilBusy={councilBusy} onClear={() => updateState({ chatHistory: [] })}/>,
     agents: <AgentsScreen {...common} state={state} updateState={updateState}/>,
     terminal: <TerminalScreen {...common} state={state} updateState={updateState}/>,
     services: <ServicesScreen {...common} notice={notice} setNotice={setNotice}/>,
